@@ -125,7 +125,7 @@ export default async function MyContributionsPage() {
           <ul style={{ margin: 0, paddingLeft: 18 }}>
             {needsAttention.map((e) => (
               <li key={e.id}>
-                <Link href={`/entries/${e.id}/edit`}>{e.name}</Link> —{" "}
+                <Link href={`/entries/${e.id}/edit`}>{e.name}</Link>:{" "}
                 <span className="muted">{e.reviewFeedback}</span>
               </li>
             ))}

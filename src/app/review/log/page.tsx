@@ -74,9 +74,9 @@ export default async function AuditLogPage() {
                     )}
                     <span className="muted"> ({l.targetType})</span>
                   </td>
-                  <td>{l.authorName ?? "—"}</td>
+                  <td>{l.authorName ?? "-"}</td>
                   <td>{l.actorName}</td>
-                  <td className="muted">{l.reason ?? "—"}</td>
+                  <td className="muted">{l.reason ?? "-"}</td>
                 </tr>
               ))}
             </tbody>

@@ -42,8 +42,8 @@ export default async function HistoryPage({
       </nav>
       <h1 className="page-title">Revision history</h1>
       <p className="lede">
-        Every edit is preserved. Nothing is overwritten — archivists can restore
-        any earlier version, which itself creates a new revision.
+        Every edit is saved as a revision. Archivists can restore any earlier
+        version, which creates a new revision instead of overwriting.
       </p>
 
       {entry.revisions.length === 0 ? (

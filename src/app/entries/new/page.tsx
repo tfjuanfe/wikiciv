@@ -51,8 +51,8 @@ export default async function NewEntryPage({
       <h1 className="page-title">Add lore</h1>
       <p className="lede">
         Pick a layer: a <strong>Record</strong> of verifiable facts (needs
-        evidence, reviewed before publishing) or an <strong>Account</strong> —
-        an in-character telling attributed to a player or faction.
+        evidence, reviewed before publishing), or an <strong>Account</strong>,
+        an in-character story credited to a player or faction.
       </p>
 
       <EntryForm

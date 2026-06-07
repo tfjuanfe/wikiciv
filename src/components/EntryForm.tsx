@@ -135,7 +135,7 @@ export default function EntryForm({
           <select value={eventId} onChange={(e) => setEventId(e.target.value)}>
             {events.map((e) => (
               <option key={e.id} value={e.id}>
-                {e.serverName} — {e.name}
+                {e.serverName} · {e.name}
               </option>
             ))}
           </select>
@@ -175,7 +175,7 @@ export default function EntryForm({
             className={`btn btn-sm ${layer === "record" ? "" : "btn-secondary"}`}
             onClick={() => setLayer("record")}
           >
-            📜 Record — verifiable facts
+            📜 Record (verifiable facts)
           </button>
           <button
             type="button"
@@ -183,7 +183,7 @@ export default function EntryForm({
             className={`btn btn-sm ${layer === "account" ? "" : "btn-secondary"}`}
             onClick={() => setLayer("account")}
           >
-            💬 Account — in-character telling
+            💬 Account (in-character story)
           </button>
         </div>
         <p className="hint" style={{ marginTop: 6 }}>

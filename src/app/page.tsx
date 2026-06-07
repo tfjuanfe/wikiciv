@@ -29,11 +29,10 @@ export default async function HomePage() {
       <section className="hero">
         <h1>WikiCiv</h1>
         <p>
-          An open, collaborative archive for Minecraft civilization events. Two
-          layers per subject: a <strong>Record</strong> of verifiable facts and
-          the <strong>Accounts</strong> of those who lived it. Every telling has
-          a home — conflicting versions coexist, attributed to whoever submitted
-          them.
+          A community archive for Minecraft civilization events. Each subject
+          has two layers: a <strong>Record</strong> for the documented facts, and{" "}
+          <strong>Accounts</strong> for the stories players and factions tell
+          about it.
         </p>
       </section>
 

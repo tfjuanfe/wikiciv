@@ -27,6 +27,8 @@ export default function Header({ user }: { user: SessionUser | null }) {
         <nav className="header-nav">
           <Link href="/">Home</Link>
           <Link href="/search">Search</Link>
+          <Link href="/info">About</Link>
+          <Link href="/faq">FAQ</Link>
           {user ? (
             <>
               <Link href="/entries/new" className="nav-cta">

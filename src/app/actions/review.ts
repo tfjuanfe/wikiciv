@@ -66,8 +66,8 @@ export async function requestChanges(
 
   const message = reason.trim();
 
-  // Send it back to the author as a draft rather than deleting it — every
-  // telling keeps its home — and attach the reason so the loop is closed.
+  // Send it back to the author as a draft instead of deleting it, and attach
+  // the reason so they know what to fix.
   await prisma.entry.update({
     where: { id: entryId },
     data: {

@@ -54,9 +54,9 @@ export default async function ReviewPage() {
         </Link>
       </div>
       <p className="lede">
-        Approve submissions, send them back for changes, or — when two Record
-        claims conflict — mark them <strong>disputed</strong> so both coexist.
-        Nothing here is ever deleted.
+        Approve submissions or send them back to the author with feedback. If
+        two Record claims conflict, mark them <strong>disputed</strong> so both
+        stay visible instead of rejecting either one.
       </p>
 
       <h2 className="section-title">
@@ -150,7 +150,7 @@ export default async function ReviewPage() {
                 </td>
                 <td>{c.role}</td>
                 <td>{c._count.entries}</td>
-                <td>{c.trusted ? "✦ trusted" : "—"}</td>
+                <td>{c.trusted ? "✦ trusted" : "no"}</td>
                 <td style={{ textAlign: "right" }}>
                   {c.id !== user.id && c.role !== "archivist" && (
                     <ActionButton

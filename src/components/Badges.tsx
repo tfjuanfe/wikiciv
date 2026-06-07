@@ -30,9 +30,9 @@ export function StatusBadge({ status }: { status: EntryStatus }) {
 export function DisputedBanner() {
   return (
     <div className="disputed-banner" role="note">
-      <strong>⚠ Disputed record.</strong> Two or more Record claims conflict.
-      Both are preserved below — WikiCiv documents the disagreement rather than
-      ruling on which version is true.
+      <strong>⚠ Disputed record.</strong> More than one Record has been filed
+      for this subject and an archivist flagged them as conflicting. Both are
+      kept and shown below.
     </div>
   );
 }

@@ -143,8 +143,8 @@ export default async function EntryPage({
       {previewing && (
         <div className="notice-pending">
           You are previewing this entry. Its status is{" "}
-          <StatusBadge status={anchor.status as any} /> — it is not yet visible
-          to readers.
+          <StatusBadge status={anchor.status as any} />. It is not visible to
+          readers yet.
         </div>
       )}
 
@@ -226,8 +226,8 @@ export default async function EntryPage({
           <h2 className="section-title">💬 Accounts</h2>
           {accounts.length === 0 ? (
             <div className="empty-state">
-              No Accounts told yet. In-character tellings, motivations, and
-              propaganda live here — each attributed to its author.
+              No Accounts yet. In-character stories, motivations, and propaganda
+              go here, each credited to its author.
             </div>
           ) : (
             accounts.map((acc) => {
@@ -282,8 +282,8 @@ export default async function EntryPage({
               {accounts.length} account{accounts.length === 1 ? "" : "s"}.
             </p>
             <p className="muted" style={{ margin: "6px 0 0" }}>
-              WikiCiv keeps every version. Conflicting tellings coexist here,
-              attributed to whoever submitted them.
+              Records and Accounts about this subject are shown together. Each
+              Account is credited to the player or faction that wrote it.
             </p>
           </div>
         </aside>

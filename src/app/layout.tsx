@@ -4,9 +4,9 @@ import Header from "@/components/Header";
 import { getCurrentUser } from "@/lib/auth";
 
 export const metadata: Metadata = {
-  title: "WikiCiv — collaborative Minecraft civilization lore",
+  title: "WikiCiv | Minecraft civilization lore archive",
   description:
-    "An open, collaborative lore archive for Minecraft civilization events. Every telling has a home.",
+    "A community archive of Minecraft civilization roleplay events: the nations, wars, characters, and places that players create.",
 };
 
 // Set the theme before first paint to avoid a flash of the wrong mode.
@@ -31,9 +31,9 @@ export default async function RootLayout({
           <div className="footer-inner">
             <span className="footer-cube" aria-hidden />
             <p>
-              <strong>WikiCiv</strong> — every telling has a home. The archive
-              documents and attributes lore; it never rules on which version is
-              true.
+              <strong>WikiCiv</strong> is a community-run archive for Minecraft
+              civilization events. Records hold the documented facts; Accounts
+              hold the stories players tell.
             </p>
           </div>
         </footer>

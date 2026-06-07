@@ -35,7 +35,7 @@ export default async function EditEntryPage({
       </nav>
       <h1 className="page-title">Edit entry</h1>
       <p className="lede">
-        Saving creates a new revision — the previous version is never lost.
+        Saving creates a new revision. The previous version is kept.
       </p>
 
       {entry.reviewFeedback && (
