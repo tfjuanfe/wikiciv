@@ -1,0 +1,162 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/db";
+import { getCurrentUser } from "@/lib/auth";
+import { canReview } from "@/lib/permissions";
+import { formatDate } from "@/lib/format";
+import type { EntryType, Layer } from "@/lib/types";
+import { TypeBadge, LayerBadge } from "@/components/Badges";
+import ActionButton from "@/components/ActionButton";
+import {
+  approveEntry,
+  requestChanges,
+  setDisputed,
+  toggleTrusted,
+} from "@/app/actions/review";
+
+export const dynamic = "force-dynamic";
+
+export default async function ReviewPage() {
+  const user = await getCurrentUser();
+  if (!user) redirect("/login?next=/review");
+  if (!canReview(user)) redirect("/");
+
+  const [pending, contributors] = await Promise.all([
+    prisma.entry.findMany({
+      where: { status: "pending" },
+      include: {
+        author: { select: { username: true } },
+        event: { select: { id: true, name: true } },
+        evidence: true,
+      },
+      orderBy: { createdAt: "asc" },
+    }),
+    prisma.user.findMany({
+      where: { role: { in: ["contributor", "archivist"] } },
+      orderBy: [{ trusted: "desc" }, { username: "asc" }],
+      include: { _count: { select: { entries: true } } },
+    }),
+  ]);
+
+  return (
+    <>
+      <nav className="breadcrumbs">
+        <Link href="/">Home</Link> / Review queue
+      </nav>
+      <h1 className="page-title">Review queue</h1>
+      <p className="lede">
+        Approve submissions, send them back for changes, or — when two Record
+        claims conflict — mark them <strong>disputed</strong> so both coexist.
+        Nothing here is ever deleted.
+      </p>
+
+      <h2 className="section-title">
+        <span className="cube-bullet" aria-hidden /> Pending ({pending.length})
+      </h2>
+      {pending.length === 0 ? (
+        <div className="empty-state">The queue is empty. Nicely kept.</div>
+      ) : (
+        pending.map((e) => (
+          <article
+            key={e.id}
+            className={`queue-item ${e.layer === "record" ? "record" : ""}`}
+          >
+            <div className="layer-block-head">
+              <TypeBadge type={e.type as EntryType} />
+              <LayerBadge layer={e.layer as Layer} />
+              <strong>{e.name}</strong>
+              <span className="muted">
+                · {e.event.name} · by {e.author.username} ·{" "}
+                {formatDate(e.createdAt)}
+              </span>
+            </div>
+
+            {e.layer === "account" && e.attributedTo && (
+              <div className="attributed">
+                as told by <strong>{e.attributedTo}</strong>
+              </div>
+            )}
+
+            <pre className="queue-preview" style={{ whiteSpace: "pre-wrap" }}>
+              {e.body || "(no body)"}
+            </pre>
+
+            {e.layer === "record" && (
+              <p className="muted" style={{ fontSize: "0.84rem" }}>
+                {e.evidence.length} evidence attachment
+                {e.evidence.length === 1 ? "" : "s"}
+              </p>
+            )}
+
+            <div className="btn-row">
+              <ActionButton
+                action={approveEntry.bind(null, e.id)}
+                className="btn btn-sm"
+              >
+                ✓ Approve &amp; publish
+              </ActionButton>
+              {e.layer === "record" && (
+                <ActionButton
+                  action={setDisputed.bind(null, e.id, true)}
+                  className="btn btn-sm btn-secondary"
+                  title="Publish, but flag it as conflicting with another record"
+                >
+                  ⚠ Mark disputed &amp; publish
+                </ActionButton>
+              )}
+              <ActionButton
+                action={requestChanges.bind(null, e.id)}
+                className="btn btn-sm btn-secondary"
+                confirm="Send this back to the author as a draft?"
+              >
+                ↩ Request changes
+              </ActionButton>
+              <Link href={`/entries/${e.id}`} className="btn btn-sm btn-secondary">
+                Preview
+              </Link>
+            </div>
+          </article>
+        ))
+      )}
+
+      <h2 className="section-title">
+        <span className="cube-bullet" aria-hidden /> Contributors
+      </h2>
+      <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Contributor</th>
+              <th>Role</th>
+              <th>Entries</th>
+              <th>Trusted</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {contributors.map((c) => (
+              <tr key={c.id}>
+                <td>
+                  <strong>{c.username}</strong>
+                </td>
+                <td>{c.role}</td>
+                <td>{c._count.entries}</td>
+                <td>{c.trusted ? "✦ trusted" : "—"}</td>
+                <td style={{ textAlign: "right" }}>
+                  {c.id !== user.id && c.role !== "archivist" && (
+                    <ActionButton
+                      action={toggleTrusted.bind(null, c.id)}
+                      className="btn btn-sm btn-secondary"
+                    >
+                      {c.trusted ? "Revoke trust" : "Grant trust"}
+                    </ActionButton>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}

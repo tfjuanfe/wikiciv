@@ -1,0 +1,103 @@
+// WikiCiv data model.
+//
+// Using SQLite for a zero-setup MVP. To move to Postgres/Supabase later:
+//   1. change provider to "postgresql"
+//   2. point DATABASE_URL at the Postgres instance
+//   3. optionally change Entry.infobox to the native Json type
+// Nothing else in the app reads the provider directly, so this is a clean seam.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  role         String   @default("contributor") // reader | contributor | archivist
+  trusted      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  entries   Entry[]    @relation("EntryAuthor")
+  revisions Revision[] @relation("RevisionEditor")
+}
+
+model Server {
+  id          String  @id @default(cuid())
+  name        String
+  description String  @default("")
+  events      Event[]
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  serverId    String
+  name        String
+  theme       String    @default("")
+  startDate   DateTime
+  endDate     DateTime?
+  status      String    @default("ongoing") // ongoing | concluded
+  description String    @default("")
+
+  server  Server  @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  entries Entry[]
+
+  @@index([serverId])
+}
+
+model Entry {
+  id           String   @id @default(cuid())
+  eventId      String
+  type         String // civilization | character | war | place | artifact
+  layer        String // record | account
+  name         String
+  infobox      String   @default("{}") // JSON string of structured fields
+  body         String   @default("") // markdown
+  authorId     String
+  attributedTo String? // faction/player a RP account is told by (account layer)
+  status       String   @default("pending") // draft | pending | published
+  disputed     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  event     Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  author    User       @relation("EntryAuthor", fields: [authorId], references: [id])
+  evidence  Evidence[]
+  revisions Revision[]
+
+  @@index([eventId])
+  @@index([status])
+  @@index([type])
+  @@index([layer])
+}
+
+model Evidence {
+  id      String  @id @default(cuid())
+  entryId String
+  url     String
+  caption String?
+
+  entry Entry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  @@index([entryId])
+}
+
+model Revision {
+  id        String   @id @default(cuid())
+  entryId   String
+  body      String
+  infobox   String
+  note      String   @default("") // e.g. "created", "edited", "rolled back to <date>"
+  editorId  String
+  createdAt DateTime @default(now())
+
+  entry  Entry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  editor User  @relation("RevisionEditor", fields: [editorId], references: [id])
+
+  @@index([entryId])
+}

@@ -1,0 +1,139 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { prisma } from "@/lib/db";
+import { getCurrentUser } from "@/lib/auth";
+import { canReview } from "@/lib/permissions";
+
+export type AdminResult =
+  | { ok: true; id: string }
+  | { ok: false; error: string };
+
+async function ensureArchivist(): Promise<{ ok: boolean; error?: string }> {
+  const user = await getCurrentUser();
+  if (!canReview(user)) return { ok: false, error: "Archivists only." };
+  return { ok: true };
+}
+
+export interface ServerInput {
+  name: string;
+  description: string;
+}
+
+export async function createServer(input: ServerInput): Promise<AdminResult> {
+  const gate = await ensureArchivist();
+  if (!gate.ok) return { ok: false, error: gate.error! };
+  if (input.name.trim().length < 2)
+    return { ok: false, error: "Server name is too short." };
+
+  const server = await prisma.server.create({
+    data: {
+      name: input.name.trim(),
+      description: input.description.trim(),
+    },
+  });
+  revalidatePath("/");
+  return { ok: true, id: server.id };
+}
+
+export async function updateServer(
+  id: string,
+  input: ServerInput,
+): Promise<AdminResult> {
+  const gate = await ensureArchivist();
+  if (!gate.ok) return { ok: false, error: gate.error! };
+  if (input.name.trim().length < 2)
+    return { ok: false, error: "Server name is too short." };
+
+  await prisma.server.update({
+    where: { id },
+    data: { name: input.name.trim(), description: input.description.trim() },
+  });
+  revalidatePath("/");
+  revalidatePath(`/servers/${id}`);
+  return { ok: true, id };
+}
+
+export interface EventInput {
+  serverId: string;
+  name: string;
+  theme: string;
+  startDate: string; // yyyy-mm-dd
+  endDate: string; // yyyy-mm-dd or ""
+  status: "ongoing" | "concluded";
+  description: string;
+}
+
+function parseDate(value: string): Date | null {
+  if (!value) return null;
+  const d = new Date(value + "T00:00:00");
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function validateEvent(input: EventInput): string | null {
+  if (input.name.trim().length < 2) return "Event name is too short.";
+  if (input.status !== "ongoing" && input.status !== "concluded")
+    return "Unknown status.";
+  const start = parseDate(input.startDate);
+  if (!start) return "A valid start date is required.";
+  const end = parseDate(input.endDate);
+  if (end && end < start) return "End date cannot be before the start date.";
+  if (input.status === "concluded" && !end)
+    return "A concluded event needs an end date.";
+  return null;
+}
+
+export async function createEvent(input: EventInput): Promise<AdminResult> {
+  const gate = await ensureArchivist();
+  if (!gate.ok) return { ok: false, error: gate.error! };
+
+  const problem = validateEvent(input);
+  if (problem) return { ok: false, error: problem };
+
+  const server = await prisma.server.findUnique({
+    where: { id: input.serverId },
+  });
+  if (!server) return { ok: false, error: "That server no longer exists." };
+
+  const event = await prisma.event.create({
+    data: {
+      serverId: input.serverId,
+      name: input.name.trim(),
+      theme: input.theme.trim(),
+      startDate: parseDate(input.startDate)!,
+      endDate: parseDate(input.endDate),
+      status: input.status,
+      description: input.description.trim(),
+    },
+  });
+  revalidatePath("/");
+  revalidatePath(`/servers/${input.serverId}`);
+  return { ok: true, id: event.id };
+}
+
+export async function updateEvent(
+  id: string,
+  input: EventInput,
+): Promise<AdminResult> {
+  const gate = await ensureArchivist();
+  if (!gate.ok) return { ok: false, error: gate.error! };
+
+  const problem = validateEvent(input);
+  if (problem) return { ok: false, error: problem };
+
+  const event = await prisma.event.update({
+    where: { id },
+    data: {
+      name: input.name.trim(),
+      theme: input.theme.trim(),
+      startDate: parseDate(input.startDate)!,
+      endDate: parseDate(input.endDate),
+      status: input.status,
+      description: input.description.trim(),
+    },
+  });
+  revalidatePath("/");
+  revalidatePath(`/servers/${event.serverId}`);
+  revalidatePath(`/events/${id}`);
+  return { ok: true, id };
+}

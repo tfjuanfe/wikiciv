@@ -1,0 +1,274 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { prisma } from "@/lib/db";
+import { getCurrentUser } from "@/lib/auth";
+import { canEditEntry, canReview } from "@/lib/permissions";
+import { loadSubject, type EntryWithRelations } from "@/lib/subjects";
+import { parseInfobox, type EntryType } from "@/lib/types";
+import { formatDate } from "@/lib/format";
+import { TYPE_LABELS } from "@/lib/templates";
+import Markdown from "@/components/Markdown";
+import Infobox from "@/components/Infobox";
+import {
+  TypeBadge,
+  LayerBadge,
+  DisputedBanner,
+  DisputedTag,
+  StatusBadge,
+} from "@/components/Badges";
+import ActionButton from "@/components/ActionButton";
+import { setDisputed } from "@/app/actions/review";
+
+export const dynamic = "force-dynamic";
+
+function Evidence({ items }: { items: EntryWithRelations["evidence"] }) {
+  if (items.length === 0) return null;
+  return (
+    <div className="evidence">
+      <h4>Evidence</h4>
+      <div className="evidence-grid">
+        {items.map((ev) => (
+          <a
+            key={ev.id}
+            href={ev.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="evidence-item"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={ev.url} alt={ev.caption ?? "Evidence"} loading="lazy" />
+            <div className="cap">{ev.caption || "View source"}</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Byline({
+  entry,
+  canEdit,
+}: {
+  entry: EntryWithRelations;
+  canEdit: boolean;
+}) {
+  return (
+    <div className="byline">
+      <span>
+        submitted by <strong>{entry.author.username}</strong>
+        {entry.author.trusted ? " ✦" : ""}
+      </span>
+      <span>{formatDate(entry.createdAt)}</span>
+      <Link href={`/entries/${entry.id}/history`}>Revision history</Link>
+      {canEdit && <Link href={`/entries/${entry.id}/edit`}>Edit</Link>}
+    </div>
+  );
+}
+
+export default async function EntryPage({
+  params,
+}: {
+  params: { entryId: string };
+}) {
+  const [anchor, user] = await Promise.all([
+    prisma.entry.findUnique({
+      where: { id: params.entryId },
+      include: {
+        author: { select: { id: true, username: true, trusted: true } },
+        evidence: true,
+        event: { include: { server: true } },
+      },
+    }),
+    getCurrentUser(),
+  ]);
+
+  if (!anchor) notFound();
+
+  const type = anchor.type as EntryType;
+  const subject = await loadSubject(anchor);
+
+  let records = subject.records;
+  let accounts = subject.accounts;
+  const isArchivist = canReview(user);
+
+  // Allow the author/archivist to preview a not-yet-published anchor in place.
+  const previewing =
+    anchor.status !== "published" && canEditEntry(user, anchor);
+  if (previewing) {
+    const a = anchor as unknown as EntryWithRelations;
+    if (anchor.layer === "record" && !records.some((r) => r.id === anchor.id)) {
+      records = [...records, a];
+    } else if (
+      anchor.layer === "account" &&
+      !accounts.some((r) => r.id === anchor.id)
+    ) {
+      accounts = [...accounts, a];
+    }
+  }
+
+  if (records.length === 0 && accounts.length === 0) {
+    // Nothing published and nothing previewable.
+    notFound();
+  }
+
+  const primaryRecord = records[0] ?? null;
+  const sidebarInfoboxSource = primaryRecord ?? accounts[0] ?? anchor;
+  const conflict = records.length > 1;
+  const anyDisputed = records.some((r) => r.disputed) || subject.anyDisputed;
+
+  return (
+    <>
+      <nav className="breadcrumbs">
+        <Link href="/">Home</Link> /{" "}
+        <Link href={`/servers/${anchor.event.serverId}`}>
+          {anchor.event.server.name}
+        </Link>{" "}
+        / <Link href={`/events/${anchor.eventId}`}>{anchor.event.name}</Link> /{" "}
+        {anchor.name}
+      </nav>
+
+      <div className="entry-header">
+        <TypeBadge type={type} />
+        <h1 className="page-title" style={{ margin: 0 }}>
+          {anchor.name}
+        </h1>
+        {anyDisputed && <DisputedTag />}
+      </div>
+      <p className="muted" style={{ marginTop: 4 }}>
+        {TYPE_LABELS[type]} in{" "}
+        <Link href={`/events/${anchor.eventId}`}>{anchor.event.name}</Link>
+      </p>
+
+      {previewing && (
+        <div className="notice-pending">
+          You are previewing this entry. Its status is{" "}
+          <StatusBadge status={anchor.status as any} /> — it is not yet visible
+          to readers.
+        </div>
+      )}
+
+      <div className="subject-layout">
+        <div>
+          {/* ---------- RECORD LAYER ---------- */}
+          <h2 className="section-title">📜 Record</h2>
+          {records.length === 0 ? (
+            <div className="empty-state">
+              No Record entry yet. The verifiable facts for this subject have not
+              been documented.
+            </div>
+          ) : (
+            <>
+              {(anyDisputed || conflict) && <DisputedBanner />}
+              {records.map((rec) => {
+                const canEdit = canEditEntry(user, rec);
+                return (
+                  <article
+                    key={rec.id}
+                    className={`layer-block record${
+                      rec.disputed ? " disputed" : ""
+                    }`}
+                  >
+                    <div className="layer-block-head">
+                      <LayerBadge layer="record" />
+                      {conflict && (
+                        <span className="muted">
+                          claim by {rec.author.username}
+                        </span>
+                      )}
+                      {rec.disputed && <DisputedTag />}
+                      {rec.status !== "published" && (
+                        <StatusBadge status={rec.status as any} />
+                      )}
+                    </div>
+
+                    {conflict && (
+                      <Infobox
+                        type={type}
+                        name={rec.name}
+                        data={parseInfobox(rec.infobox)}
+                      />
+                    )}
+
+                    {rec.body ? (
+                      <Markdown>{rec.body}</Markdown>
+                    ) : (
+                      <p className="muted">No description written.</p>
+                    )}
+
+                    <Evidence items={rec.evidence} />
+                    <Byline entry={rec} canEdit={canEdit} />
+
+                    {isArchivist && (
+                      <div className="byline" style={{ border: 0, paddingTop: 4 }}>
+                        <ActionButton
+                          action={setDisputed.bind(null, rec.id, !rec.disputed)}
+                          className="btn btn-sm btn-secondary"
+                        >
+                          {rec.disputed ? "Clear disputed flag" : "Mark disputed"}
+                        </ActionButton>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
+            </>
+          )}
+
+          {/* ---------- ACCOUNT LAYER ---------- */}
+          <h2 className="section-title">💬 Accounts</h2>
+          {accounts.length === 0 ? (
+            <div className="empty-state">
+              No Accounts told yet. In-character tellings, motivations, and
+              propaganda live here — each attributed to its author.
+            </div>
+          ) : (
+            accounts.map((acc) => {
+              const canEdit = canEditEntry(user, acc);
+              return (
+                <article key={acc.id} className="layer-block account">
+                  <div className="layer-block-head">
+                    <LayerBadge layer="account" />
+                    {acc.status !== "published" && (
+                      <StatusBadge status={acc.status as any} />
+                    )}
+                  </div>
+                  <div className="attributed">
+                    as told by <strong>{acc.attributedTo || "Unknown"}</strong>
+                  </div>
+                  {acc.body ? (
+                    <Markdown>{acc.body}</Markdown>
+                  ) : (
+                    <p className="muted">No description written.</p>
+                  )}
+                  <Byline entry={acc} canEdit={canEdit} />
+                </article>
+              );
+            })
+          )}
+        </div>
+
+        {/* ---------- SIDEBAR INFOBOX ---------- */}
+        <aside>
+          {!conflict && (
+            <Infobox
+              type={type}
+              name={anchor.name}
+              data={parseInfobox(sidebarInfoboxSource.infobox)}
+            />
+          )}
+          <div className="card" style={{ marginTop: 16, fontSize: "0.85rem" }}>
+            <strong>About this subject</strong>
+            <p className="muted" style={{ margin: "6px 0 0" }}>
+              {records.length} record{records.length === 1 ? "" : "s"} ·{" "}
+              {accounts.length} account{accounts.length === 1 ? "" : "s"}.
+            </p>
+            <p className="muted" style={{ margin: "6px 0 0" }}>
+              WikiCiv keeps every version. Conflicting tellings coexist here,
+              attributed to whoever submitted them.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </>
+  );
+}
