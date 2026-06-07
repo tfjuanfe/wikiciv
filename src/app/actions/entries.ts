@@ -5,7 +5,19 @@ import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { canContribute, canEditEntry, resolveSubmissionStatus } from "@/lib/permissions";
 import { INFOBOX_FIELDS, isEntryType } from "@/lib/templates";
+import { rateLimit, retryMessage } from "@/lib/ratelimit";
 import type { EntryType, Layer } from "@/lib/types";
+
+// Field length caps to keep payloads sane and block abuse.
+const LIMITS = {
+  name: 200,
+  attributedTo: 200,
+  body: 20000,
+  infoboxValue: 500,
+  evidenceItems: 20,
+  evidenceUrl: 2000,
+  evidenceCaption: 300,
+};
 
 export interface EvidenceInput {
   url: string;
@@ -50,8 +62,25 @@ function validate(input: EntryInput, evidence: EvidenceInput[]): string | null {
     return "Unknown layer.";
   if (!input.name || input.name.trim().length < 2)
     return "Please give the entry a name.";
+  if (input.name.trim().length > LIMITS.name)
+    return `Name is too long (${LIMITS.name} characters max).`;
+  if ((input.attributedTo ?? "").length > LIMITS.attributedTo)
+    return "Attribution is too long.";
   if (input.layer === "account" && !(input.attributedTo ?? "").trim())
     return "Accounts must be attributed to a player or faction.";
+  if ((input.body ?? "").length > LIMITS.body)
+    return `Body is too long (${LIMITS.body.toLocaleString()} characters max).`;
+  for (const v of Object.values(input.infobox ?? {})) {
+    if (typeof v === "string" && v.length > LIMITS.infoboxValue)
+      return `An infobox field is too long (${LIMITS.infoboxValue} characters max).`;
+  }
+  if (evidence.length > LIMITS.evidenceItems)
+    return `Too many evidence items (${LIMITS.evidenceItems} max).`;
+  for (const e of evidence) {
+    if (e.url.length > LIMITS.evidenceUrl) return "An evidence URL is too long.";
+    if ((e.caption ?? "").length > LIMITS.evidenceCaption)
+      return "An evidence caption is too long.";
+  }
   if (input.layer === "record" && !input.asDraft && evidence.length === 0)
     return "Record entries require at least one piece of evidence (an image or source URL).";
   return null;
@@ -61,6 +90,9 @@ export async function createEntry(input: EntryInput): Promise<EntryResult> {
   const user = await getCurrentUser();
   if (!canContribute(user) || !user)
     return { ok: false, error: "You must be a contributor to add entries." };
+
+  const rl = await rateLimit(`entry:${user.id}`, 20, 600);
+  if (!rl.ok) return { ok: false, error: retryMessage(rl.retryAfter) };
 
   const evidence = cleanEvidence(input.evidence);
   const problem = validate(input, evidence);

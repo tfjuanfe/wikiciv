@@ -38,6 +38,10 @@ export async function createServer(input: ServerInput): Promise<AdminResult> {
   if (!gate.ok) return { ok: false, error: gate.error! };
   if (input.name.trim().length < 2)
     return { ok: false, error: "Server name is too short." };
+  if (input.name.trim().length > 200)
+    return { ok: false, error: "Server name is too long." };
+  if ((input.description ?? "").length > 5000)
+    return { ok: false, error: "Description is too long (5000 characters max)." };
 
   const server = await prisma.server.create({
     data: {
@@ -57,6 +61,10 @@ export async function updateServer(
   if (!gate.ok) return { ok: false, error: gate.error! };
   if (input.name.trim().length < 2)
     return { ok: false, error: "Server name is too short." };
+  if (input.name.trim().length > 200)
+    return { ok: false, error: "Server name is too long." };
+  if ((input.description ?? "").length > 5000)
+    return { ok: false, error: "Description is too long (5000 characters max)." };
 
   await prisma.server.update({
     where: { id },
@@ -85,6 +93,10 @@ function parseDate(value: string): Date | null {
 
 function validateEvent(input: EventInput): string | null {
   if (input.name.trim().length < 2) return "Event name is too short.";
+  if (input.name.trim().length > 200) return "Event name is too long.";
+  if ((input.theme ?? "").length > 200) return "Theme is too long.";
+  if ((input.description ?? "").length > 5000)
+    return "Description is too long (5000 characters max).";
   if (input.status !== "ongoing" && input.status !== "concluded")
     return "Unknown status.";
   const start = parseDate(input.startDate);

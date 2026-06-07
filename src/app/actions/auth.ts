@@ -9,6 +9,7 @@ import {
   hashPassword,
   verifyPassword,
 } from "@/lib/auth";
+import { clientIp, rateLimit, retryMessage } from "@/lib/ratelimit";
 
 export type AuthResult = { ok: true } | { ok: false; error: string };
 
@@ -18,15 +19,21 @@ export async function register(
   username: string,
   password: string,
 ): Promise<AuthResult> {
+  const rl = await rateLimit(`register:${clientIp()}`, 5, 3600);
+  if (!rl.ok) return { ok: false, error: retryMessage(rl.retryAfter) };
+
   username = username.trim();
   if (!USERNAME_RE.test(username)) {
     return {
       ok: false,
-      error: "Username must be 3–20 letters, numbers, or underscores.",
+      error: "Username must be 3 to 20 letters, numbers, or underscores.",
     };
   }
-  if (password.length < 6) {
-    return { ok: false, error: "Password must be at least 6 characters." };
+  if (password.length < 8) {
+    return { ok: false, error: "Password must be at least 8 characters." };
+  }
+  if (password.length > 200) {
+    return { ok: false, error: "Password is too long." };
   }
 
   const existing = await prisma.user.findUnique({ where: { username } });
@@ -51,6 +58,9 @@ export async function login(
   username: string,
   password: string,
 ): Promise<AuthResult> {
+  const rl = await rateLimit(`login:${clientIp()}`, 10, 300);
+  if (!rl.ok) return { ok: false, error: retryMessage(rl.retryAfter) };
+
   username = username.trim();
   const user = await prisma.user.findUnique({ where: { username } });
   if (!user || !(await verifyPassword(password, user.passwordHash))) {

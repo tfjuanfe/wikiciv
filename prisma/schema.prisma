@@ -112,6 +112,14 @@ model Revision {
 // Durable record of moderation/review actions. Intentionally has NO foreign-key
 // relations and stores denormalized snapshots (names), so the log survives even
 // after the target entry/event/server or a user is deleted.
+// Fixed-window rate-limit counters, keyed by action + IP (or user). Stored in
+// the DB so limits are shared across serverless instances.
+model RateLimit {
+  key     String   @id
+  count   Int      @default(0)
+  resetAt DateTime
+}
+
 model AuditLog {
   id         String   @id @default(cuid())
   action     String // approved | requested_changes | disputed | undisputed | rolled_back | deleted_entry | deleted_event | deleted_server
