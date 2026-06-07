@@ -22,9 +22,6 @@ export default function Header({ user }: { user: SessionUser | null }) {
           method="get"
           role="search"
         >
-          <span className="search-icon" aria-hidden>
-            🔍
-          </span>
           <input
             type="search"
             name="q"
