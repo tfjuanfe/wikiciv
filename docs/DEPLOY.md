@@ -20,14 +20,14 @@ Easiest path is Vercel's built-in Postgres (Neon under the hood):
    (If using neon.tech directly instead, copy the "Pooled connection" and the
    "Direct connection" strings from the Neon dashboard.)
 
-## 2. Environment variables (Vercel project) **[you or CLI]**
-Set these three on the Vercel **Project → Settings → Environment Variables**
-(Production + Preview + Development), or via the CLI:
+## 2. Environment variables (Vercel project) **[you]**
+The Vercel/Neon integration auto-creates the database variables, including the
+two the app uses: `POSTGRES_PRISMA_URL` (pooled runtime) and
+`POSTGRES_URL_NON_POOLING` (direct, for migrations). You only add one by hand,
+under **Project → Settings → Environment Variables** (all environments):
 
 ```
-DATABASE_URL = <pooled connection string, ?sslmode=require>
-DIRECT_URL   = <direct connection string, ?sslmode=require>
-AUTH_SECRET  = c464204e06117aea5093c4abbca023f9edbe424d45b4866476ed7c17e5f57a22
+AUTH_SECRET = c464204e06117aea5093c4abbca023f9edbe424d45b4866476ed7c17e5f57a22
 ```
 
 (Generate a fresh AUTH_SECRET anytime with:

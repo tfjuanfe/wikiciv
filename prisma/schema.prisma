@@ -11,10 +11,11 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  // Pooled connection (used at runtime by serverless functions).
-  url       = env("DATABASE_URL")
-  // Direct connection (used by `prisma db push` / migrations).
-  directUrl = env("DIRECT_URL")
+  // Pooled, Prisma-ready connection (pgbouncer) — used at runtime. Auto-created
+  // by the Vercel/Neon Postgres integration.
+  url       = env("POSTGRES_PRISMA_URL")
+  // Direct (non-pooled) connection — used by `prisma db push` / migrations.
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
