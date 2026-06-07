@@ -25,41 +25,51 @@ export default function Header({ user }: { user: SessionUser | null }) {
         </form>
 
         <nav className="header-nav">
-          <Link href="/">Home</Link>
-          <Link href="/search">Search</Link>
-          <Link href="/info">About</Link>
-          <Link href="/faq">FAQ</Link>
-          {user ? (
-            <>
-              <Link href="/entries/new" className="nav-cta">
-                + Add lore
-              </Link>
-              <Link href="/me">Mine</Link>
-              {user.role === "archivist" && (
-                <Link href="/review" className="nav-review">
-                  Review
+          <span className="nav-links">
+            <Link href="/">Home</Link>
+            <Link href="/info">About</Link>
+            <Link href="/faq">FAQ</Link>
+          </span>
+
+          <span className="nav-divider" aria-hidden />
+
+          <span className="nav-actions">
+            {user ? (
+              <>
+                <Link href="/entries/new" className="nav-cta">
+                  + Add lore
                 </Link>
-              )}
-              <span className="nav-user" title={`role: ${user.role}`}>
-                {user.username}
-                {user.trusted && <span className="trusted-dot" title="trusted">✦</span>}
-                <span className="nav-role">{user.role}</span>
-              </span>
-              <form action={logout} className="logout-form">
-                <button type="submit" className="link-button">
-                  Log out
-                </button>
-              </form>
-            </>
-          ) : (
-            <>
-              <Link href="/login">Log in</Link>
-              <Link href="/register" className="nav-cta">
-                Sign up
-              </Link>
-            </>
-          )}
-          <ThemeToggle />
+                <Link href="/me">Mine</Link>
+                {user.role === "archivist" && (
+                  <Link href="/review" className="nav-review">
+                    Review
+                  </Link>
+                )}
+                <span className="nav-user" title={`role: ${user.role}`}>
+                  {user.username}
+                  {user.trusted && (
+                    <span className="trusted-dot" title="trusted">
+                      ✦
+                    </span>
+                  )}
+                  <span className="nav-role">{user.role}</span>
+                </span>
+                <form action={logout} className="logout-form">
+                  <button type="submit" className="link-button">
+                    Log out
+                  </button>
+                </form>
+              </>
+            ) : (
+              <>
+                <Link href="/login">Log in</Link>
+                <Link href="/register" className="nav-cta">
+                  Sign up
+                </Link>
+              </>
+            )}
+            <ThemeToggle />
+          </span>
         </nav>
       </div>
     </header>
