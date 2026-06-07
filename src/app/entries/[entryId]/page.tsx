@@ -3,9 +3,9 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { canEditEntry, canReview } from "@/lib/permissions";
-import { loadSubject, type EntryWithRelations } from "@/lib/subjects";
+import { loadSubject, subjectKey, type EntryWithRelations } from "@/lib/subjects";
 import { parseInfobox, type EntryType } from "@/lib/types";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatDateTime } from "@/lib/format";
 import { TYPE_LABELS } from "@/lib/templates";
 import Markdown from "@/components/Markdown";
 import Infobox from "@/components/Infobox";
@@ -18,7 +18,10 @@ import {
 } from "@/components/Badges";
 import ActionButton from "@/components/ActionButton";
 import DeleteButton from "@/components/DeleteButton";
+import StarButton from "@/components/StarButton";
+import CommentForm from "@/components/CommentForm";
 import { setDisputed, deleteEntry } from "@/app/actions/review";
+import { deleteComment } from "@/app/actions/social";
 
 export const dynamic = "force-dynamic";
 
@@ -120,6 +123,30 @@ export default async function EntryPage({
   const conflict = records.length > 1;
   const anyDisputed = records.some((r) => r.disputed) || subject.anyDisputed;
 
+  // Stars + comments live on the subject, so they survive any anchor change.
+  const sk = subjectKey(anchor.eventId, anchor.type, anchor.name);
+  const hasPublished =
+    subject.records.length > 0 || subject.accounts.length > 0;
+
+  const [starCount, userStar, comments] = await Promise.all([
+    hasPublished
+      ? prisma.star.count({ where: { subjectKey: sk } })
+      : Promise.resolve(0),
+    hasPublished && user
+      ? prisma.star.findUnique({
+          where: { subjectKey_userId: { subjectKey: sk, userId: user.id } },
+        })
+      : Promise.resolve(null),
+    hasPublished
+      ? prisma.comment.findMany({
+          where: { subjectKey: sk },
+          include: { author: { select: { username: true } } },
+          orderBy: { createdAt: "asc" },
+        })
+      : Promise.resolve([]),
+  ]);
+  const userStarred = !!userStar;
+
   return (
     <>
       <nav className="breadcrumbs">
@@ -143,8 +170,14 @@ export default async function EntryPage({
         <Link href={`/events/${anchor.eventId}`}>{anchor.event.name}</Link>
       </p>
 
-      {(subject.records.length > 0 || subject.accounts.length > 0) && (
+      {hasPublished && (
         <div className="entry-tools">
+          <StarButton
+            subjectKey={sk}
+            initialCount={starCount}
+            initialStarred={userStarred}
+            isLoggedIn={!!user}
+          />
           <a
             href={`/entries/${anchor.id}/export`}
             className="btn btn-sm btn-secondary"
@@ -277,6 +310,52 @@ export default async function EntryPage({
                 </article>
               );
             })
+          )}
+
+          {/* ---------- DISCUSSION ---------- */}
+          {hasPublished && (
+            <section className="discussion">
+              <h2 className="section-title">
+                💬 Discussion ({comments.length})
+              </h2>
+              {comments.length === 0 ? (
+                <p className="muted">No comments yet. Start the discussion.</p>
+              ) : (
+                <ul className="comment-list">
+                  {comments.map((c) => (
+                    <li key={c.id} className="comment">
+                      <div className="comment-head">
+                        <Link href={`/users/${c.author.username}`}>
+                          <strong>{c.author.username}</strong>
+                        </Link>
+                        <span className="muted">
+                          {formatDateTime(c.createdAt)}
+                        </span>
+                      </div>
+                      <p className="comment-body">{c.body}</p>
+                      {(user?.id === c.authorId || isArchivist) && (
+                        <div className="comment-actions">
+                          <ActionButton
+                            action={deleteComment.bind(null, c.id)}
+                            className="link-button"
+                            confirm="Delete this comment?"
+                          >
+                            Delete
+                          </ActionButton>
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {user ? (
+                <CommentForm subjectKey={sk} />
+              ) : (
+                <p className="muted">
+                  <Link href="/login">Log in</Link> to join the discussion.
+                </p>
+              )}
+            </section>
           )}
         </div>
 

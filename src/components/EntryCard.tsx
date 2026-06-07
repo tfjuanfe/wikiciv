@@ -13,6 +13,7 @@ export interface EntryCardData {
   disputed: boolean;
   createdAt: Date | string;
   author?: { username: string } | null;
+  stars?: number;
 }
 
 function snippet(body: string, max = 160): string {
@@ -42,6 +43,9 @@ export default function EntryCard({ entry }: { entry: EntryCardData }) {
       )}
       {snippet(entry.body) && <p className="snippet">{snippet(entry.body)}</p>}
       <div className="entry-card-foot">
+        {typeof entry.stars === "number" && entry.stars > 0 && (
+          <span className="star-count">★ {entry.stars}</span>
+        )}
         {entry.author && (
           <span>
             by{" "}

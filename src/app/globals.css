@@ -1083,7 +1083,9 @@ fieldset legend {
   .link-button,
   .byline a,
   .notice-pending,
-  .disputed-banner {
+  .disputed-banner,
+  .comment-form,
+  .comment-actions {
     display: none !important;
   }
   body {
@@ -1113,4 +1115,68 @@ fieldset legend {
   h3 {
     break-after: avoid;
   }
+}
+
+/* ---------- Stars ---------- */
+.star-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.star-on {
+  background: #e9b949 !important;
+  color: #3a2e0a !important;
+  border-color: #e9b949 !important;
+}
+.star-on:hover {
+  background: #dca81f !important;
+}
+.star-count {
+  color: #b8860b;
+  font-weight: 700;
+}
+
+/* ---------- Comments / discussion ---------- */
+.discussion {
+  margin-top: 30px;
+}
+.comment-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.comment {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 12px 14px;
+}
+.comment-head {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+.comment-body {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+.comment-actions {
+  margin-top: 7px;
+}
+.comment-form textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.92rem;
+  resize: vertical;
 }

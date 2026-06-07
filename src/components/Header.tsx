@@ -28,6 +28,7 @@ export default function Header({ user }: { user: SessionUser | null }) {
           <span className="nav-links">
             <Link href="/">Home</Link>
             <Link href="/upcoming">Upcoming</Link>
+            <Link href="/popular">Popular</Link>
             <Link href="/info">About</Link>
             <Link href="/faq">FAQ</Link>
           </span>

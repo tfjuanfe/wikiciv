@@ -29,6 +29,8 @@ model User {
 
   entries   Entry[]    @relation("EntryAuthor")
   revisions Revision[] @relation("RevisionEditor")
+  stars     Star[]
+  comments  Comment[]
 }
 
 model Server {
@@ -114,6 +116,35 @@ model Revision {
 // Durable record of moderation/review actions. Intentionally has NO foreign-key
 // relations and stores denormalized snapshots (names), so the log survives even
 // after the target entry/event/server or a user is deleted.
+// Stars and comments attach to a SUBJECT (eventId + type + name), not a single
+// entry, because a subject page is reachable through any of its entries' IDs.
+// subjectKey is the same grouping key used throughout the app.
+model Star {
+  id         String   @id @default(cuid())
+  subjectKey String
+  userId     String
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([subjectKey, userId])
+  @@index([subjectKey])
+}
+
+model Comment {
+  id         String   @id @default(cuid())
+  subjectKey String
+  authorId   String
+  body       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([subjectKey])
+  @@index([createdAt])
+}
+
 // Fixed-window rate-limit counters, keyed by action + IP (or user). Stored in
 // the DB so limits are shared across serverless instances.
 model RateLimit {
