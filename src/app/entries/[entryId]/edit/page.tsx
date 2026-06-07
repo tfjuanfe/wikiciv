@@ -38,6 +38,14 @@ export default async function EditEntryPage({
         Saving creates a new revision — the previous version is never lost.
       </p>
 
+      {entry.reviewFeedback && (
+        <div className="alert alert-error">
+          <strong>An archivist requested changes:</strong>
+          <br />
+          {entry.reviewFeedback}
+        </div>
+      )}
+
       <EntryForm
         mode="edit"
         events={[

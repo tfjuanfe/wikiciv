@@ -32,6 +32,7 @@ export default function Header({ user }: { user: SessionUser | null }) {
               <Link href="/entries/new" className="nav-cta">
                 + Add lore
               </Link>
+              <Link href="/me">Mine</Link>
               {user.role === "archivist" && (
                 <Link href="/review" className="nav-review">
                   Review

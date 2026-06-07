@@ -4,15 +4,28 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { canReview } from "@/lib/permissions";
+import { logAudit } from "@/lib/audit";
+import type { SessionUser } from "@/lib/types";
 
 export type AdminResult =
   | { ok: true; id: string }
   | { ok: false; error: string };
 
+export type DeleteResult = { ok: true } | { ok: false; error: string };
+
 async function ensureArchivist(): Promise<{ ok: boolean; error?: string }> {
   const user = await getCurrentUser();
   if (!canReview(user)) return { ok: false, error: "Archivists only." };
   return { ok: true };
+}
+
+async function gateArchivist(): Promise<
+  { ok: true; user: SessionUser } | { ok: false; error: string }
+> {
+  const user = await getCurrentUser();
+  if (!canReview(user) || !user)
+    return { ok: false, error: "Archivists only." };
+  return { ok: true, user };
 }
 
 export interface ServerInput {
@@ -136,4 +149,52 @@ export async function updateEvent(
   revalidatePath(`/servers/${event.serverId}`);
   revalidatePath(`/events/${id}`);
   return { ok: true, id };
+}
+
+// Hard-delete an event and everything filed under it (cascades to entries,
+// evidence, revisions). Archivist only. The audit log entry survives.
+export async function deleteEvent(eventId: string): Promise<DeleteResult> {
+  const gate = await gateArchivist();
+  if (!gate.ok) return gate;
+
+  const event = await prisma.event.findUnique({ where: { id: eventId } });
+  if (!event) return { ok: false, error: "Event not found." };
+
+  await prisma.event.delete({ where: { id: eventId } });
+
+  await logAudit({
+    action: "deleted_event",
+    actorId: gate.user.id,
+    actorName: gate.user.username,
+    targetType: "event",
+    targetId: event.id,
+    targetName: event.name,
+  });
+
+  revalidatePath("/");
+  revalidatePath(`/servers/${event.serverId}`);
+  return { ok: true };
+}
+
+// Hard-delete a server and all its events/entries (cascade). Archivist only.
+export async function deleteServer(serverId: string): Promise<DeleteResult> {
+  const gate = await gateArchivist();
+  if (!gate.ok) return gate;
+
+  const server = await prisma.server.findUnique({ where: { id: serverId } });
+  if (!server) return { ok: false, error: "Server not found." };
+
+  await prisma.server.delete({ where: { id: serverId } });
+
+  await logAudit({
+    action: "deleted_server",
+    actorId: gate.user.id,
+    actorName: gate.user.username,
+    targetType: "server",
+    targetId: server.id,
+    targetName: server.name,
+  });
+
+  revalidatePath("/");
+  return { ok: true };
 }

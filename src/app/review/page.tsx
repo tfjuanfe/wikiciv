@@ -7,11 +7,13 @@ import { formatDate } from "@/lib/format";
 import type { EntryType, Layer } from "@/lib/types";
 import { TypeBadge, LayerBadge } from "@/components/Badges";
 import ActionButton from "@/components/ActionButton";
+import DeleteButton from "@/components/DeleteButton";
+import RequestChangesForm from "@/components/RequestChangesForm";
 import {
   approveEntry,
-  requestChanges,
   setDisputed,
   toggleTrusted,
+  deleteEntry,
 } from "@/app/actions/review";
 
 export const dynamic = "force-dynamic";
@@ -43,7 +45,14 @@ export default async function ReviewPage() {
       <nav className="breadcrumbs">
         <Link href="/">Home</Link> / Review queue
       </nav>
-      <h1 className="page-title">Review queue</h1>
+      <div className="entry-header">
+        <h1 className="page-title" style={{ margin: 0 }}>
+          Review queue
+        </h1>
+        <Link href="/review/log" className="btn btn-sm btn-secondary">
+          📋 Activity log
+        </Link>
+      </div>
       <p className="lede">
         Approve submissions, send them back for changes, or — when two Record
         claims conflict — mark them <strong>disputed</strong> so both coexist.
@@ -104,16 +113,16 @@ export default async function ReviewPage() {
                   ⚠ Mark disputed &amp; publish
                 </ActionButton>
               )}
-              <ActionButton
-                action={requestChanges.bind(null, e.id)}
-                className="btn btn-sm btn-secondary"
-                confirm="Send this back to the author as a draft?"
-              >
-                ↩ Request changes
-              </ActionButton>
+              <RequestChangesForm entryId={e.id} />
               <Link href={`/entries/${e.id}`} className="btn btn-sm btn-secondary">
                 Preview
               </Link>
+              <DeleteButton
+                action={deleteEntry.bind(null, e.id)}
+                confirm={`Permanently delete "${e.name}"? This removes the entry, its evidence, and revisions. This cannot be undone.`}
+              >
+                🗑 Delete
+              </DeleteButton>
             </div>
           </article>
         ))

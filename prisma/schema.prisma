@@ -62,6 +62,10 @@ model Entry {
   attributedTo String? // faction/player a RP account is told by (account layer)
   status       String   @default("pending") // draft | pending | published
   disputed     Boolean  @default(false)
+  // Feedback left by an archivist when sending an entry back for changes.
+  // Surfaced to the author on their "My Contributions" page; cleared on resubmit.
+  reviewFeedback   String?
+  reviewFeedbackAt DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -100,4 +104,23 @@ model Revision {
   editor User  @relation("RevisionEditor", fields: [editorId], references: [id])
 
   @@index([entryId])
+}
+
+// Durable record of moderation/review actions. Intentionally has NO foreign-key
+// relations and stores denormalized snapshots (names), so the log survives even
+// after the target entry/event/server or a user is deleted.
+model AuditLog {
+  id         String   @id @default(cuid())
+  action     String // approved | requested_changes | disputed | undisputed | rolled_back | deleted_entry | deleted_event | deleted_server
+  actorId    String // who performed the action (archivist)
+  actorName  String
+  targetType String // entry | event | server
+  targetId   String?
+  targetName String
+  authorName String? // original submitter (for entries)
+  reason     String? // e.g. the change-request message
+  createdAt  DateTime @default(now())
+
+  @@index([action])
+  @@index([createdAt])
 }

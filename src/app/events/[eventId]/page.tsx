@@ -6,6 +6,8 @@ import { canContribute, canReview } from "@/lib/permissions";
 import { formatDate } from "@/lib/format";
 import { ENTRY_TYPES, TYPE_ICONS, TYPE_LABELS } from "@/lib/templates";
 import { TypeBadge, LayerBadge, DisputedTag } from "@/components/Badges";
+import DeleteButton from "@/components/DeleteButton";
+import { deleteEvent } from "@/app/actions/admin";
 import type { EntryType } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -101,12 +103,21 @@ export default async function EventPage({
           {event.name}
         </h1>
         {canReview(user) && (
-          <Link
-            href={`/events/${event.id}/edit`}
-            className="btn btn-sm btn-secondary"
-          >
-            Edit event
-          </Link>
+          <span className="inline-actions">
+            <Link
+              href={`/events/${event.id}/edit`}
+              className="btn btn-sm btn-secondary"
+            >
+              Edit event
+            </Link>
+            <DeleteButton
+              action={deleteEvent.bind(null, event.id)}
+              redirectTo={`/servers/${event.serverId}`}
+              confirm={`Permanently delete the event "${event.name}" and ALL entries filed under it? This cannot be undone.`}
+            >
+              🗑 Delete event
+            </DeleteButton>
+          </span>
         )}
       </div>
       <p className="lede">{event.description}</p>

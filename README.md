@@ -66,8 +66,8 @@ One server (**Stoneholm SMP**), one concluded event (**The Ashen Era**), and a s
 ## Roles & permissions
 
 - **reader** (no login): browse and search published entries.
-- **contributor**: create/edit entries. New/untrusted submissions enter the review queue (`pending`). Trusted contributors auto-publish **Account** entries; **Record** entries always go through review.
-- **archivist**: review the queue (approve / request changes), mark conflicting Records as disputed (instead of rejecting), roll back any entry to a previous revision, toggle a contributor's trusted flag, and **create/edit servers and events** (via "+ New server" on the home page and "+ New event" on each server page).
+- **contributor**: create/edit entries. New/untrusted submissions enter the review queue (`pending`). Trusted contributors auto-publish **Account** entries; **Record** entries always go through review. Track everything you've submitted (drafts, awaiting review, published) on your **My Contributions** (`/me`) page, including any change requests an archivist has sent back.
+- **archivist**: review the queue (approve / request changes **with a reason the author sees**), mark conflicting Records as disputed (instead of rejecting), roll back any entry to a previous revision, toggle a contributor's trusted flag, **create/edit servers and events**, and **delete entries, events, or servers** for moderation. Every approval and moderation action is recorded in a durable **Activity log** (`/review/log`) showing what happened, who did it, and when.
 
 ## Every edit is non-destructive
 

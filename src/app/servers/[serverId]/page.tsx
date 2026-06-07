@@ -4,6 +4,8 @@ import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { canReview } from "@/lib/permissions";
 import { formatDate } from "@/lib/format";
+import DeleteButton from "@/components/DeleteButton";
+import { deleteServer } from "@/app/actions/admin";
 
 export const dynamic = "force-dynamic";
 
@@ -39,9 +41,18 @@ export default async function ServerPage({
           {server.name}
         </h1>
         {isArchivist && (
-          <Link href={`/servers/${server.id}/edit`} className="btn btn-sm btn-secondary">
-            Edit server
-          </Link>
+          <span className="inline-actions">
+            <Link href={`/servers/${server.id}/edit`} className="btn btn-sm btn-secondary">
+              Edit server
+            </Link>
+            <DeleteButton
+              action={deleteServer.bind(null, server.id)}
+              redirectTo="/"
+              confirm={`Permanently delete the server "${server.name}" and ALL its events and entries? This cannot be undone.`}
+            >
+              🗑 Delete server
+            </DeleteButton>
+          </span>
         )}
       </div>
       <p className="lede">{server.description}</p>

@@ -17,7 +17,8 @@ import {
   StatusBadge,
 } from "@/components/Badges";
 import ActionButton from "@/components/ActionButton";
-import { setDisputed } from "@/app/actions/review";
+import DeleteButton from "@/components/DeleteButton";
+import { setDisputed, deleteEntry } from "@/app/actions/review";
 
 export const dynamic = "force-dynamic";
 
@@ -206,6 +207,13 @@ export default async function EntryPage({
                         >
                           {rec.disputed ? "Clear disputed flag" : "Mark disputed"}
                         </ActionButton>
+                        <DeleteButton
+                          action={deleteEntry.bind(null, rec.id)}
+                          redirectTo={`/events/${anchor.eventId}`}
+                          confirm={`Permanently delete this Record of "${rec.name}"? This cannot be undone.`}
+                        >
+                          🗑 Delete
+                        </DeleteButton>
                       </div>
                     )}
                   </article>
@@ -241,6 +249,17 @@ export default async function EntryPage({
                     <p className="muted">No description written.</p>
                   )}
                   <Byline entry={acc} canEdit={canEdit} />
+                  {isArchivist && (
+                    <div className="byline" style={{ border: 0, paddingTop: 4 }}>
+                      <DeleteButton
+                        action={deleteEntry.bind(null, acc.id)}
+                        redirectTo={`/events/${anchor.eventId}`}
+                        confirm={`Permanently delete this Account as told by "${acc.attributedTo || "Unknown"}"? This cannot be undone.`}
+                      >
+                        🗑 Delete
+                      </DeleteButton>
+                    </div>
+                  )}
                 </article>
               );
             })

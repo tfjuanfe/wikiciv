@@ -134,6 +134,9 @@ export async function updateEntry(
         body,
         infobox,
         status,
+        // Resubmitting clears any prior "changes requested" feedback.
+        reviewFeedback: null,
+        reviewFeedbackAt: null,
         evidence: { create: evidence },
         revisions: {
           create: { body, infobox, editorId: user.id, note: "edited" },
