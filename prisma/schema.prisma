@@ -1,18 +1,20 @@
 // WikiCiv data model.
 //
-// Using SQLite for a zero-setup MVP. To move to Postgres/Supabase later:
-//   1. change provider to "postgresql"
-//   2. point DATABASE_URL at the Postgres instance
-//   3. optionally change Entry.infobox to the native Json type
-// Nothing else in the app reads the provider directly, so this is a clean seam.
+// Production runs on PostgreSQL (Neon, via Vercel). Set DATABASE_URL to the
+// pooled connection string and DIRECT_URL to the direct (non-pooled) one.
+// Entry.infobox is stored as a JSON string for portability; it can be switched
+// to the native Json type later if desired.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  // Pooled connection (used at runtime by serverless functions).
+  url       = env("DATABASE_URL")
+  // Direct connection (used by `prisma db push` / migrations).
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
