@@ -40,3 +40,19 @@ export function DisputedBanner() {
 export function DisputedTag() {
   return <span className="badge badge-disputed">⚠ Disputed</span>;
 }
+
+export function EventStatusBadge({ status }: { status: string }) {
+  const label =
+    status === "upcoming"
+      ? "Upcoming"
+      : status === "concluded"
+        ? "Concluded"
+        : "Ongoing";
+  const cls =
+    status === "upcoming"
+      ? "event-upcoming"
+      : status === "concluded"
+        ? "event-concluded"
+        : "event-ongoing";
+  return <span className={`badge ${cls}`}>{label}</span>;
+}

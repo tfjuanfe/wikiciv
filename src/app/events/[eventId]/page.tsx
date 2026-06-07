@@ -5,7 +5,12 @@ import { getCurrentUser } from "@/lib/auth";
 import { canContribute, canReview } from "@/lib/permissions";
 import { formatDate } from "@/lib/format";
 import { ENTRY_TYPES, TYPE_ICONS, TYPE_LABELS } from "@/lib/templates";
-import { TypeBadge, LayerBadge, DisputedTag } from "@/components/Badges";
+import {
+  TypeBadge,
+  LayerBadge,
+  DisputedTag,
+  EventStatusBadge,
+} from "@/components/Badges";
 import DeleteButton from "@/components/DeleteButton";
 import { deleteEvent } from "@/app/actions/admin";
 import type { EntryType } from "@/lib/types";
@@ -85,16 +90,14 @@ export default async function EventPage({
       </nav>
 
       <div className="tag-row" style={{ marginBottom: 8 }}>
-        <span
-          className={`badge badge-status status-${
-            event.status === "concluded" ? "published" : "pending"
-          }`}
-        >
-          {event.status}
-        </span>
+        <EventStatusBadge status={event.status} />
         {event.theme && <span className="badge badge-type">{event.theme}</span>}
         <span className="muted">
-          {formatDate(event.startDate)} – {formatDate(event.endDate)}
+          {event.status === "upcoming"
+            ? `Planned for ${formatDate(event.startDate)}`
+            : `${formatDate(event.startDate)} – ${
+                event.endDate ? formatDate(event.endDate) : "present"
+              }`}
         </span>
       </div>
 
@@ -121,6 +124,19 @@ export default async function EventPage({
         )}
       </div>
       <p className="lede">{event.description}</p>
+
+      {event.discordUrl && (
+        <p style={{ margin: "8px 0 14px" }}>
+          <a
+            href={event.discordUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-sm discord-btn"
+          >
+            💬 Join on Discord
+          </a>
+        </p>
+      )}
 
       {canContribute(user) && (
         <div style={{ margin: "14px 0" }}>

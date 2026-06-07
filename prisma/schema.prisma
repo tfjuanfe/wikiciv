@@ -24,6 +24,7 @@ model User {
   passwordHash String
   role         String   @default("contributor") // reader | contributor | archivist
   trusted      Boolean  @default(false)
+  bio          String   @default("")
   createdAt    DateTime @default(now())
 
   entries   Entry[]    @relation("EntryAuthor")
@@ -44,8 +45,9 @@ model Event {
   theme       String    @default("")
   startDate   DateTime
   endDate     DateTime?
-  status      String    @default("ongoing") // ongoing | concluded
+  status      String    @default("ongoing") // upcoming | ongoing | concluded
   description String    @default("")
+  discordUrl  String    @default("")
 
   server  Server  @relation(fields: [serverId], references: [id], onDelete: Cascade)
   entries Entry[]

@@ -9,6 +9,8 @@ interface ServerOption {
   name: string;
 }
 
+type EventStatusValue = "upcoming" | "ongoing" | "concluded";
+
 export interface EventFormInitial {
   id?: string;
   serverId: string;
@@ -16,8 +18,9 @@ export interface EventFormInitial {
   theme: string;
   startDate: string;
   endDate: string;
-  status: "ongoing" | "concluded";
+  status: EventStatusValue;
   description: string;
+  discordUrl: string;
 }
 
 export default function EventForm({
@@ -37,8 +40,9 @@ export default function EventForm({
   const [theme, setTheme] = useState(initial.theme);
   const [startDate, setStartDate] = useState(initial.startDate);
   const [endDate, setEndDate] = useState(initial.endDate);
-  const [status, setStatus] = useState<"ongoing" | "concluded">(initial.status);
+  const [status, setStatus] = useState<EventStatusValue>(initial.status);
   const [description, setDescription] = useState(initial.description);
+  const [discordUrl, setDiscordUrl] = useState(initial.discordUrl);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -54,6 +58,7 @@ export default function EventForm({
       endDate,
       status,
       description,
+      discordUrl,
     };
     const res = isEdit
       ? await updateEvent(initial.id!, payload)
@@ -145,6 +150,13 @@ export default function EventForm({
         <div className="tag-row">
           <button
             type="button"
+            className={`btn btn-sm ${status === "upcoming" ? "" : "btn-secondary"}`}
+            onClick={() => setStatus("upcoming")}
+          >
+            Upcoming
+          </button>
+          <button
+            type="button"
             className={`btn btn-sm ${status === "ongoing" ? "" : "btn-secondary"}`}
             onClick={() => setStatus("ongoing")}
           >
@@ -160,6 +172,25 @@ export default function EventForm({
             Concluded
           </button>
         </div>
+        {status === "upcoming" && (
+          <p className="hint" style={{ marginTop: 6 }}>
+            Upcoming events show on the Upcoming page. Use the start date as the
+            planned date and add a Discord link below so people can join.
+          </p>
+        )}
+      </div>
+
+      <div className="field">
+        <label htmlFor="discord">
+          Discord link <span className="hint">(optional)</span>
+        </label>
+        <input
+          id="discord"
+          type="url"
+          value={discordUrl}
+          onChange={(e) => setDiscordUrl(e.target.value)}
+          placeholder="https://discord.gg/your-invite"
+        />
       </div>
 
       <div className="field">

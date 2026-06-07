@@ -39,8 +39,9 @@ export default async function EditEventPage({
           theme: event.theme,
           startDate: toDateInputValue(event.startDate),
           endDate: toDateInputValue(event.endDate),
-          status: event.status as "ongoing" | "concluded",
+          status: event.status as "upcoming" | "ongoing" | "concluded",
           description: event.description,
+          discordUrl: event.discordUrl,
         }}
       />
     </>

@@ -49,8 +49,9 @@ export default async function NewEventPage({
           theme: "",
           startDate: "",
           endDate: "",
-          status: "ongoing",
+          status: "upcoming",
           description: "",
+          discordUrl: "",
         }}
       />
     </>

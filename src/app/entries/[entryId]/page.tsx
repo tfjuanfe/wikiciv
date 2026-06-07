@@ -56,7 +56,10 @@ function Byline({
   return (
     <div className="byline">
       <span>
-        submitted by <strong>{entry.author.username}</strong>
+        submitted by{" "}
+        <Link href={`/users/${entry.author.username}`}>
+          <strong>{entry.author.username}</strong>
+        </Link>
         {entry.author.trusted ? " ✦" : ""}
       </span>
       <span>{formatDate(entry.createdAt)}</span>
@@ -139,6 +142,17 @@ export default async function EntryPage({
         {TYPE_LABELS[type]} in{" "}
         <Link href={`/events/${anchor.eventId}`}>{anchor.event.name}</Link>
       </p>
+
+      {(subject.records.length > 0 || subject.accounts.length > 0) && (
+        <div className="entry-tools">
+          <a
+            href={`/entries/${anchor.id}/export`}
+            className="btn btn-sm btn-secondary"
+          >
+            ⬇ Download as Markdown
+          </a>
+        </div>
+      )}
 
       {previewing && (
         <div className="notice-pending">

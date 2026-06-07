@@ -7,7 +7,7 @@ export type EntryType =
   | "artifact";
 export type Layer = "record" | "account";
 export type EntryStatus = "draft" | "pending" | "published";
-export type EventStatus = "ongoing" | "concluded";
+export type EventStatus = "upcoming" | "ongoing" | "concluded";
 
 export interface SessionUser {
   id: string;

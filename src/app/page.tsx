@@ -2,13 +2,15 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { canReview } from "@/lib/permissions";
+import { formatDate } from "@/lib/format";
+import { EventStatusBadge } from "@/components/Badges";
 import EntryCard from "@/components/EntryCard";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const user = await getCurrentUser();
-  const [servers, recent] = await Promise.all([
+  const [servers, recent, upcoming] = await Promise.all([
     prisma.server.findMany({
       include: {
         _count: { select: { events: true } },
@@ -21,6 +23,12 @@ export default async function HomePage() {
       include: { author: { select: { username: true } } },
       orderBy: { createdAt: "desc" },
       take: 6,
+    }),
+    prisma.event.findMany({
+      where: { status: "upcoming" },
+      include: { server: { select: { id: true, name: true } } },
+      orderBy: { startDate: "asc" },
+      take: 3,
     }),
   ]);
 
@@ -35,6 +43,38 @@ export default async function HomePage() {
           about it.
         </p>
       </section>
+
+      {upcoming.length > 0 && (
+        <>
+          <h2
+            className="section-title"
+            style={{ justifyContent: "space-between" }}
+          >
+            <span>
+              <span className="cube-bullet" aria-hidden /> Upcoming events
+            </span>
+            <Link href="/upcoming" className="btn btn-sm btn-secondary">
+              See all
+            </Link>
+          </h2>
+          <div className="card-grid">
+            {upcoming.map((e) => (
+              <Link key={e.id} href={`/events/${e.id}`} className="card">
+                <div className="tag-row" style={{ marginBottom: 6 }}>
+                  <EventStatusBadge status={e.status} />
+                  {e.theme && (
+                    <span className="badge badge-type">{e.theme}</span>
+                  )}
+                </div>
+                <h3 style={{ margin: "2px 0" }}>{e.name}</h3>
+                <div className="meta muted">
+                  Planned for {formatDate(e.startDate)} · {e.server.name}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
 
       <h2 className="section-title" style={{ justifyContent: "space-between" }}>
         <span>

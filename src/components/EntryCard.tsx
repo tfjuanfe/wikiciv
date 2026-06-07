@@ -42,7 +42,14 @@ export default function EntryCard({ entry }: { entry: EntryCardData }) {
       )}
       {snippet(entry.body) && <p className="snippet">{snippet(entry.body)}</p>}
       <div className="entry-card-foot">
-        {entry.author && <span>by {entry.author.username}</span>}
+        {entry.author && (
+          <span>
+            by{" "}
+            <Link href={`/users/${entry.author.username}`}>
+              {entry.author.username}
+            </Link>
+          </span>
+        )}
         <span>{formatDate(entry.createdAt)}</span>
       </div>
     </article>

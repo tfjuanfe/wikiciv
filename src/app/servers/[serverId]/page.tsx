@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { canReview } from "@/lib/permissions";
 import { formatDate } from "@/lib/format";
+import { EventStatusBadge } from "@/components/Badges";
 import DeleteButton from "@/components/DeleteButton";
 import { deleteServer } from "@/app/actions/admin";
 
@@ -74,15 +75,17 @@ export default async function ServerPage({
           {server.events.map((e) => (
             <Link key={e.id} href={`/events/${e.id}`} className="card">
               <div className="tag-row" style={{ marginBottom: 6 }}>
-                <span className={`badge badge-status status-${e.status === "concluded" ? "published" : "pending"}`}>
-                  {e.status}
-                </span>
+                <EventStatusBadge status={e.status} />
                 {e.theme && <span className="badge badge-type">{e.theme}</span>}
               </div>
               <h3 style={{ margin: "2px 0" }}>{e.name}</h3>
               <div className="meta muted">
-                {formatDate(e.startDate)} – {formatDate(e.endDate)} ·{" "}
-                {e._count.entries} entr{e._count.entries === 1 ? "y" : "ies"}
+                {e.status === "upcoming"
+                  ? `Planned for ${formatDate(e.startDate)}`
+                  : `${formatDate(e.startDate)} – ${
+                      e.endDate ? formatDate(e.endDate) : "present"
+                    }`}{" "}
+                · {e._count.entries} entr{e._count.entries === 1 ? "y" : "ies"}
               </div>
               {e.description && (
                 <p className="muted" style={{ marginBottom: 0 }}>

@@ -81,8 +81,9 @@ export interface EventInput {
   theme: string;
   startDate: string; // yyyy-mm-dd
   endDate: string; // yyyy-mm-dd or ""
-  status: "ongoing" | "concluded";
+  status: "upcoming" | "ongoing" | "concluded";
   description: string;
+  discordUrl: string;
 }
 
 function parseDate(value: string): Date | null {
@@ -97,8 +98,18 @@ function validateEvent(input: EventInput): string | null {
   if ((input.theme ?? "").length > 200) return "Theme is too long.";
   if ((input.description ?? "").length > 5000)
     return "Description is too long (5000 characters max).";
-  if (input.status !== "ongoing" && input.status !== "concluded")
+  if (
+    input.status !== "upcoming" &&
+    input.status !== "ongoing" &&
+    input.status !== "concluded"
+  )
     return "Unknown status.";
+  const discord = (input.discordUrl ?? "").trim();
+  if (discord) {
+    if (discord.length > 500) return "Discord link is too long.";
+    if (!/^https?:\/\//i.test(discord))
+      return "Discord link must start with http:// or https://.";
+  }
   const start = parseDate(input.startDate);
   if (!start) return "A valid start date is required.";
   const end = parseDate(input.endDate);
@@ -129,9 +140,11 @@ export async function createEvent(input: EventInput): Promise<AdminResult> {
       endDate: parseDate(input.endDate),
       status: input.status,
       description: input.description.trim(),
+      discordUrl: input.discordUrl.trim(),
     },
   });
   revalidatePath("/");
+  revalidatePath("/upcoming");
   revalidatePath(`/servers/${input.serverId}`);
   return { ok: true, id: event.id };
 }
@@ -155,9 +168,11 @@ export async function updateEvent(
       endDate: parseDate(input.endDate),
       status: input.status,
       description: input.description.trim(),
+      discordUrl: input.discordUrl.trim(),
     },
   });
   revalidatePath("/");
+  revalidatePath("/upcoming");
   revalidatePath(`/servers/${event.serverId}`);
   revalidatePath(`/events/${id}`);
   return { ok: true, id };

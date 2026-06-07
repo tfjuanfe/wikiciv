@@ -27,6 +27,7 @@ export default function Header({ user }: { user: SessionUser | null }) {
         <nav className="header-nav">
           <span className="nav-links">
             <Link href="/">Home</Link>
+            <Link href="/upcoming">Upcoming</Link>
             <Link href="/info">About</Link>
             <Link href="/faq">FAQ</Link>
           </span>
@@ -46,7 +47,7 @@ export default function Header({ user }: { user: SessionUser | null }) {
                   </Link>
                 )}
                 <span className="nav-user" title={`role: ${user.role}`}>
-                  {user.username}
+                  <Link href={`/users/${user.username}`}>{user.username}</Link>
                   {user.trusted && (
                     <span className="trusted-dot" title="trusted">
                       ✦
