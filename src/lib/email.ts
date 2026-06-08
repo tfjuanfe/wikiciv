@@ -28,7 +28,7 @@ export function getBaseUrl(): string {
   return "http://localhost:3000";
 }
 
-const FROM = process.env.EMAIL_FROM?.trim() || "WikiCiv <onboarding@resend.dev>";
+const FROM = process.env.EMAIL_FROM?.trim() || "WikiCiv <noreply@wikiciv.xyz>";
 
 // Send the verification email. Returns ok=false (rather than throwing) so
 // callers can surface a friendly message. If RESEND_API_KEY is unset we log the
