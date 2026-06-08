@@ -21,16 +21,39 @@ datasource db {
 model User {
   id           String   @id @default(cuid())
   username     String   @unique
+  // Optional: accounts can exist without an email, but a verified email is
+  // required to contribute. Stored lowercased; unique among set values
+  // (Postgres treats multiple NULLs as distinct, so absence is always allowed).
+  email         String? @unique
+  emailVerified Boolean @default(false)
   passwordHash String
   role         String   @default("contributor") // reader | contributor | archivist
   trusted      Boolean  @default(false)
   bio          String   @default("")
   createdAt    DateTime @default(now())
 
-  entries   Entry[]    @relation("EntryAuthor")
-  revisions Revision[] @relation("RevisionEditor")
-  stars     Star[]
-  comments  Comment[]
+  entries            Entry[]                  @relation("EntryAuthor")
+  revisions          Revision[]               @relation("RevisionEditor")
+  stars              Star[]
+  comments           Comment[]
+  verificationTokens EmailVerificationToken[]
+}
+
+// Single-use email-verification tokens. Only a SHA-256 hash of the token is
+// stored; the raw token travels in the emailed link. Expired/used tokens are
+// deleted. A user has at most one outstanding token (older ones are cleared on
+// resend).
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  userId    String
+  email     String // the address this token verifies (may differ from User.email if changed)
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model Server {

@@ -926,6 +926,34 @@ fieldset legend {
   background: #233019;
 }
 
+/* email-verification nudge below the header */
+.verify-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  background: var(--record-bg);
+  border-bottom: 1px solid var(--record);
+  color: var(--text);
+}
+.verify-banner a {
+  font-weight: 600;
+}
+.verify-banner-close {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 4px;
+}
+.verify-banner-close:hover {
+  color: var(--text);
+}
+
 /* repeatable evidence rows in the form */
 .evidence-row {
   display: grid;

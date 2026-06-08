@@ -14,6 +14,7 @@ export default function AuthForm({
 }) {
   const router = useRouter();
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -25,7 +26,7 @@ export default function AuthForm({
     const res =
       mode === "login"
         ? await login(username, password)
-        : await register(username, password);
+        : await register(username, password, email || undefined);
     if (!res.ok) {
       setError(res.error);
       setBusy(false);
@@ -49,6 +50,25 @@ export default function AuthForm({
           autoFocus
         />
       </div>
+      {mode === "register" && (
+        <div className="field">
+          <label htmlFor="email">
+            Email <span className="muted">(optional — needed to contribute)</span>
+          </label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+          />
+          <p className="muted" style={{ fontSize: "0.8rem", margin: "4px 0 0" }}>
+            We&apos;ll send a verification link. You can browse without one, but a
+            verified email is required to add records or accounts.
+          </p>
+        </div>
+      )}
       <div className="field">
         <label htmlFor="password">Password</label>
         <input

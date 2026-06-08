@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { formatDate, formatDateTime } from "@/lib/format";
 import type { EntryType, Layer } from "@/lib/types";
 import { TypeBadge, LayerBadge, StatusBadge, DisputedTag } from "@/components/Badges";
+import EmailVerification from "@/components/EmailVerification";
 
 export const dynamic = "force-dynamic";
 
@@ -115,6 +116,8 @@ export default async function MyContributionsPage() {
         {pending.length} awaiting review · {drafts.length} draft
         {drafts.length === 1 ? "" : "s"}.
       </p>
+
+      <EmailVerification email={user.email} verified={user.emailVerified} />
 
       {needsAttention.length > 0 && (
         <div className="card" style={{ borderLeft: "5px solid var(--disputed)" }}>

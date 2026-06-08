@@ -60,6 +60,8 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
       username: user.username,
       role: user.role as Role,
       trusted: user.trusted,
+      email: user.email,
+      emailVerified: user.emailVerified,
     };
   } catch {
     return null;

@@ -3,7 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
-import { canContribute, canEditEntry, resolveSubmissionStatus } from "@/lib/permissions";
+import {
+  canContribute,
+  canContributeNow,
+  canEditEntry,
+  resolveSubmissionStatus,
+  VERIFY_EMAIL_MESSAGE,
+} from "@/lib/permissions";
 import { INFOBOX_FIELDS, isEntryType } from "@/lib/templates";
 import { rateLimit, retryMessage } from "@/lib/ratelimit";
 import type { EntryType, Layer } from "@/lib/types";
@@ -90,6 +96,8 @@ export async function createEntry(input: EntryInput): Promise<EntryResult> {
   const user = await getCurrentUser();
   if (!canContribute(user) || !user)
     return { ok: false, error: "You must be a contributor to add entries." };
+  if (!canContributeNow(user))
+    return { ok: false, error: VERIFY_EMAIL_MESSAGE };
 
   const rl = await rateLimit(`entry:${user.id}`, 20, 600);
   if (!rl.ok) return { ok: false, error: retryMessage(rl.retryAfter) };
@@ -136,6 +144,8 @@ export async function updateEntry(
 ): Promise<EntryResult> {
   const user = await getCurrentUser();
   if (!user) return { ok: false, error: "You must be logged in to edit." };
+  if (!canContributeNow(user))
+    return { ok: false, error: VERIFY_EMAIL_MESSAGE };
 
   const existing = await prisma.entry.findUnique({ where: { id: entryId } });
   if (!existing) return { ok: false, error: "Entry not found." };

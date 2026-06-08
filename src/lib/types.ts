@@ -14,6 +14,8 @@ export interface SessionUser {
   username: string;
   role: Role;
   trusted: boolean;
+  email: string | null;
+  emailVerified: boolean;
 }
 
 export type Infobox = Record<string, string>;

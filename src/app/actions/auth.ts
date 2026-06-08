@@ -10,6 +10,8 @@ import {
   verifyPassword,
 } from "@/lib/auth";
 import { clientIp, rateLimit, retryMessage } from "@/lib/ratelimit";
+import { isValidEmail, normalizeEmail, sendVerificationEmail } from "@/lib/email";
+import { issueVerificationToken } from "@/lib/verification";
 
 export type AuthResult = { ok: true } | { ok: false; error: string };
 
@@ -18,6 +20,7 @@ const USERNAME_RE = /^[a-zA-Z0-9_]{3,20}$/;
 export async function register(
   username: string,
   password: string,
+  rawEmail?: string,
 ): Promise<AuthResult> {
   const rl = await rateLimit(`register:${clientIp()}`, 5, 3600);
   if (!rl.ok) return { ok: false, error: retryMessage(rl.retryAfter) };
@@ -36,6 +39,16 @@ export async function register(
     return { ok: false, error: "Password is too long." };
   }
 
+  // Email is optional at signup, but if supplied it must be valid and unused.
+  const email = rawEmail ? normalizeEmail(rawEmail) : "";
+  if (email) {
+    if (!isValidEmail(email))
+      return { ok: false, error: "Please enter a valid email address." };
+    const emailTaken = await prisma.user.findUnique({ where: { email } });
+    if (emailTaken)
+      return { ok: false, error: "That email is already in use." };
+  }
+
   const existing = await prisma.user.findUnique({ where: { username } });
   if (existing) {
     return { ok: false, error: "That username is already taken." };
@@ -47,8 +60,17 @@ export async function register(
       passwordHash: await hashPassword(password),
       role: "contributor",
       trusted: false,
+      email: email || null,
+      emailVerified: false,
     },
   });
+
+  // Fire off the verification email (best effort — signup still succeeds even
+  // if delivery fails; the user can resend from /me).
+  if (email) {
+    const link = await issueVerificationToken(user.id, email);
+    await sendVerificationEmail(email, link);
+  }
 
   await createSession(user.id);
   return { ok: true };

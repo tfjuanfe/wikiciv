@@ -84,12 +84,16 @@ async function main() {
   console.log("Creating users…");
   const passwordHash = await bcrypt.hash(PASSWORD, 10);
 
+  // Demo accounts are grandfathered as emailVerified so the instant-demo can
+  // contribute without an email round-trip. Real signups go through the
+  // verification flow.
   const archivist = await prisma.user.create({
     data: {
       username: "archivist",
       passwordHash,
       role: "archivist",
       trusted: true,
+      emailVerified: true,
     },
   });
   const chronicler = await prisma.user.create({
@@ -98,6 +102,7 @@ async function main() {
       passwordHash,
       role: "contributor",
       trusted: true,
+      emailVerified: true,
     },
   });
   const ashenScribe = await prisma.user.create({
@@ -106,6 +111,7 @@ async function main() {
       passwordHash,
       role: "contributor",
       trusted: true,
+      emailVerified: true,
     },
   });
   const newcomer = await prisma.user.create({
@@ -114,6 +120,7 @@ async function main() {
       passwordHash,
       role: "contributor",
       trusted: false,
+      emailVerified: true,
     },
   });
 

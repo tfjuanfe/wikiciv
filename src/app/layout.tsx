@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
+import VerifyEmailBanner from "@/components/VerifyEmailBanner";
 import { getCurrentUser } from "@/lib/auth";
 
 export const metadata: Metadata = {
@@ -26,6 +27,9 @@ export default async function RootLayout({
       </head>
       <body>
         <Header user={user} />
+        {user && !user.emailVerified && (
+          <VerifyEmailBanner hasEmail={!!user.email} />
+        )}
         <main className="site-main">{children}</main>
         <footer className="site-footer">
           <div className="footer-inner">

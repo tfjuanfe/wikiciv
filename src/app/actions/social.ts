@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
-import { canReview } from "@/lib/permissions";
+import { canReview, canContributeNow, VERIFY_EMAIL_MESSAGE } from "@/lib/permissions";
 import { rateLimit, retryMessage } from "@/lib/ratelimit";
 
 export type StarResult =
@@ -18,6 +18,8 @@ const COMMENT_MAX = 2000;
 export async function toggleStar(subjectKey: string): Promise<StarResult> {
   const user = await getCurrentUser();
   if (!user) return { ok: false, error: "Log in to star articles." };
+  if (!canContributeNow(user))
+    return { ok: false, error: VERIFY_EMAIL_MESSAGE };
 
   const rl = await rateLimit(`star:${user.id}`, 40, 60);
   if (!rl.ok) return { ok: false, error: retryMessage(rl.retryAfter) };
@@ -46,6 +48,8 @@ export async function addComment(
 ): Promise<CommentResult> {
   const user = await getCurrentUser();
   if (!user) return { ok: false, error: "Log in to comment." };
+  if (!canContributeNow(user))
+    return { ok: false, error: VERIFY_EMAIL_MESSAGE };
 
   const rl = await rateLimit(`comment:${user.id}`, 10, 300);
   if (!rl.ok) return { ok: false, error: retryMessage(rl.retryAfter) };

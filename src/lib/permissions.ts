@@ -36,3 +36,13 @@ export function canReview(user: SessionUser | null): boolean {
 export function canContribute(user: SessionUser | null): boolean {
   return user?.role === "contributor" || user?.role === "archivist";
 }
+
+// Whether a user may take a contributing action RIGHT NOW. Contributing
+// (creating/editing entries, commenting, starring) requires a verified email.
+// Readers and unverified users can still browse.
+export function canContributeNow(user: SessionUser | null): boolean {
+  return canContribute(user) && !!user?.emailVerified;
+}
+
+export const VERIFY_EMAIL_MESSAGE =
+  "Verify your email before contributing. Add or confirm your email on your My Contributions page.";
