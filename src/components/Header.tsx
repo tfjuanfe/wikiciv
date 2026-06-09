@@ -1,9 +1,14 @@
 import Link from "next/link";
 import type { SessionUser } from "@/lib/types";
+import { prisma } from "@/lib/db";
 import { logout } from "@/app/actions/auth";
 import ThemeToggle from "./ThemeToggle";
 
-export default function Header({ user }: { user: SessionUser | null }) {
+export default async function Header({ user }: { user: SessionUser | null }) {
+  const upcomingCount = await prisma.event.count({
+    where: { status: "upcoming" },
+  });
+
   return (
     <header className="site-header">
       {/* Row 1: brand · search · account */}
@@ -65,7 +70,12 @@ export default function Header({ user }: { user: SessionUser | null }) {
       {/* Row 2: page tabs */}
       <nav className="header-tabs">
         <Link href="/">Home</Link>
-        <Link href="/upcoming">Upcoming</Link>
+        <Link href="/upcoming" className="tab-with-badge">
+          Upcoming
+          {upcomingCount > 0 && (
+            <span className="tab-badge">{upcomingCount}</span>
+          )}
+        </Link>
         <Link href="/ratings">Ratings</Link>
         <Link href="/popular">Popular</Link>
         {user && <Link href="/me">My contributions</Link>}
