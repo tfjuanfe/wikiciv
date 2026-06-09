@@ -1,0 +1,10 @@
+Add event ratings, a ratings catalog tab, and an upcoming count box
+
+- New EventRating model (1-5 copper-to-netherite scale, one per user per
+  event, re-rate or clear by clicking again)
+- Event pages get a rating widget and a discussion section (comments reuse
+  the existing Comment model under an event:: subject key)
+- New Ratings tab: a catalog of concluded events ranked by average rating,
+  with inline rating and a link to each event's discussion
+- Upcoming tab shows a count box of how many events are upcoming
+- Rating is gated like other contributions (verified email) and rate-limited

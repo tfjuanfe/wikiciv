@@ -1213,3 +1213,129 @@ fieldset legend {
   font-size: 0.92rem;
   resize: vertical;
 }
+
+/* ---------- Event ratings ---------- */
+.rating-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 14px 0;
+}
+.rating-control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rating-tiers {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.tier-block {
+  width: 34px;
+  height: 30px;
+  border: 1px solid var(--border-strong);
+  border-radius: 5px;
+  background: var(--surface-3);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.82rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.06s ease;
+}
+.tier-block:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+.tier-block:disabled {
+  cursor: default;
+}
+.tier-block.on .tier-num {
+  color: #1a1a1a;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.tier-block:not(.on) .tier-num {
+  color: var(--text-muted);
+}
+.rating-hint {
+  font-size: 0.85rem;
+  min-width: 70px;
+}
+.rating-summary {
+  font-size: 0.88rem;
+}
+
+/* Catalog rows on /ratings */
+.rating-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.rating-rank {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  min-width: 34px;
+  padding-top: 2px;
+}
+.rating-row-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rating-row-foot {
+  margin-top: 2px;
+}
+
+/* Upcoming count box */
+.upcoming-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.count-box {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 92px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--grass);
+  border-radius: var(--radius);
+}
+.count-num {
+  font-size: 2.1rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--grass-deep);
+}
+.count-label {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 4px;
+}
+[data-theme="dark"] .count-num {
+  color: var(--grass-light);
+}
+@media (max-width: 560px) {
+  .upcoming-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .rating-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+}

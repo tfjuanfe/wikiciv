@@ -66,6 +66,7 @@ export default function Header({ user }: { user: SessionUser | null }) {
       <nav className="header-tabs">
         <Link href="/">Home</Link>
         <Link href="/upcoming">Upcoming</Link>
+        <Link href="/ratings">Ratings</Link>
         <Link href="/popular">Popular</Link>
         {user && <Link href="/me">My contributions</Link>}
         {user?.role === "archivist" && (

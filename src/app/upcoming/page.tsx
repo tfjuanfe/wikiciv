@@ -19,11 +19,23 @@ export default async function UpcomingPage() {
       <nav className="breadcrumbs">
         <Link href="/">Home</Link> / Upcoming
       </nav>
-      <h1 className="page-title">Upcoming events</h1>
-      <p className="lede">
-        Events that are planned but have not started yet. Join the Discord for an
-        event to take part.
-      </p>
+      <div className="upcoming-head">
+        <div className="count-box">
+          <span className="count-num">{events.length}</span>
+          <span className="count-label">
+            upcoming event{events.length === 1 ? "" : "s"}
+          </span>
+        </div>
+        <div>
+          <h1 className="page-title" style={{ margin: 0 }}>
+            Upcoming events
+          </h1>
+          <p className="lede" style={{ margin: "6px 0 0" }}>
+            Events that are planned but have not started yet. Join the Discord
+            for an event to take part.
+          </p>
+        </div>
+      </div>
 
       {events.length === 0 ? (
         <div className="empty-state">

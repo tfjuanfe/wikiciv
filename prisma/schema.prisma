@@ -37,6 +37,7 @@ model User {
   stars              Star[]
   comments           Comment[]
   verificationTokens EmailVerificationToken[]
+  eventRatings       EventRating[]
 }
 
 // Single-use email-verification tokens. Only a SHA-256 hash of the token is
@@ -74,8 +75,9 @@ model Event {
   description String    @default("")
   discordUrl  String    @default("")
 
-  server  Server  @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  server  Server        @relation(fields: [serverId], references: [id], onDelete: Cascade)
   entries Entry[]
+  ratings EventRating[]
 
   @@index([serverId])
 }
@@ -166,6 +168,23 @@ model Comment {
 
   @@index([subjectKey])
   @@index([createdAt])
+}
+
+// A member's rating of a (concluded/ongoing) event, on a 1–5 Minecraft-tier
+// scale (copper → netherite). One rating per user per event; updating re-rates.
+model EventRating {
+  id        String   @id @default(cuid())
+  eventId   String
+  userId    String
+  value     Int // 1..5
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@index([eventId])
 }
 
 // Fixed-window rate-limit counters, keyed by action + IP (or user). Stored in

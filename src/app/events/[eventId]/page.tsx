@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { canContribute, canReview } from "@/lib/permissions";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatDateTime } from "@/lib/format";
+import { eventSubjectKey } from "@/lib/ratings";
 import { ENTRY_TYPES, TYPE_ICONS, TYPE_LABELS } from "@/lib/templates";
 import {
   TypeBadge,
@@ -12,7 +13,11 @@ import {
   EventStatusBadge,
 } from "@/components/Badges";
 import DeleteButton from "@/components/DeleteButton";
+import ActionButton from "@/components/ActionButton";
+import RatingControl from "@/components/RatingControl";
+import CommentForm from "@/components/CommentForm";
 import { deleteEvent } from "@/app/actions/admin";
+import { deleteComment } from "@/app/actions/social";
 import type { EntryType } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -48,6 +53,29 @@ export default async function EventPage({
   ]);
 
   if (!event) notFound();
+
+  // Ratings + discussion live on the event itself. Upcoming events can't be
+  // rated yet (nothing to judge), but everyone can still discuss them.
+  const sk = eventSubjectKey(event.id);
+  const canRate = event.status !== "upcoming";
+  const isArchivist = canReview(user);
+  const [ratingAgg, userRating, comments] = await Promise.all([
+    prisma.eventRating.aggregate({
+      where: { eventId: event.id },
+      _avg: { value: true },
+      _count: { value: true },
+    }),
+    user
+      ? prisma.eventRating.findUnique({
+          where: { eventId_userId: { eventId: event.id, userId: user.id } },
+        })
+      : Promise.resolve(null),
+    prisma.comment.findMany({
+      where: { subjectKey: sk },
+      include: { author: { select: { username: true } } },
+      orderBy: { createdAt: "asc" },
+    }),
+  ]);
 
   // Group published entries into subjects (event already fixed, so key on type+name).
   const map = new Map<string, SubjectSummary>();
@@ -138,6 +166,19 @@ export default async function EventPage({
         </p>
       )}
 
+      {canRate && (
+        <div className="card rating-card">
+          <strong>Rate this event</strong>
+          <RatingControl
+            eventId={event.id}
+            initialAverage={ratingAgg._avg.value}
+            initialCount={ratingAgg._count.value}
+            initialUserValue={userRating?.value ?? 0}
+            isLoggedIn={!!user}
+          />
+        </div>
+      )}
+
       {canContribute(user) && (
         <div style={{ margin: "14px 0" }}>
           <Link href={`/entries/new?eventId=${event.id}`} className="btn">
@@ -222,6 +263,47 @@ export default async function EventPage({
           )}
         </aside>
       </div>
+
+      <section className="discussion">
+        <h2 className="section-title">💬 Discussion ({comments.length})</h2>
+        {comments.length === 0 ? (
+          <p className="muted">
+            No comments yet. Share your thoughts on this event.
+          </p>
+        ) : (
+          <ul className="comment-list">
+            {comments.map((c) => (
+              <li key={c.id} className="comment">
+                <div className="comment-head">
+                  <Link href={`/users/${c.author.username}`}>
+                    <strong>{c.author.username}</strong>
+                  </Link>
+                  <span className="muted">{formatDateTime(c.createdAt)}</span>
+                </div>
+                <p className="comment-body">{c.body}</p>
+                {(user?.id === c.authorId || isArchivist) && (
+                  <div className="comment-actions">
+                    <ActionButton
+                      action={deleteComment.bind(null, c.id)}
+                      className="link-button"
+                      confirm="Delete this comment?"
+                    >
+                      Delete
+                    </ActionButton>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+        {user ? (
+          <CommentForm subjectKey={sk} />
+        ) : (
+          <p className="muted">
+            <Link href="/login">Log in</Link> to join the discussion.
+          </p>
+        )}
+      </section>
     </>
   );
 }
