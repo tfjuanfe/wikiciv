@@ -44,7 +44,10 @@ export default async function ProfilePage({
   const [entries, total, viewer] = await Promise.all([
     prisma.entry.findMany({
       where: { authorId: profile.id, status: "published" },
-      include: { author: { select: { username: true } } },
+      include: {
+        author: { select: { username: true } },
+        event: { select: { server: { select: { id: true, name: true } } } },
+      },
       orderBy: { createdAt: "desc" },
       take: 30,
     }),

@@ -11,6 +11,7 @@ import {
   LayerBadge,
   DisputedTag,
   EventStatusBadge,
+  HostBadge,
 } from "@/components/Badges";
 import DeleteButton from "@/components/DeleteButton";
 import ActionButton from "@/components/ActionButton";
@@ -119,6 +120,7 @@ export default async function EventPage({
 
       <div className="tag-row" style={{ marginBottom: 8 }}>
         <EventStatusBadge status={event.status} />
+        <HostBadge server={event.server} />
         {event.theme && <span className="badge badge-type">{event.theme}</span>}
         <span className="muted">
           {event.status === "upcoming"

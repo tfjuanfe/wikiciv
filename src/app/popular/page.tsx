@@ -36,7 +36,10 @@ export default async function PopularPage() {
           name: { equals: parsed.name, mode: "insensitive" },
           status: "published",
         },
-        include: { author: { select: { username: true } } },
+        include: {
+          author: { select: { username: true } },
+          event: { select: { server: { select: { id: true, name: true } } } },
+        },
         orderBy: [{ layer: "desc" }, { createdAt: "asc" }],
       });
       if (!entry) return null;

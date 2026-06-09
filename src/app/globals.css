@@ -1364,3 +1364,15 @@ fieldset legend {
 .header-tabs a.tab-with-badge:hover .tab-badge {
   background: var(--grass);
 }
+
+/* host (server) badge — links to the host's catalog */
+.badge-host {
+  background: var(--account-bg);
+  border-color: var(--account);
+  color: var(--account) !important;
+}
+a.badge-host:hover {
+  text-decoration: none;
+  background: var(--account);
+  color: #fff !important;
+}

@@ -15,6 +15,7 @@ import {
   DisputedBanner,
   DisputedTag,
   StatusBadge,
+  HostBadge,
 } from "@/components/Badges";
 import ActionButton from "@/components/ActionButton";
 import DeleteButton from "@/components/DeleteButton";
@@ -169,6 +170,9 @@ export default async function EntryPage({
         {TYPE_LABELS[type]} in{" "}
         <Link href={`/events/${anchor.eventId}`}>{anchor.event.name}</Link>
       </p>
+      <div className="tag-row" style={{ marginTop: 6 }}>
+        <HostBadge server={anchor.event.server} />
+      </div>
 
       {hasPublished && (
         <div className="entry-tools">

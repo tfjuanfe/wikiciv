@@ -81,10 +81,19 @@ export default async function SearchPage({
 async function findEntries(ql: string) {
   const all = await prisma.entry.findMany({
     where: { status: "published" },
-    include: { author: { select: { username: true } } },
+    include: {
+      author: { select: { username: true } },
+      event: { select: { server: { select: { id: true, name: true } } } },
+    },
     orderBy: { createdAt: "desc" },
   });
-  const matched = all.filter((e) => e.name.toLowerCase().includes(ql));
+  // Match on the subject name OR its host (server) name, so searching a host
+  // surfaces everything they've hosted.
+  const matched = all.filter(
+    (e) =>
+      e.name.toLowerCase().includes(ql) ||
+      e.event.server.name.toLowerCase().includes(ql),
+  );
 
   // Collapse to one result per subject (record + accounts share a name).
   const seen = new Map<string, (typeof matched)[number]>();
@@ -107,6 +116,7 @@ async function findEvents(ql: string) {
     (e) =>
       e.name.toLowerCase().includes(ql) ||
       e.theme.toLowerCase().includes(ql) ||
-      e.description.toLowerCase().includes(ql),
+      e.description.toLowerCase().includes(ql) ||
+      e.server.name.toLowerCase().includes(ql),
   );
 }

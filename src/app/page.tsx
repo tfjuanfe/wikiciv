@@ -20,7 +20,10 @@ export default async function HomePage() {
     }),
     prisma.entry.findMany({
       where: { status: "published" },
-      include: { author: { select: { username: true } } },
+      include: {
+        author: { select: { username: true } },
+        event: { select: { server: { select: { id: true, name: true } } } },
+      },
       orderBy: { createdAt: "desc" },
       take: 6,
     }),

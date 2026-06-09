@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { EntryType, Layer } from "@/lib/types";
-import { TypeBadge, LayerBadge, DisputedTag } from "./Badges";
+import { TypeBadge, LayerBadge, DisputedTag, HostBadge } from "./Badges";
 import { formatDate } from "@/lib/format";
 
 export interface EntryCardData {
@@ -14,6 +14,7 @@ export interface EntryCardData {
   createdAt: Date | string;
   author?: { username: string } | null;
   stars?: number;
+  event?: { server: { id: string; name: string } } | null;
 }
 
 function snippet(body: string, max = 160): string {
@@ -32,6 +33,7 @@ export default function EntryCard({ entry }: { entry: EntryCardData }) {
         <TypeBadge type={entry.type as EntryType} />
         <LayerBadge layer={entry.layer as Layer} />
         {entry.disputed && <DisputedTag />}
+        {entry.event?.server && <HostBadge server={entry.event.server} />}
       </div>
       <h3>
         <Link href={`/entries/${entry.id}`}>{entry.name}</Link>

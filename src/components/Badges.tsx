@@ -1,5 +1,21 @@
+import Link from "next/link";
 import type { EntryStatus, EntryType, Layer } from "@/lib/types";
 import { TYPE_ICONS, TYPE_LABELS } from "@/lib/templates";
+
+// The server that hosts an event acts as its "host". Servers are archivist-
+// created, so this is already a deduped, canonical name — clicking it opens the
+// host's catalog of events.
+export function HostBadge({
+  server,
+}: {
+  server: { id: string; name: string };
+}) {
+  return (
+    <Link href={`/servers/${server.id}`} className="badge badge-host">
+      🏰 Host: {server.name}
+    </Link>
+  );
+}
 
 export function TypeBadge({ type }: { type: EntryType }) {
   return (
