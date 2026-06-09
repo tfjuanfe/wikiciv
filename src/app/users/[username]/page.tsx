@@ -30,6 +30,14 @@ export default async function ProfilePage({
 }) {
   const profile = await prisma.user.findFirst({
     where: { username: { equals: params.username, mode: "insensitive" } },
+    select: {
+      id: true,
+      username: true,
+      role: true,
+      trusted: true,
+      bio: true,
+      createdAt: true,
+    },
   });
   if (!profile) notFound();
 

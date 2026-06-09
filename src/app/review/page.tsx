@@ -36,7 +36,13 @@ export default async function ReviewPage() {
     prisma.user.findMany({
       where: { role: { in: ["contributor", "archivist"] } },
       orderBy: [{ trusted: "desc" }, { username: "asc" }],
-      include: { _count: { select: { entries: true } } },
+      select: {
+        id: true,
+        username: true,
+        role: true,
+        trusted: true,
+        _count: { select: { entries: true } },
+      },
     }),
   ]);
 

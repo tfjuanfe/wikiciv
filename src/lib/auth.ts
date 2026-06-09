@@ -6,10 +6,22 @@ import { prisma } from "./db";
 import type { Role, SessionUser } from "./types";
 
 const COOKIE_NAME = "wikiciv_session";
-const SECRET = new TextEncoder().encode(
-  process.env.AUTH_SECRET ?? "dev-only-insecure-secret-change-me",
-);
 const MAX_AGE = 60 * 60 * 24 * 30; // 30 days
+
+// Resolve the signing secret at request time. In production we refuse to fall
+// back to the public dev string: a missing AUTH_SECRET must fail loudly rather
+// than sign sessions with a secret that's visible in the repo (which would let
+// anyone forge a session for any user, including an archivist).
+function authSecret(): Uint8Array {
+  const secret = process.env.AUTH_SECRET;
+  if (secret) return new TextEncoder().encode(secret);
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "AUTH_SECRET is not set. Refusing to sign or verify sessions with an insecure fallback in production.",
+    );
+  }
+  return new TextEncoder().encode("dev-only-insecure-secret-change-me");
+}
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 10);
@@ -27,7 +39,7 @@ export async function createSession(userId: string): Promise<void> {
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime(`${MAX_AGE}s`)
-    .sign(SECRET);
+    .sign(authSecret());
 
   cookies().set(COOKIE_NAME, token, {
     httpOnly: true,
@@ -48,11 +60,21 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
   if (!token) return null;
 
   try {
-    const { payload } = await jwtVerify(token, SECRET);
+    const { payload } = await jwtVerify(token, authSecret());
     const uid = payload.uid as string | undefined;
     if (!uid) return null;
 
-    const user = await prisma.user.findUnique({ where: { id: uid } });
+    const user = await prisma.user.findUnique({
+      where: { id: uid },
+      select: {
+        id: true,
+        username: true,
+        role: true,
+        trusted: true,
+        email: true,
+        emailVerified: true,
+      },
+    });
     if (!user) return null;
 
     return {
