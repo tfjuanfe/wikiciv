@@ -12,7 +12,7 @@ export function HostBadge({
 }) {
   return (
     <Link href={`/servers/${server.id}`} className="badge badge-host">
-      🏰 Host: {server.name}
+      Host: {server.name}
     </Link>
   );
 }
