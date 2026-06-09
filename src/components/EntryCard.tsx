@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { EntryType, Layer } from "@/lib/types";
-import { TypeBadge, LayerBadge, DisputedTag, HostBadge } from "./Badges";
+import { TypeBadge, LayerBadge, DisputedTag } from "./Badges";
 import { formatDate } from "@/lib/format";
 
 export interface EntryCardData {
@@ -33,7 +33,6 @@ export default function EntryCard({ entry }: { entry: EntryCardData }) {
         <TypeBadge type={entry.type as EntryType} />
         <LayerBadge layer={entry.layer as Layer} />
         {entry.disputed && <DisputedTag />}
-        {entry.event?.server && <HostBadge server={entry.event.server} />}
       </div>
       <h3>
         <Link href={`/entries/${entry.id}`}>{entry.name}</Link>
@@ -47,6 +46,14 @@ export default function EntryCard({ entry }: { entry: EntryCardData }) {
       <div className="entry-card-foot">
         {typeof entry.stars === "number" && entry.stars > 0 && (
           <span className="star-count">★ {entry.stars}</span>
+        )}
+        {entry.event?.server && (
+          <span>
+            on{" "}
+            <Link href={`/servers/${entry.event.server.id}`}>
+              {entry.event.server.name}
+            </Link>
+          </span>
         )}
         {entry.author && (
           <span>

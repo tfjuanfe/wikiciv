@@ -1365,14 +1365,37 @@ fieldset legend {
   background: var(--grass);
 }
 
-/* host (server) badge — links to the host's catalog */
+/* host (server) badge — quiet neutral; links to the host's catalog */
 .badge-host {
-  background: var(--account-bg);
-  border-color: var(--account);
-  color: var(--account) !important;
+  background: var(--surface-3);
+  border-color: var(--border-strong);
+  color: var(--text-muted) !important;
+  font-weight: 600;
 }
 a.badge-host:hover {
   text-decoration: none;
-  background: var(--account);
-  color: #fff !important;
+  background: var(--surface-2);
+  border-color: var(--stone);
+  color: var(--text) !important;
+}
+
+/* --- light polish pass --- */
+.card {
+  transition: transform 0.1s ease, border-color 0.1s ease, box-shadow 0.1s ease;
+}
+a.card:hover {
+  text-decoration: none;
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.04), 0 6px 16px rgba(50, 45, 30, 0.1);
+}
+[data-theme="dark"] a.card:hover {
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3), 0 6px 16px rgba(0, 0, 0, 0.45);
+}
+.entry-card .entry-card-head {
+  gap: 6px;
+}
+.entry-card .entry-card-foot {
+  gap: 6px 12px;
+  align-items: center;
 }
