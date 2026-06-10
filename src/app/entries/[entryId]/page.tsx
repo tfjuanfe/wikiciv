@@ -5,7 +5,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { canEditEntry, canReview } from "@/lib/permissions";
 import { loadSubject, subjectKey, type EntryWithRelations } from "@/lib/subjects";
 import { parseInfobox, type EntryType } from "@/lib/types";
-import { formatDate, formatDateTime } from "@/lib/format";
+import { formatDateTime, formatRelative, readingStats } from "@/lib/format";
 import { TYPE_LABELS } from "@/lib/templates";
 import Markdown from "@/components/Markdown";
 import Infobox from "@/components/Infobox";
@@ -20,6 +20,7 @@ import {
 import ActionButton from "@/components/ActionButton";
 import DeleteButton from "@/components/DeleteButton";
 import StarButton from "@/components/StarButton";
+import ShareButton from "@/components/ShareButton";
 import CommentForm from "@/components/CommentForm";
 import { setDisputed, deleteEntry } from "@/app/actions/review";
 import { deleteComment } from "@/app/actions/social";
@@ -57,6 +58,7 @@ function Byline({
   entry: EntryWithRelations;
   canEdit: boolean;
 }) {
+  const stats = readingStats(entry.body);
   return (
     <div className="byline">
       <span>
@@ -66,7 +68,14 @@ function Byline({
         </Link>
         {entry.author.trusted ? " ✦" : ""}
       </span>
-      <span>{formatDate(entry.createdAt)}</span>
+      <span title={formatDateTime(entry.createdAt)}>
+        {formatRelative(entry.createdAt)}
+      </span>
+      {stats.words > 0 && (
+        <span>
+          {stats.words.toLocaleString()} words · ~{stats.minutes} min read
+        </span>
+      )}
       <Link href={`/entries/${entry.id}/history`}>Revision history</Link>
       {canEdit && <Link href={`/entries/${entry.id}/edit`}>Edit</Link>}
     </div>
@@ -182,6 +191,7 @@ export default async function EntryPage({
             initialStarred={userStarred}
             isLoggedIn={!!user}
           />
+          <ShareButton />
           <a
             href={`/entries/${anchor.id}/export`}
             className="btn btn-sm btn-secondary"
@@ -332,8 +342,11 @@ export default async function EntryPage({
                         <Link href={`/users/${c.author.username}`}>
                           <strong>{c.author.username}</strong>
                         </Link>
-                        <span className="muted">
-                          {formatDateTime(c.createdAt)}
+                        <span
+                          className="muted"
+                          title={formatDateTime(c.createdAt)}
+                        >
+                          {formatRelative(c.createdAt)}
                         </span>
                       </div>
                       <p className="comment-body">{c.body}</p>
