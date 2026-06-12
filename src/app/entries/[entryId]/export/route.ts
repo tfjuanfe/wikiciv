@@ -48,7 +48,7 @@ export async function GET(
     out.push("## Record", "");
     records.forEach((rec, i) => {
       if (records.length > 1) {
-        out.push(`### Record claim ${i + 1} — by ${rec.author.username}`, "");
+        out.push(`### Record claim ${i + 1}, by ${rec.author.username}`, "");
       }
       const info = parseInfobox(rec.infobox);
       const fields = INFOBOX_FIELDS[type].filter((f) => info[f.key]);

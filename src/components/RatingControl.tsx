@@ -87,7 +87,7 @@ export default function RatingControl({
 
       <div className="rating-summary muted">
         {count === 0 ? (
-          <span>Not yet rated{isLoggedIn ? " — be the first." : "."}</span>
+          <span>Not yet rated{isLoggedIn ? ". Be the first." : "."}</span>
         ) : (
           <span>
             <strong style={{ color: avgTier?.color }}>{avgTier?.name}</strong>{" "}

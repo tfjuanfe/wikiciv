@@ -53,7 +53,7 @@ export default function AuthForm({
       {mode === "register" && (
         <div className="field">
           <label htmlFor="email">
-            Email <span className="muted">(optional — needed to contribute)</span>
+            Email <span className="muted">(optional, needed to contribute)</span>
           </label>
           <input
             id="email"

@@ -11,9 +11,27 @@ import ShowMore from "@/components/ShowMore";
 
 export const dynamic = "force-dynamic";
 
+// Plain-text preview of a markdown body for the hero cards.
+function heroSnippet(body: string, max = 120): string {
+  const plain = body
+    .replace(/[#>*_`~]/g, " ")
+    .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+  return plain.length > max ? plain.slice(0, max).trimEnd() + "…" : plain;
+}
+
 export default async function HomePage() {
   const user = await getCurrentUser();
-  const [servers, recent, upcoming, entryCount, eventCount] = await Promise.all([
+  const [
+    servers,
+    recent,
+    upcoming,
+    entryCount,
+    eventCount,
+    featuredRecord,
+    featuredAccount,
+  ] = await Promise.all([
     prisma.server.findMany({
       include: {
         _count: { select: { events: true } },
@@ -38,6 +56,16 @@ export default async function HomePage() {
     }),
     prisma.entry.count({ where: { status: "published" } }),
     prisma.event.count(),
+    prisma.entry.findFirst({
+      where: { status: "published", layer: "record" },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, name: true, body: true },
+    }),
+    prisma.entry.findFirst({
+      where: { status: "published", layer: "account" },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, name: true, body: true, attributedTo: true },
+    }),
   ]);
 
   return (
@@ -45,13 +73,12 @@ export default async function HomePage() {
       <section className="hero">
         <div className="hero-copy">
           <p className="eyebrow">The civilization archive</p>
-          <h1>Every telling has a home.</h1>
+          <h1>Welcome to WikiCiv!</h1>
           <p className="hero-lede">
-            Players build nations, wage wars, and remember them differently.
-            WikiCiv keeps both sides — the documented <strong>Record</strong> and
-            the <strong>Accounts</strong> each faction tells. When versions
-            conflict, they stand side by side. Nothing overwritten, nothing
-            erased.
+            Inspired by Wikipedia, on WikiCiv <strong>YOUR</strong> stories,
+            lore, and ideas become immortalized in an ever-growing civ
+            storytelling community. Read articles, or write your own. The
+            library is all yours!
           </p>
           <div className="hero-cta">
             <Link href="/search" className="btn btn-lg">
@@ -77,27 +104,37 @@ export default async function HomePage() {
           </dl>
         </div>
 
-        <div className="hero-visual" aria-hidden>
-          <article className="concept-card concept-record">
-            <header>
-              <Icon name="record" /> Record
-              <span className="concept-chip">Verified</span>
-            </header>
-            <p>
-              Founded Day 3 · Capital sacked in the Ashen War. Drawn from server
-              logs and screenshots, reviewed before publishing.
-            </p>
-          </article>
-          <article className="concept-card concept-account">
-            <header>
-              <Icon name="account" /> Account
-            </header>
-            <p className="concept-quote">
-              “We did not start the fire. We only refused to kneel before it.”
-            </p>
-            <footer>— as told by The Ardenfall Court</footer>
-          </article>
-          <span className="concept-tie">one subject, every telling</span>
+        <div className="hero-visual">
+          {featuredRecord && (
+            <Link
+              href={`/entries/${featuredRecord.id}`}
+              className="concept-card concept-record"
+            >
+              <header>
+                <Icon name="record" /> Record
+                <span className="concept-chip">Verified</span>
+              </header>
+              <strong className="concept-name">{featuredRecord.name}</strong>
+              <p>{heroSnippet(featuredRecord.body, 120)}</p>
+            </Link>
+          )}
+          {featuredAccount && (
+            <Link
+              href={`/entries/${featuredAccount.id}`}
+              className="concept-card concept-account"
+            >
+              <header>
+                <Icon name="account" /> Account
+              </header>
+              <strong className="concept-name">{featuredAccount.name}</strong>
+              <p className="concept-quote">
+                {heroSnippet(featuredAccount.body, 110)}
+              </p>
+              {featuredAccount.attributedTo && (
+                <footer>as told by {featuredAccount.attributedTo}</footer>
+              )}
+            </Link>
+          )}
         </div>
       </section>
 

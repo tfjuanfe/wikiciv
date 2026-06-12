@@ -28,7 +28,7 @@ export default function VerifyEmailBanner({ hasEmail }: { hasEmail: boolean }) {
     <div className="verify-banner">
       <span>
         {hasEmail
-          ? "Check your inbox to verify your email — it's required before you can contribute."
+          ? "Check your inbox to verify your email. It's required before you can contribute."
           : "Add and verify an email to start contributing records and accounts."}{" "}
         <Link href="/me">
           {hasEmail ? "Resend or change it" : "Add your email"}

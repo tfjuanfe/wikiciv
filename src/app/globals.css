@@ -1918,3 +1918,25 @@ a.card:hover::after {
 .show-more-btn {
   padding: 9px 22px;
 }
+
+/* Hero concept cards now feature real entries and link to them. */
+.concept-name {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+  margin: 9px 0 3px;
+}
+a.concept-card {
+  color: inherit;
+  transition: box-shadow 0.18s ease, border-color 0.18s ease;
+}
+a.concept-card:hover {
+  text-decoration: none;
+  border-color: var(--border-strong);
+  box-shadow: 0 16px 38px rgba(40, 35, 20, 0.2);
+}
+[data-theme="dark"] a.concept-card:hover {
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.5);
+}

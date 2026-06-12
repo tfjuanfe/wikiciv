@@ -59,8 +59,8 @@ export default async function RootLayout({
             />
             <p>
               <strong>WikiCiv</strong> is a community-run archive for Minecraft
-              civilization events. Records hold the documented facts; Accounts
-              hold the stories players tell.
+              civilization events: the nations, wars, and characters players
+              bring to life.
             </p>
           </div>
         </footer>

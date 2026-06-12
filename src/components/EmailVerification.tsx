@@ -51,8 +51,8 @@ export default function EmailVerification({
         <p className="muted" style={{ margin: "0 0 8px" }}>
           <strong className="verified-tag">
             <Icon name="check" /> Verified
-          </strong>{" "}
-          —{" "}
+          </strong>
+          {": "}
           {email}. You can contribute records and accounts.
         </p>
       ) : (
