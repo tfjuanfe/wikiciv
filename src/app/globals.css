@@ -1929,6 +1929,7 @@ a.card:hover::after {
   margin: 9px 0 3px;
 }
 a.concept-card {
+  display: block;
   color: inherit;
   transition: box-shadow 0.18s ease, border-color 0.18s ease;
 }
