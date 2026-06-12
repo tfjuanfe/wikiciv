@@ -27,10 +27,15 @@ export async function setEmailAndSendVerification(
   if (user.email === email && user.emailVerified)
     return { ok: false, error: "That email is already verified." };
 
-  // Block taking an address already verified by someone else.
+  // Block taking an address already VERIFIED by someone else. An address only
+  // held unverified by another account (a squatter) is released here, so it
+  // can't be used to permanently lock out the real owner.
   const taken = await prisma.user.findUnique({ where: { email } });
-  if (taken && taken.id !== user.id)
-    return { ok: false, error: "That email is already in use by another account." };
+  if (taken && taken.id !== user.id) {
+    if (taken.emailVerified)
+      return { ok: false, error: "That email is already in use by another account." };
+    await prisma.user.update({ where: { id: taken.id }, data: { email: null } });
+  }
 
   // Store the (unverified) email so the account reflects the pending address.
   await prisma.user.update({

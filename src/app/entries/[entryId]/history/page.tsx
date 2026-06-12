@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
-import { canReview } from "@/lib/permissions";
+import { canEditEntry, canReview } from "@/lib/permissions";
 import { formatDateTime } from "@/lib/format";
 import { parseInfobox } from "@/lib/types";
 import { INFOBOX_FIELDS } from "@/lib/templates";
@@ -31,6 +31,13 @@ export default async function HistoryPage({
   ]);
 
   if (!entry) notFound();
+
+  // Don't leak unpublished bodies (drafts / pending review) through the history
+  // view. Only the author or an archivist may see a non-published entry's
+  // revisions — every other surface hides them too.
+  if (entry.status !== "published" && !canEditEntry(user, entry) && !canReview(user))
+    notFound();
+
   const isArchivist = canReview(user);
   const type = entry.type as EntryType;
 

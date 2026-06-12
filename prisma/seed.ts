@@ -73,6 +73,22 @@ async function makeEntry(opts: {
 }
 
 async function main() {
+  // Guard against accidentally wiping a remote/production database. The seed
+  // deletes EVERY row, so refuse unless the target looks local or --force is
+  // passed explicitly. This is the catastrophic-loss footgun: a prod URL in the
+  // wrong .env would otherwise be erased by `npm run db:seed`.
+  const dbUrl =
+    process.env.POSTGRES_PRISMA_URL ?? process.env.DATABASE_URL ?? "";
+  const isLocal = /@(localhost|127\.0\.0\.1|0\.0\.0\.0)[:/]/.test(dbUrl);
+  if (!isLocal && !process.argv.includes("--force")) {
+    console.error(
+      "Refusing to seed: target database is not local. This deletes ALL data.\n" +
+        "Re-run with --force if you really mean to reset this database:\n" +
+        "  tsx prisma/seed.ts --force",
+    );
+    process.exit(1);
+  }
+
   console.log("Resetting data…");
   await prisma.revision.deleteMany();
   await prisma.evidence.deleteMany();

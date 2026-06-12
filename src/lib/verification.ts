@@ -62,14 +62,26 @@ export async function consumeVerificationToken(
     };
   }
 
-  const [user] = await prisma.$transaction([
-    prisma.user.update({
-      where: { id: token.userId },
-      data: { email: token.email, emailVerified: true },
-      select: { username: true },
-    }),
-    prisma.emailVerificationToken.delete({ where: { id: token.id } }),
-  ]);
+  try {
+    const [user] = await prisma.$transaction([
+      prisma.user.update({
+        where: { id: token.userId },
+        data: { email: token.email, emailVerified: true },
+        select: { username: true },
+      }),
+      prisma.emailVerificationToken.delete({ where: { id: token.id } }),
+    ]);
 
-  return { ok: true, username: user.username };
+    return { ok: true, username: user.username };
+  } catch {
+    // The only expected failure is the unique-email constraint: another account
+    // verified this same address first. Drop the now-unusable token.
+    await prisma.emailVerificationToken
+      .delete({ where: { id: token.id } })
+      .catch(() => {});
+    return {
+      ok: false,
+      error: "That email has since been verified by another account.",
+    };
+  }
 }

@@ -13,12 +13,8 @@ export type AdminResult =
 
 export type DeleteResult = { ok: true } | { ok: false; error: string };
 
-async function ensureArchivist(): Promise<{ ok: boolean; error?: string }> {
-  const user = await getCurrentUser();
-  if (!canReview(user)) return { ok: false, error: "Archivists only." };
-  return { ok: true };
-}
-
+// Single archivist gate used by every action here. Returns the user on success
+// so callers that need it (e.g. for audit logging) have it.
 async function gateArchivist(): Promise<
   { ok: true; user: SessionUser } | { ok: false; error: string }
 > {
@@ -34,8 +30,8 @@ export interface ServerInput {
 }
 
 export async function createServer(input: ServerInput): Promise<AdminResult> {
-  const gate = await ensureArchivist();
-  if (!gate.ok) return { ok: false, error: gate.error! };
+  const gate = await gateArchivist();
+  if (!gate.ok) return { ok: false, error: gate.error };
   if (input.name.trim().length < 2)
     return { ok: false, error: "Server name is too short." };
   if (input.name.trim().length > 200)
@@ -57,8 +53,8 @@ export async function updateServer(
   id: string,
   input: ServerInput,
 ): Promise<AdminResult> {
-  const gate = await ensureArchivist();
-  if (!gate.ok) return { ok: false, error: gate.error! };
+  const gate = await gateArchivist();
+  if (!gate.ok) return { ok: false, error: gate.error };
   if (input.name.trim().length < 2)
     return { ok: false, error: "Server name is too short." };
   if (input.name.trim().length > 200)
@@ -120,8 +116,8 @@ function validateEvent(input: EventInput): string | null {
 }
 
 export async function createEvent(input: EventInput): Promise<AdminResult> {
-  const gate = await ensureArchivist();
-  if (!gate.ok) return { ok: false, error: gate.error! };
+  const gate = await gateArchivist();
+  if (!gate.ok) return { ok: false, error: gate.error };
 
   const problem = validateEvent(input);
   if (problem) return { ok: false, error: problem };
@@ -153,8 +149,8 @@ export async function updateEvent(
   id: string,
   input: EventInput,
 ): Promise<AdminResult> {
-  const gate = await ensureArchivist();
-  if (!gate.ok) return { ok: false, error: gate.error! };
+  const gate = await gateArchivist();
+  if (!gate.ok) return { ok: false, error: gate.error };
 
   const problem = validateEvent(input);
   if (problem) return { ok: false, error: problem };

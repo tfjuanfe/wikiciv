@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { canReview, canContributeNow, VERIFY_EMAIL_MESSAGE } from "@/lib/permissions";
 import { rateLimit, retryMessage } from "@/lib/ratelimit";
+import { subjectExists } from "@/lib/subjects";
 
 export type StarResult =
   | { ok: true; starred: boolean; count: number }
@@ -23,6 +24,9 @@ export async function toggleStar(subjectKey: string): Promise<StarResult> {
 
   const rl = await rateLimit(`star:${user.id}`, 40, 60);
   if (!rl.ok) return { ok: false, error: retryMessage(rl.retryAfter) };
+
+  if (!(await subjectExists(subjectKey)))
+    return { ok: false, error: "That subject doesn't exist." };
 
   const existing = await prisma.star.findUnique({
     where: { subjectKey_userId: { subjectKey, userId: user.id } },
@@ -53,6 +57,9 @@ export async function addComment(
 
   const rl = await rateLimit(`comment:${user.id}`, 10, 300);
   if (!rl.ok) return { ok: false, error: retryMessage(rl.retryAfter) };
+
+  if (!(await subjectExists(subjectKey)))
+    return { ok: false, error: "That subject doesn't exist." };
 
   const clean = body.trim();
   if (clean.length === 0)

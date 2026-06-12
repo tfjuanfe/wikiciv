@@ -12,6 +12,7 @@ import {
 } from "@/lib/permissions";
 import { INFOBOX_FIELDS, isEntryType } from "@/lib/templates";
 import { rateLimit, retryMessage } from "@/lib/ratelimit";
+import { subjectKey } from "@/lib/subjects";
 import type { EntryType, Layer } from "@/lib/types";
 
 // Field length caps to keep payloads sane and block abuse.
@@ -84,6 +85,10 @@ function validate(input: EntryInput, evidence: EvidenceInput[]): string | null {
     return `Too many evidence items (${LIMITS.evidenceItems} max).`;
   for (const e of evidence) {
     if (e.url.length > LIMITS.evidenceUrl) return "An evidence URL is too long.";
+    // Only allow http(s) links. Blocks javascript:/data: URLs that would
+    // otherwise render as a clickable <a href> on the entry page (stored XSS).
+    if (!/^https?:\/\//i.test(e.url))
+      return "Evidence links must start with http:// or https://.";
     if ((e.caption ?? "").length > LIMITS.evidenceCaption)
       return "An evidence caption is too long.";
   }
@@ -186,6 +191,40 @@ export async function updateEntry(
       },
     }),
   ]);
+
+  // Stars/comments hang off the subjectKey (eventId::type::name). If this edit
+  // renamed the subject, those rows would be orphaned. When no other entry
+  // remains under the old name, move them to the new subject so they follow the
+  // rename. Best-effort: a rare unique collision must not fail the edit itself.
+  const newName = input.name.trim();
+  const oldKey = subjectKey(existing.eventId, type, existing.name);
+  const newKey = subjectKey(existing.eventId, type, newName);
+  if (oldKey !== newKey) {
+    try {
+      const remaining = await prisma.entry.count({
+        where: {
+          id: { not: entryId },
+          eventId: existing.eventId,
+          type,
+          name: { equals: existing.name, mode: "insensitive" },
+        },
+      });
+      if (remaining === 0) {
+        await prisma.$transaction([
+          prisma.star.updateMany({
+            where: { subjectKey: oldKey },
+            data: { subjectKey: newKey },
+          }),
+          prisma.comment.updateMany({
+            where: { subjectKey: oldKey },
+            data: { subjectKey: newKey },
+          }),
+        ]);
+      }
+    } catch {
+      // Leave the social rows under the old key rather than break the edit.
+    }
+  }
 
   revalidatePath(`/entries/${entryId}`);
   revalidatePath(`/events/${existing.eventId}`);

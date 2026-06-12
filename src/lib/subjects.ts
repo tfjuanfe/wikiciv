@@ -14,6 +14,25 @@ export function nameMatches(a: string, b: string): boolean {
   return a.trim().toLowerCase() === b.trim().toLowerCase();
 }
 
+// Whether a subjectKey corresponds to a real, PUBLISHED subject. Stars and
+// comments are keyed by this string and come straight from the client, so we
+// verify the subject exists before writing — otherwise anyone could fabricate
+// stars/comments on arbitrary keys and inflate the "popular" list.
+export async function subjectExists(key: string): Promise<boolean> {
+  // Key shape is `eventId::type::name`. Names may contain "::", so keep the
+  // first two segments fixed and treat the remainder as the (lowercased) name.
+  const parts = key.split("::");
+  if (parts.length < 3) return false;
+  const [eventId, type] = parts;
+  if (!eventId || !type) return false;
+
+  const candidates = await prisma.entry.findMany({
+    where: { eventId, type, status: "published" },
+    select: { name: true },
+  });
+  return candidates.some((c) => subjectKey(eventId, type, c.name) === key);
+}
+
 export interface SubjectEntries {
   records: EntryWithRelations[];
   accounts: EntryWithRelations[];

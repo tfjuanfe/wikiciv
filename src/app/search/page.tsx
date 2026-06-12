@@ -76,24 +76,27 @@ export default async function SearchPage({
   );
 }
 
-// SQLite `contains` is case-sensitive, so we filter in memory for a forgiving,
-// case-insensitive match. Fine at MVP scale; swap for full-text search later.
-async function findEntries(ql: string) {
-  const all = await prisma.entry.findMany({
-    where: { status: "published" },
+// Postgres matches case-insensitively natively (`mode: "insensitive"`), so we
+// filter in the database instead of loading every row and scanning in memory.
+// `take` caps the work per query; a future upgrade is Postgres full-text
+// search (tsvector). Matching includes the host (server) name so searching a
+// host surfaces everything they've hosted.
+async function findEntries(q: string) {
+  const matched = await prisma.entry.findMany({
+    where: {
+      status: "published",
+      OR: [
+        { name: { contains: q, mode: "insensitive" } },
+        { event: { server: { name: { contains: q, mode: "insensitive" } } } },
+      ],
+    },
     include: {
       author: { select: { username: true } },
       event: { select: { server: { select: { id: true, name: true } } } },
     },
     orderBy: { createdAt: "desc" },
+    take: 200,
   });
-  // Match on the subject name OR its host (server) name, so searching a host
-  // surfaces everything they've hosted.
-  const matched = all.filter(
-    (e) =>
-      e.name.toLowerCase().includes(ql) ||
-      e.event.server.name.toLowerCase().includes(ql),
-  );
 
   // Collapse to one result per subject (record + accounts share a name).
   const seen = new Map<string, (typeof matched)[number]>();
@@ -104,19 +107,21 @@ async function findEntries(ql: string) {
       seen.set(key, e);
     }
   }
-  return [...seen.values()];
+  return [...seen.values()].slice(0, 50);
 }
 
-async function findEvents(ql: string) {
-  const all = await prisma.event.findMany({
+async function findEvents(q: string) {
+  return prisma.event.findMany({
+    where: {
+      OR: [
+        { name: { contains: q, mode: "insensitive" } },
+        { theme: { contains: q, mode: "insensitive" } },
+        { description: { contains: q, mode: "insensitive" } },
+        { server: { name: { contains: q, mode: "insensitive" } } },
+      ],
+    },
     include: { server: { select: { name: true } } },
     orderBy: { startDate: "desc" },
+    take: 50,
   });
-  return all.filter(
-    (e) =>
-      e.name.toLowerCase().includes(ql) ||
-      e.theme.toLowerCase().includes(ql) ||
-      e.description.toLowerCase().includes(ql) ||
-      e.server.name.toLowerCase().includes(ql),
-  );
 }

@@ -21,33 +21,41 @@ export async function rateLimit(
   windowSeconds: number,
 ): Promise<RateResult> {
   const now = Date.now();
-  const windowMs = windowSeconds * 1000;
+  const reset = new Date(now + windowSeconds * 1000);
   try {
-    const existing = await prisma.rateLimit.findUnique({ where: { key } });
+    // Single atomic statement: insert a fresh counter, or — on conflict — reset
+    // it if the window has elapsed, otherwise increment. Doing the read, reset,
+    // and increment in one round trip closes the race where two concurrent
+    // requests both pass the check or both reset the window.
+    const rows = await prisma.$queryRaw<{ count: number; resetAt: Date }[]>`
+      INSERT INTO "RateLimit" ("key", "count", "resetAt")
+      VALUES (${key}, 1, ${reset})
+      ON CONFLICT ("key") DO UPDATE SET
+        "count" = CASE WHEN "RateLimit"."resetAt" <= now()
+                       THEN 1 ELSE "RateLimit"."count" + 1 END,
+        "resetAt" = CASE WHEN "RateLimit"."resetAt" <= now()
+                         THEN ${reset} ELSE "RateLimit"."resetAt" END
+      RETURNING "count", "resetAt"
+    `;
+    const row = rows[0];
 
-    if (!existing || existing.resetAt.getTime() <= now) {
-      await prisma.rateLimit.upsert({
-        where: { key },
-        create: { key, count: 1, resetAt: new Date(now + windowMs) },
-        update: { count: 1, resetAt: new Date(now + windowMs) },
-      });
-      return { ok: true };
+    // Opportunistically sweep expired counters (~1% of calls) so the table
+    // doesn't grow without bound. Best-effort; failures are ignored.
+    if (Math.random() < 0.01) {
+      prisma.rateLimit
+        .deleteMany({ where: { resetAt: { lte: new Date() } } })
+        .catch(() => {});
     }
 
-    if (existing.count >= limit) {
+    if (Number(row.count) > limit) {
       return {
         ok: false,
         retryAfter: Math.max(
           1,
-          Math.ceil((existing.resetAt.getTime() - now) / 1000),
+          Math.ceil((row.resetAt.getTime() - now) / 1000),
         ),
       };
     }
-
-    await prisma.rateLimit.update({
-      where: { key },
-      data: { count: { increment: 1 } },
-    });
     return { ok: true };
   } catch {
     return { ok: true };

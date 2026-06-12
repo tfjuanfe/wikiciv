@@ -17,6 +17,12 @@ export type AuthResult = { ok: true } | { ok: false; error: string };
 
 const USERNAME_RE = /^[a-zA-Z0-9_]{3,20}$/;
 
+// A valid bcrypt hash to compare against when the username doesn't exist, so
+// login spends the same time whether or not the account is real (prevents
+// user enumeration via response timing). Not a usable password.
+const DUMMY_HASH =
+  "$2a$10$iAkS/etJ10cd7kYDgv6Qiugp4RtOEzXpz0EnMqG/U4041hhyv5J3.";
+
 export async function register(
   username: string,
   password: string,
@@ -45,8 +51,15 @@ export async function register(
     if (!isValidEmail(email))
       return { ok: false, error: "Please enter a valid email address." };
     const emailTaken = await prisma.user.findUnique({ where: { email } });
-    if (emailTaken)
+    // Only a VERIFIED owner blocks the address. An address merely held
+    // unverified (e.g. a squatter) is released so the new account can claim it.
+    if (emailTaken?.emailVerified)
       return { ok: false, error: "That email is already in use." };
+    if (emailTaken && !emailTaken.emailVerified)
+      await prisma.user.update({
+        where: { id: emailTaken.id },
+        data: { email: null },
+      });
   }
 
   const existing = await prisma.user.findUnique({ where: { username } });
@@ -85,7 +98,13 @@ export async function login(
 
   username = username.trim();
   const user = await prisma.user.findUnique({ where: { username } });
-  if (!user || !(await verifyPassword(password, user.passwordHash))) {
+  // Always run a bcrypt comparison (against a dummy hash when the user is
+  // missing) so the timing is identical for real and unknown usernames.
+  const passwordOk = await verifyPassword(
+    password,
+    user?.passwordHash ?? DUMMY_HASH,
+  );
+  if (!user || !passwordOk) {
     return { ok: false, error: "Invalid username or password." };
   }
 
