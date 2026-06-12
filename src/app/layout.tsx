@@ -1,8 +1,20 @@
 import type { Metadata } from "next";
+import { Inter, Fraunces } from "next/font/google";
+import Image from "next/image";
 import "./globals.css";
 import Header from "@/components/Header";
 import VerifyEmailBanner from "@/components/VerifyEmailBanner";
+import CardSpotlight from "@/components/CardSpotlight";
 import { getCurrentUser } from "@/lib/auth";
+
+// UI text in a clean grotesk; display headings in Fraunces, a high-contrast
+// "old-style" serif that gives the archive an editorial, literary feel.
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "WikiCiv | Minecraft civilization lore archive",
@@ -11,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 // Set the theme before first paint to avoid a flash of the wrong mode.
-const themeScript = `(function(){try{var t=localStorage.getItem('wikiciv-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
+const themeScript = `(function(){try{document.documentElement.classList.add('js');var t=localStorage.getItem('wikiciv-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
 
 export default async function RootLayout({
   children,
@@ -21,11 +33,16 @@ export default async function RootLayout({
   const user = await getCurrentUser();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.variable} ${fraunces.variable}`}
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
+        <CardSpotlight />
         <Header user={user} />
         {user && !user.emailVerified && (
           <VerifyEmailBanner hasEmail={!!user.email} />
@@ -33,7 +50,13 @@ export default async function RootLayout({
         <main className="site-main">{children}</main>
         <footer className="site-footer">
           <div className="footer-inner">
-            <span className="footer-cube" aria-hidden />
+            <Image
+              src="/icon.png"
+              alt=""
+              width={34}
+              height={34}
+              className="footer-mark"
+            />
             <p>
               <strong>WikiCiv</strong> is a community-run archive for Minecraft
               civilization events. Records hold the documented facts; Accounts

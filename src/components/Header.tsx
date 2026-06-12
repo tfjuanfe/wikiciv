@@ -1,8 +1,10 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { SessionUser } from "@/lib/types";
 import { prisma } from "@/lib/db";
 import { logout } from "@/app/actions/auth";
 import ThemeToggle from "./ThemeToggle";
+import Icon from "./Icon";
 
 export default async function Header({ user }: { user: SessionUser | null }) {
   const upcomingCount = await prisma.event.count({
@@ -14,11 +16,22 @@ export default async function Header({ user }: { user: SessionUser | null }) {
       {/* Row 1: brand · search · account */}
       <div className="header-top">
         <Link href="/" className="brand" aria-label="WikiCiv home">
-          <span className="brand-cube" aria-hidden />
-          <span className="brand-text">
-            Wiki<span className="brand-accent">Civ</span>
-          </span>
-          <span className="brand-tag">lore archive</span>
+          <Image
+            src="/logo.png"
+            alt="WikiCiv"
+            width={760}
+            height={252}
+            priority
+            className="brand-logo brand-logo-light"
+          />
+          <Image
+            src="/logo-dark.png"
+            alt="WikiCiv"
+            width={760}
+            height={252}
+            priority
+            className="brand-logo brand-logo-dark"
+          />
         </Link>
 
         <form
@@ -45,7 +58,7 @@ export default async function Header({ user }: { user: SessionUser | null }) {
                 <Link href={`/users/${user.username}`}>{user.username}</Link>
                 {user.trusted && (
                   <span className="trusted-dot" title="trusted">
-                    ✦
+                    <Icon name="sparkle" />
                   </span>
                 )}
               </span>

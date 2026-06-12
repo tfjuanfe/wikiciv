@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Icon from "@/components/Icon";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
@@ -105,7 +106,7 @@ export default async function HistoryPage({
                     className="btn btn-sm btn-secondary"
                     confirm="Restore this version? This creates a new revision and does not erase any history."
                   >
-                    ↺ Roll back to this version
+                    <Icon name="undo" /> Roll back to this version
                   </ActionButton>
                 )}
               </article>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Icon from "./Icon";
 
 // Shown to logged-in users who haven't verified an email. Dismissible for the
 // current tab session (reappears next visit) so it nudges without nagging.
@@ -40,7 +41,7 @@ export default function VerifyEmailBanner({ hasEmail }: { hasEmail: boolean }) {
         onClick={dismiss}
         aria-label="Dismiss"
       >
-        ✕
+        <Icon name="close" />
       </button>
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Icon from "./Icon";
 
 // Copies the current page URL to the clipboard so readers can quickly paste a
 // link to a subject into Discord. Falls back to a prompt when the Clipboard API
@@ -26,7 +27,15 @@ export default function ShareButton() {
       className="btn btn-sm btn-secondary"
       title="Copy a link to this subject"
     >
-      {copied ? "✓ Link copied" : "🔗 Share"}
+      {copied ? (
+        <>
+          <Icon name="check" /> Link copied
+        </>
+      ) : (
+        <>
+          <Icon name="link" /> Share
+        </>
+      )}
     </button>
   );
 }

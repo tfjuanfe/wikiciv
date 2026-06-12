@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Icon from "@/components/Icon";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
 import { formatDate } from "@/lib/format";
@@ -69,7 +70,7 @@ export default async function UpcomingPage() {
                     rel="noopener noreferrer"
                     className="btn btn-sm discord-btn"
                   >
-                    💬 Join on Discord
+                    <Icon name="discord" /> Join on Discord
                   </a>
                 </p>
               )}

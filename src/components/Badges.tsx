@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { EntryStatus, EntryType, Layer } from "@/lib/types";
-import { TYPE_ICONS, TYPE_LABELS } from "@/lib/templates";
+import { TYPE_LABELS } from "@/lib/templates";
+import Icon from "./Icon";
 
 // The server that hosts an event acts as its "host". Servers are archivist-
 // created, so this is already a deduped, canonical name — clicking it opens the
@@ -20,7 +21,8 @@ export function HostBadge({
 export function TypeBadge({ type }: { type: EntryType }) {
   return (
     <span className={`badge badge-type type-${type}`}>
-      <span aria-hidden>{TYPE_ICONS[type]}</span> {TYPE_LABELS[type]}
+      <Icon name={type} className="badge-ico" />
+      {TYPE_LABELS[type]}
     </span>
   );
 }
@@ -28,7 +30,7 @@ export function TypeBadge({ type }: { type: EntryType }) {
 export function LayerBadge({ layer }: { layer: Layer }) {
   return (
     <span className={`badge badge-layer layer-${layer}`}>
-      {layer === "record" ? "📜 Record" : "💬 Account"}
+      {layer === "record" ? "Record" : "Account"}
     </span>
   );
 }
@@ -46,7 +48,10 @@ export function StatusBadge({ status }: { status: EntryStatus }) {
 export function DisputedBanner() {
   return (
     <div className="disputed-banner" role="note">
-      <strong>⚠ Disputed record.</strong> More than one Record has been filed
+      <strong>
+        <Icon name="warning" className="inline-ico" /> Disputed record.
+      </strong>{" "}
+      More than one Record has been filed
       for this subject and an archivist flagged them as conflicting. Both are
       kept and shown below.
     </div>
@@ -54,7 +59,7 @@ export function DisputedBanner() {
 }
 
 export function DisputedTag() {
-  return <span className="badge badge-disputed">⚠ Disputed</span>;
+  return <span className="badge badge-disputed">Disputed</span>;
 }
 
 export function EventStatusBadge({ status }: { status: string }) {

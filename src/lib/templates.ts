@@ -55,15 +55,6 @@ export const TYPE_LABELS: Record<EntryType, string> = {
   artifact: "Artifact",
 };
 
-// Simple voxel/blocky emoji icons per type — light Minecraft flavor.
-export const TYPE_ICONS: Record<EntryType, string> = {
-  civilization: "🏰",
-  character: "🧍",
-  war: "⚔️",
-  place: "🗺️",
-  artifact: "💎",
-};
-
 export function isEntryType(value: string): value is EntryType {
   return (ENTRY_TYPES as string[]).includes(value);
 }

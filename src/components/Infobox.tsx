@@ -1,5 +1,6 @@
 import type { EntryType, Infobox as InfoboxData } from "@/lib/types";
-import { INFOBOX_FIELDS, TYPE_ICONS, TYPE_LABELS } from "@/lib/templates";
+import { INFOBOX_FIELDS, TYPE_LABELS } from "@/lib/templates";
+import Icon from "./Icon";
 
 export default function Infobox({
   type,
@@ -17,7 +18,7 @@ export default function Infobox({
     <aside className="infobox" aria-label={`${TYPE_LABELS[type]} infobox`}>
       <div className="infobox-title">
         <span aria-hidden className="infobox-icon">
-          {TYPE_ICONS[type]}
+          <Icon name={type} />
         </span>
         <div>
           <div className="infobox-name">{name}</div>

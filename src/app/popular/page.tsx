@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Icon from "@/components/Icon";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
 import EntryCard from "@/components/EntryCard";
@@ -64,7 +65,8 @@ export default async function PopularPage() {
 
       {items.length === 0 ? (
         <div className="empty-state">
-          No starred articles yet. Open any article and hit ★ to be the first.
+          No starred articles yet. Open any article and hit{" "}
+          <Icon name="star" className="inline-ico" /> to be the first.
         </div>
       ) : (
         <div className="card-grid">

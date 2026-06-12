@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Icon from "@/components/Icon";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
@@ -145,7 +146,7 @@ export default async function RatingsPage() {
                   href={`/events/${event.id}`}
                   className="btn btn-sm btn-secondary"
                 >
-                  💬 Discuss ({comments})
+                  <Icon name="discussion" /> Discuss ({comments})
                 </Link>
               </div>
             </div>

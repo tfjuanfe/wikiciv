@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Icon from "@/components/Icon";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
@@ -121,7 +122,11 @@ export default async function MyContributionsPage() {
 
       {needsAttention.length > 0 && (
         <div className="card" style={{ borderLeft: "5px solid var(--disputed)" }}>
-          <strong>⚠ {needsAttention.length} entr{needsAttention.length === 1 ? "y" : "ies"} need your attention</strong>
+          <strong>
+            <Icon name="warning" className="inline-ico" />{" "}
+            {needsAttention.length} entr
+            {needsAttention.length === 1 ? "y" : "ies"} need your attention
+          </strong>
           <p className="muted" style={{ margin: "4px 0 8px" }}>
             An archivist sent these back with feedback. Edit and resubmit.
           </p>

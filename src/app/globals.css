@@ -33,8 +33,9 @@
   --shadow: 0 1px 0 rgba(0, 0, 0, 0.04), 0 2px 8px rgba(50, 45, 30, 0.06);
   --radius: 6px;
   --maxw: 1080px;
-  --font-ui: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial,
-    sans-serif;
+  --font-ui: var(--font-sans), "Segoe UI", system-ui, -apple-system, Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-display: var(--font-serif), Georgia, "Iowan Old Style", Palatino, serif;
   --font-read: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino,
     "Times New Roman", serif;
   --font-pixel: "Segoe UI", ui-monospace, monospace;
@@ -82,12 +83,6 @@ body {
 
 body {
   background-color: var(--bg);
-  background-image: linear-gradient(
-      var(--bg-pattern) 1px,
-      transparent 1px
-    ),
-    linear-gradient(90deg, var(--bg-pattern) 1px, transparent 1px);
-  background-size: 28px 28px;
   color: var(--text);
   font-family: var(--font-ui);
   font-size: 16px;
@@ -112,6 +107,14 @@ h3,
 h4 {
   line-height: 1.2;
   color: var(--text);
+}
+.page-title,
+.section-title,
+.hero h1,
+.hero-concept-card h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 /* ---------- Blocky grass-block cube motif ---------- */
@@ -157,28 +160,24 @@ h4 {
 .brand {
   display: flex;
   align-items: center;
-  gap: 9px;
-  color: var(--text);
-  font-weight: 800;
+  flex: none;
 }
 .brand:hover {
   text-decoration: none;
 }
-.brand-text {
-  font-size: 1.3rem;
-  letter-spacing: -0.02em;
+.brand-logo {
+  height: 38px;
+  width: auto;
+  display: block;
 }
-.brand-accent {
-  color: var(--grass-deep);
+.brand-logo-dark {
+  display: none;
 }
-.brand-tag {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  border-left: 2px solid var(--border-strong);
-  padding-left: 8px;
+[data-theme="dark"] .brand-logo-light {
+  display: none;
+}
+[data-theme="dark"] .brand-logo-dark {
+  display: block;
 }
 .header-search {
   position: relative;
@@ -332,6 +331,11 @@ h4 {
   color: var(--text-muted);
   font-size: 0.85rem;
 }
+.footer-mark {
+  flex: none;
+  border-radius: 6px;
+  image-rendering: auto;
+}
 
 /* ---------- Breadcrumbs / headings ---------- */
 .breadcrumbs {
@@ -366,35 +370,172 @@ h4 {
 
 /* ---------- Hero ---------- */
 .hero {
-  background: linear-gradient(120deg, var(--grass-deep), var(--grass));
-  color: #fff;
-  border-radius: var(--radius);
-  padding: 28px 26px;
-  margin-bottom: 28px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: inset 0 -5px 0 rgba(0, 0, 0, 0.18);
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 40px;
+  align-items: center;
+  margin: 6px 0 38px;
+  padding: 8px 0 4px;
 }
-.hero::after {
+.hero .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--grass-deep);
+  margin: 0 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+.hero .eyebrow::before {
   content: "";
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
-  background-size: 24px 24px;
-  pointer-events: none;
+  width: 22px;
+  height: 2px;
+  background: var(--grass);
 }
 .hero h1 {
-  color: #fff;
-  font-size: 2.1rem;
-  margin: 0 0 8px;
-  position: relative;
+  font-size: clamp(2.4rem, 4.6vw, 3.4rem);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  margin: 0 0 16px;
+  font-weight: 600;
 }
-.hero p {
+.hero-lede {
   margin: 0;
-  max-width: 64ch;
-  color: rgba(255, 255, 255, 0.92);
+  max-width: 54ch;
+  color: var(--text-muted);
+  font-size: 1.06rem;
+  line-height: 1.6;
+}
+.hero-lede strong {
+  color: var(--text);
+  font-weight: 600;
+}
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0 4px;
+}
+.hero-stats {
+  display: flex;
+  gap: 30px;
+  margin: 26px 0 0;
+  padding: 20px 0 0;
+  border-top: 1px solid var(--border);
+}
+.hero-stats div {
+  display: flex;
+  flex-direction: column;
+}
+.hero-stats dt {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1;
+}
+.hero-stats dd {
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+/* Hero concept visual: the two-layer model shown as stacked cards. */
+.hero-visual {
   position: relative;
+  padding: 14px 8px 30px 18px;
+}
+.concept-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 16px 18px;
+  box-shadow: 0 10px 30px rgba(40, 35, 20, 0.12);
+}
+.concept-card header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+.concept-card header svg {
+  font-size: 1.1em;
+}
+.concept-card p {
+  margin: 10px 0 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.concept-record {
+  border-top: 3px solid var(--record);
+  transform: rotate(-2.5deg);
+  z-index: 2;
+}
+.concept-record header {
+  color: var(--record);
+}
+.concept-account {
+  border-top: 3px solid var(--account);
+  transform: rotate(2deg) translate(26px, -14px);
+  z-index: 1;
+}
+.concept-account header {
+  color: var(--account);
+}
+.concept-quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--text) !important;
+  font-size: 0.98rem !important;
+}
+.concept-account footer {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.concept-chip {
+  margin-left: auto;
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--grass-deep);
+  background: #e4f0d8;
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+[data-theme="dark"] .concept-chip {
+  background: #233019;
+  color: var(--grass-light);
+}
+.concept-tie {
+  position: absolute;
+  left: 50%;
+  bottom: 2px;
+  transform: translateX(-50%);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+@media (max-width: 880px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .hero-visual {
+    display: none;
+  }
 }
 
 /* ---------- Cards & grids ---------- */
@@ -454,60 +595,66 @@ h4 {
   flex-wrap: wrap;
 }
 
-/* ---------- Badges ---------- */
+/* ---------- Badges ----------
+   One restrained system: an uppercase label in a neutral outlined chip. State
+   and category are carried by a single small colored dot (currentColor), not by
+   loud fills or emoji. */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 0.74rem;
-  font-weight: 700;
-  padding: 3px 8px;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 8px;
   border-radius: 4px;
-  letter-spacing: 0.01em;
-  border: 1px solid transparent;
-  white-space: nowrap;
-}
-.badge-type {
-  background: var(--surface-3);
-  color: var(--text);
-  border-color: var(--border-strong);
-}
-.badge-layer.layer-record {
-  background: var(--record-bg);
-  color: var(--record);
-  border-color: var(--record);
-}
-.badge-layer.layer-account {
-  background: var(--account-bg);
-  color: var(--account);
-  border-color: var(--account);
-}
-.badge-status {
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  font-size: 0.66rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  white-space: nowrap;
+  line-height: 1.7;
 }
-.status-published {
-  background: #e4f0d8;
-  color: var(--grass-deep);
+/* Categorical / stateful badges get a leading dot in their own color. */
+.badge-layer::before,
+.badge-status::before,
+.badge-disputed::before,
+.event-upcoming::before,
+.event-ongoing::before,
+.event-concluded::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
 }
-.status-pending {
-  background: #fbeecb;
-  color: #9a6b1f;
-}
-.status-draft {
-  background: var(--surface-3);
+/* Type is contextual, not a state — keep it quiet, no dot. */
+.badge-type {
   color: var(--text-muted);
 }
-[data-theme="dark"] .status-published {
-  background: #233019;
+.badge-layer.layer-record {
+  color: var(--record);
+}
+.badge-layer.layer-account {
+  color: var(--account);
+}
+.badge-status.status-published {
+  color: var(--grass-deep);
+}
+.badge-status.status-pending {
+  color: #9a6b1f;
+}
+.badge-status.status-draft {
+  color: var(--text-muted);
+}
+[data-theme="dark"] .badge-status.status-published {
   color: var(--grass-light);
 }
-[data-theme="dark"] .status-pending {
-  background: #322816;
+[data-theme="dark"] .badge-status.status-pending {
   color: #e0bf76;
 }
 .badge-disputed {
-  background: var(--disputed-bg);
   color: var(--disputed);
   border-color: var(--disputed);
 }
@@ -1048,15 +1195,12 @@ fieldset legend {
 
 /* ---------- Event status badges ---------- */
 .event-upcoming {
-  background: #3b6fb0;
-  color: #fff;
+  color: var(--record);
 }
 .event-ongoing {
-  background: var(--grass);
-  color: #fff;
+  color: var(--grass-deep);
 }
 .event-concluded {
-  background: var(--surface-3);
   color: var(--text-muted);
 }
 
@@ -1340,7 +1484,7 @@ fieldset legend {
   }
 }
 
-/* count badge inside a nav tab (e.g. Upcoming ⑤) */
+/* count badge inside a nav tab (e.g. Upcoming 5) */
 .tab-with-badge {
   display: inline-flex;
   align-items: center;
@@ -1365,12 +1509,15 @@ fieldset legend {
   background: var(--grass);
 }
 
-/* host (server) badge — quiet neutral; links to the host's catalog */
+/* host (server) badge — quiet neutral; links to the host's catalog. Carries a
+   proper noun, so it opts out of the uppercase/tracking treatment. */
 .badge-host {
-  background: var(--surface-3);
-  border-color: var(--border-strong);
+  background: var(--surface);
+  border-color: var(--border);
   color: var(--text-muted) !important;
   font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
 }
 a.badge-host:hover {
   text-decoration: none;
@@ -1398,4 +1545,376 @@ a.card:hover {
 .entry-card .entry-card-foot {
   gap: 6px 12px;
   align-items: center;
+}
+
+/* ============================================================
+   SOTA polish pass — depth, icons, type tints, richer surfaces.
+   ============================================================ */
+
+/* Warm, layered page background — soft light from the top, never a grid. */
+body {
+  background-image: radial-gradient(
+      1200px 520px at 50% -10%,
+      rgba(93, 143, 58, 0.08),
+      transparent 70%
+    ),
+    radial-gradient(
+      900px 600px at 100% 0%,
+      rgba(122, 87, 51, 0.05),
+      transparent 60%
+    );
+  background-attachment: fixed;
+}
+[data-theme="dark"] body {
+  background-image: radial-gradient(
+      1200px 520px at 50% -10%,
+      rgba(124, 177, 90, 0.1),
+      transparent 70%
+    ),
+    radial-gradient(
+      900px 600px at 100% 0%,
+      rgba(154, 117, 72, 0.07),
+      transparent 60%
+    );
+}
+
+/* Icons inside badges / buttons / legends. */
+.badge-ico {
+  font-size: 0.95em;
+  margin-right: 1px;
+  flex: none;
+}
+.section-ico {
+  font-size: 1.05em;
+  flex: none;
+  color: var(--text-muted);
+}
+.section-ico.record-tint {
+  color: var(--record);
+}
+.section-ico.account-tint {
+  color: var(--account);
+}
+.type-group-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.type-group-head svg {
+  color: var(--grass-deep);
+  font-size: 1.1em;
+  flex: none;
+}
+
+/* Per-type accent dot on type badges — a quiet hint of identity. */
+.badge-type .badge-ico {
+  color: var(--stone-deep);
+}
+.type-civilization .badge-ico {
+  color: var(--grass-deep);
+}
+.type-character .badge-ico {
+  color: #2f6090;
+}
+.type-war .badge-ico {
+  color: var(--disputed);
+}
+.type-place .badge-ico {
+  color: var(--dirt);
+}
+.type-artifact .badge-ico {
+  color: #8a5a1f;
+}
+
+/* Larger button for the hero. */
+.btn-lg {
+  padding: 12px 22px;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  box-shadow: none;
+}
+.btn-ghost:hover {
+  background: var(--surface-2);
+  border-color: var(--stone);
+}
+
+/* Section titles: display serif with a short colored tick instead of the cube. */
+.section-title {
+  border-bottom-width: 1px;
+  border-bottom-color: var(--border);
+  font-size: 1.45rem;
+}
+.cube-bullet {
+  border-radius: 2px;
+}
+
+/* Cards: a touch more depth + a hairline top accent on hover. */
+.card {
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(40, 35, 20, 0.04);
+}
+a.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px rgba(50, 45, 30, 0.13);
+}
+.server-card {
+  position: relative;
+  overflow: hidden;
+}
+.server-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--grass), var(--grass-light));
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+a.server-card:hover::before {
+  opacity: 1;
+}
+
+/* Make the existing infobox top accent richer. */
+.infobox {
+  border-top: 3px solid var(--grass);
+  border-radius: 10px;
+}
+
+/* ============================================================
+   Motion, depth & effects pass. All motion gated behind
+   prefers-reduced-motion; layout is fluid to the viewport.
+   ============================================================ */
+
+/* ---- Fluid sizing: scales smoothly with the screen ---- */
+:root {
+  --maxw: 1120px;
+  --pad-x: clamp(16px, 4vw, 34px);
+}
+.site-main,
+.header-top,
+.header-tabs,
+.footer-inner {
+  padding-left: var(--pad-x);
+  padding-right: var(--pad-x);
+}
+.page-title {
+  font-size: clamp(1.7rem, 1.15rem + 2.3vw, 2.4rem);
+}
+.section-title {
+  font-size: clamp(1.2rem, 1.02rem + 0.8vw, 1.5rem);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+::selection {
+  background: color-mix(in srgb, var(--grass) 28%, transparent);
+}
+
+/* ---- Film-grain overlay: organic texture, never a grid ---- */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+[data-theme="dark"] body::after {
+  opacity: 0.06;
+}
+
+/* ---- Sticky glass header ---- */
+.site-header {
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+  transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+@supports (
+  (backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px))
+) {
+  .site-header {
+    background: color-mix(in srgb, var(--surface) 72%, transparent);
+    -webkit-backdrop-filter: saturate(1.6) blur(12px);
+    backdrop-filter: saturate(1.6) blur(12px);
+  }
+}
+
+/* ---- Buttons & interactive polish ---- */
+.btn {
+  transition: transform 0.12s ease, background 0.15s ease,
+    box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.btn:not(.btn-secondary):not(.btn-ghost) {
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.14),
+    rgba(255, 255, 255, 0)
+  );
+}
+.btn:hover {
+  transform: translateY(-1px);
+}
+.btn:active {
+  transform: translateY(0);
+}
+.nav-cta {
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+.nav-cta:hover {
+  transform: translateY(-1px);
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--grass);
+  outline-offset: 2px;
+  border-radius: 5px;
+}
+
+/* ---- Cards: depth + cursor-follow spotlight ---- */
+.card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.18s cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(93, 143, 58, 0.1),
+    transparent 60%
+  );
+}
+a.card:hover::after {
+  opacity: 1;
+}
+[data-theme="dark"] .card::after {
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(124, 177, 90, 0.14),
+    transparent 60%
+  );
+}
+
+/* ---- Icon helpers ---- */
+.inline-ico,
+.trusted-inline {
+  vertical-align: -0.13em;
+}
+.trusted-inline {
+  color: var(--grass-deep);
+  margin-left: 3px;
+}
+.verified-tag,
+.trusted-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--grass-deep);
+}
+
+/* ---- Keyframes ---- */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes conceptRecordIn {
+  from {
+    opacity: 0;
+    transform: rotate(-2.5deg) translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-2.5deg);
+  }
+}
+@keyframes conceptAccountIn {
+  from {
+    opacity: 0;
+    transform: rotate(2deg) translate(26px, 4px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(2deg) translate(26px, -14px);
+  }
+}
+
+/* ---- Motion (only when the user allows it) ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-copy > * {
+    animation: fadeUp 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .hero-copy .eyebrow {
+    animation-delay: 0.04s;
+  }
+  .hero-copy h1 {
+    animation-delay: 0.12s;
+  }
+  .hero-copy .hero-lede {
+    animation-delay: 0.2s;
+  }
+  .hero-copy .hero-cta {
+    animation-delay: 0.28s;
+  }
+  .hero-copy .hero-stats {
+    animation-delay: 0.36s;
+  }
+  .concept-record {
+    animation: conceptRecordIn 0.85s cubic-bezier(0.2, 0.7, 0.2, 1) 0.35s both;
+  }
+  .concept-account {
+    animation: conceptAccountIn 0.85s cubic-bezier(0.2, 0.7, 0.2, 1) 0.5s both;
+  }
+  .concept-tie {
+    animation: fadeUp 0.6s ease 0.85s both;
+  }
+
+  /* Scroll-reveal (only hides when JS is present to un-hide it). */
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+    will-change: opacity, transform;
+  }
+  .js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Show-more control (caps long lists like the server grid). */
+.show-more-row {
+  display: flex;
+  justify-content: center;
+  margin: 18px 0 4px;
+}
+.show-more-btn {
+  padding: 9px 22px;
 }

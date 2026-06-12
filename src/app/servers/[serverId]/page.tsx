@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Icon from "@/components/Icon";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
@@ -51,7 +52,7 @@ export default async function ServerPage({
               redirectTo="/"
               confirm={`Permanently delete the server "${server.name}" and ALL its events and entries? This cannot be undone.`}
             >
-              🗑 Delete server
+              <Icon name="trash" /> Delete server
             </DeleteButton>
           </span>
         )}

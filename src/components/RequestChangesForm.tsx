@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { requestChanges } from "@/app/actions/review";
+import Icon from "./Icon";
 
 // Inline "request changes" control: reveals a reason field so the archivist's
 // feedback reaches the author instead of silently sending it back.
@@ -32,7 +33,7 @@ export default function RequestChangesForm({ entryId }: { entryId: string }) {
         className="btn btn-sm btn-secondary"
         onClick={() => setOpen(true)}
       >
-        ↩ Request changes
+        <Icon name="undo" /> Request changes
       </button>
     );
   }

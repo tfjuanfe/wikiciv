@@ -9,6 +9,7 @@ import { formatDateTime, formatRelative, readingStats } from "@/lib/format";
 import { TYPE_LABELS } from "@/lib/templates";
 import Markdown from "@/components/Markdown";
 import Infobox from "@/components/Infobox";
+import Icon from "@/components/Icon";
 import {
   TypeBadge,
   LayerBadge,
@@ -66,7 +67,9 @@ function Byline({
         <Link href={`/users/${entry.author.username}`}>
           <strong>{entry.author.username}</strong>
         </Link>
-        {entry.author.trusted ? " ✦" : ""}
+        {entry.author.trusted && (
+          <Icon name="sparkle" className="trusted-inline" />
+        )}
       </span>
       <span title={formatDateTime(entry.createdAt)}>
         {formatRelative(entry.createdAt)}
@@ -196,7 +199,7 @@ export default async function EntryPage({
             href={`/entries/${anchor.id}/export`}
             className="btn btn-sm btn-secondary"
           >
-            ⬇ Download as Markdown
+            <Icon name="download" /> Download as Markdown
           </a>
         </div>
       )}
@@ -212,7 +215,9 @@ export default async function EntryPage({
       <div className="subject-layout">
         <div>
           {/* ---------- RECORD LAYER ---------- */}
-          <h2 className="section-title">📜 Record</h2>
+          <h2 className="section-title">
+            <Icon name="record" className="section-ico record-tint" /> Record
+          </h2>
           {records.length === 0 ? (
             <div className="empty-state">
               No Record entry yet. The verifiable facts for this subject have not
@@ -273,7 +278,7 @@ export default async function EntryPage({
                           redirectTo={`/events/${anchor.eventId}`}
                           confirm={`Permanently delete this Record of "${rec.name}"? This cannot be undone.`}
                         >
-                          🗑 Delete
+                          <Icon name="trash" /> Delete
                         </DeleteButton>
                       </div>
                     )}
@@ -284,7 +289,9 @@ export default async function EntryPage({
           )}
 
           {/* ---------- ACCOUNT LAYER ---------- */}
-          <h2 className="section-title">💬 Accounts</h2>
+          <h2 className="section-title">
+            <Icon name="account" className="section-ico account-tint" /> Accounts
+          </h2>
           {accounts.length === 0 ? (
             <div className="empty-state">
               No Accounts yet. In-character stories, motivations, and propaganda
@@ -317,7 +324,7 @@ export default async function EntryPage({
                         redirectTo={`/events/${anchor.eventId}`}
                         confirm={`Permanently delete this Account as told by "${acc.attributedTo || "Unknown"}"? This cannot be undone.`}
                       >
-                        🗑 Delete
+                        <Icon name="trash" /> Delete
                       </DeleteButton>
                     </div>
                   )}
@@ -330,7 +337,8 @@ export default async function EntryPage({
           {hasPublished && (
             <section className="discussion">
               <h2 className="section-title">
-                💬 Discussion ({comments.length})
+                <Icon name="discussion" className="section-ico" /> Discussion (
+                {comments.length})
               </h2>
               {comments.length === 0 ? (
                 <p className="muted">No comments yet. Start the discussion.</p>

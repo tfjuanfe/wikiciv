@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { EntryType, Layer } from "@/lib/types";
 import { TypeBadge, LayerBadge, DisputedTag } from "./Badges";
+import Icon from "./Icon";
 import { formatDate } from "@/lib/format";
 
 export interface EntryCardData {
@@ -45,7 +46,9 @@ export default function EntryCard({ entry }: { entry: EntryCardData }) {
       {snippet(entry.body) && <p className="snippet">{snippet(entry.body)}</p>}
       <div className="entry-card-foot">
         {typeof entry.stars === "number" && entry.stars > 0 && (
-          <span className="star-count">★ {entry.stars}</span>
+          <span className="star-count">
+            <Icon name="star" /> {entry.stars}
+          </span>
         )}
         {entry.event?.server && (
           <span>

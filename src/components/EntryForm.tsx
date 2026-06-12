@@ -2,14 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  ENTRY_TYPES,
-  INFOBOX_FIELDS,
-  TYPE_ICONS,
-  TYPE_LABELS,
-} from "@/lib/templates";
+import { ENTRY_TYPES, INFOBOX_FIELDS, TYPE_LABELS } from "@/lib/templates";
 import type { EntryType, Layer } from "@/lib/types";
 import { createEntry, updateEntry } from "@/app/actions/entries";
+import Icon from "./Icon";
 
 interface EventOption {
   id: string;
@@ -157,7 +153,7 @@ export default function EntryForm({
               className={`btn btn-sm ${type === t ? "" : "btn-secondary"}`}
               onClick={() => setType(t)}
             >
-              {TYPE_ICONS[t]} {TYPE_LABELS[t]}
+              <Icon name={t} className="badge-ico" /> {TYPE_LABELS[t]}
             </button>
           ))}
         </div>
@@ -175,7 +171,8 @@ export default function EntryForm({
             className={`btn btn-sm ${layer === "record" ? "" : "btn-secondary"}`}
             onClick={() => setLayer("record")}
           >
-            📜 Record (verifiable facts)
+            <Icon name="record" className="badge-ico" /> Record (verifiable
+            facts)
           </button>
           <button
             type="button"
@@ -183,7 +180,8 @@ export default function EntryForm({
             className={`btn btn-sm ${layer === "account" ? "" : "btn-secondary"}`}
             onClick={() => setLayer("account")}
           >
-            💬 Account (in-character story)
+            <Icon name="account" className="badge-ico" /> Account (in-character
+            story)
           </button>
         </div>
         <p className="hint" style={{ marginTop: 6 }}>
@@ -227,7 +225,7 @@ export default function EntryForm({
       {/* Infobox template */}
       <fieldset>
         <legend>
-          {TYPE_ICONS[type]} {TYPE_LABELS[type]} details
+          <Icon name={type} className="badge-ico" /> {TYPE_LABELS[type]} details
         </legend>
         <div className="field-row">
           {fields.map((f) => (
@@ -272,7 +270,7 @@ export default function EntryForm({
                 onClick={() => removeEvidence(i)}
                 aria-label="Remove evidence"
               >
-                ✕
+                <Icon name="close" />
               </button>
             </div>
           ))}

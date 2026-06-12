@@ -5,7 +5,8 @@ import { getCurrentUser } from "@/lib/auth";
 import { canContribute, canReview } from "@/lib/permissions";
 import { formatDate, formatDateTime } from "@/lib/format";
 import { eventSubjectKey } from "@/lib/ratings";
-import { ENTRY_TYPES, TYPE_ICONS, TYPE_LABELS } from "@/lib/templates";
+import { ENTRY_TYPES, TYPE_LABELS } from "@/lib/templates";
+import Icon from "@/components/Icon";
 import {
   TypeBadge,
   LayerBadge,
@@ -148,7 +149,7 @@ export default async function EventPage({
               redirectTo={`/servers/${event.serverId}`}
               confirm={`Permanently delete the event "${event.name}" and ALL entries filed under it? This cannot be undone.`}
             >
-              🗑 Delete event
+              <Icon name="trash" /> Delete event
             </DeleteButton>
           </span>
         )}
@@ -163,7 +164,7 @@ export default async function EventPage({
             rel="noopener noreferrer"
             className="btn btn-sm discord-btn"
           >
-            💬 Join on Discord
+            <Icon name="discord" /> Join on Discord
           </a>
         </p>
       )}
@@ -201,8 +202,8 @@ export default async function EventPage({
           ) : (
             byType.map((group) => (
               <section key={group.type} style={{ marginBottom: 22 }}>
-                <h3 style={{ marginBottom: 10 }}>
-                  {TYPE_ICONS[group.type]} {TYPE_LABELS[group.type]}
+                <h3 style={{ marginBottom: 10 }} className="type-group-head">
+                  <Icon name={group.type} /> {TYPE_LABELS[group.type]}
                 </h3>
                 <div className="list-stack">
                   {group.items.map((s) => (
@@ -267,7 +268,10 @@ export default async function EventPage({
       </div>
 
       <section className="discussion">
-        <h2 className="section-title">💬 Discussion ({comments.length})</h2>
+        <h2 className="section-title">
+          <Icon name="discussion" className="section-ico" /> Discussion (
+          {comments.length})
+        </h2>
         {comments.length === 0 ? (
           <p className="muted">
             No comments yet. Share your thoughts on this event.

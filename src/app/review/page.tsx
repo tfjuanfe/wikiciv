@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Icon from "@/components/Icon";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
@@ -56,7 +57,7 @@ export default async function ReviewPage() {
           Review queue
         </h1>
         <Link href="/review/log" className="btn btn-sm btn-secondary">
-          📋 Activity log
+          <Icon name="clipboard" /> Activity log
         </Link>
       </div>
       <p className="lede">
@@ -108,7 +109,7 @@ export default async function ReviewPage() {
                 action={approveEntry.bind(null, e.id)}
                 className="btn btn-sm"
               >
-                ✓ Approve &amp; publish
+                <Icon name="check" /> Approve &amp; publish
               </ActionButton>
               {e.layer === "record" && (
                 <ActionButton
@@ -116,7 +117,7 @@ export default async function ReviewPage() {
                   className="btn btn-sm btn-secondary"
                   title="Publish, but flag it as conflicting with another record"
                 >
-                  ⚠ Mark disputed &amp; publish
+                  <Icon name="warning" /> Mark disputed &amp; publish
                 </ActionButton>
               )}
               <RequestChangesForm entryId={e.id} />
@@ -127,7 +128,7 @@ export default async function ReviewPage() {
                 action={deleteEntry.bind(null, e.id)}
                 confirm={`Permanently delete "${e.name}"? This removes the entry, its evidence, and revisions. This cannot be undone.`}
               >
-                🗑 Delete
+                <Icon name="trash" /> Delete
               </DeleteButton>
             </div>
           </article>
@@ -156,7 +157,15 @@ export default async function ReviewPage() {
                 </td>
                 <td>{c.role}</td>
                 <td>{c._count.entries}</td>
-                <td>{c.trusted ? "✦ trusted" : "no"}</td>
+                <td>
+                  {c.trusted ? (
+                    <span className="trusted-tag">
+                      <Icon name="sparkle" /> trusted
+                    </span>
+                  ) : (
+                    "no"
+                  )}
+                </td>
                 <td style={{ textAlign: "right" }}>
                   {c.id !== user.id && c.role !== "archivist" && (
                     <ActionButton

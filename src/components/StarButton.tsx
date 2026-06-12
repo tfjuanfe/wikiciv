@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toggleStar } from "@/app/actions/social";
+import Icon from "./Icon";
 
 export default function StarButton({
   subjectKey,
@@ -27,7 +28,7 @@ export default function StarButton({
         className="btn btn-sm btn-secondary star-btn"
         title="Log in to star this article"
       >
-        ☆ <span>{count}</span>
+        <Icon name="star" outline /> <span>{count}</span>
       </a>
     );
   }
@@ -53,7 +54,8 @@ export default function StarButton({
       className={`btn btn-sm star-btn ${starred ? "star-on" : "btn-secondary"}`}
       title={starred ? "Remove your star" : "Star this article"}
     >
-      {starred ? "★" : "☆"} <span>{count}</span>
+      {starred ? <Icon name="star" /> : <Icon name="star" outline />}{" "}
+      <span>{count}</span>
     </button>
   );
 }

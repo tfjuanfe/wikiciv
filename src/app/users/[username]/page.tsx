@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Icon from "@/components/Icon";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
@@ -75,7 +76,7 @@ export default async function ProfilePage({
             {profile.trusted && (
               <span className="trusted-dot" title="trusted contributor">
                 {" "}
-                ✦
+                <Icon name="sparkle" />
               </span>
             )}
           </h1>

@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { setEmailAndSendVerification, resendVerification } from "@/app/actions/verify";
+import Icon from "./Icon";
 
 export default function EmailVerification({
   email,
@@ -48,7 +49,10 @@ export default function EmailVerification({
 
       {verified ? (
         <p className="muted" style={{ margin: "0 0 8px" }}>
-          <strong style={{ color: "var(--ok, inherit)" }}>✓ Verified</strong> —{" "}
+          <strong className="verified-tag">
+            <Icon name="check" /> Verified
+          </strong>{" "}
+          —{" "}
           {email}. You can contribute records and accounts.
         </p>
       ) : (
