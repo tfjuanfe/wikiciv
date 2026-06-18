@@ -6,7 +6,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { canReview } from "@/lib/permissions";
 import { formatDate } from "@/lib/format";
 import type { EntryType, Layer } from "@/lib/types";
-import { TypeBadge, LayerBadge } from "@/components/Badges";
+import { TypeBadge, LayerBadge, EventStatusBadge } from "@/components/Badges";
 import ActionButton from "@/components/ActionButton";
 import DeleteButton from "@/components/DeleteButton";
 import RequestChangesForm from "@/components/RequestChangesForm";
@@ -14,8 +14,15 @@ import {
   approveEntry,
   setDisputed,
   toggleTrusted,
+  toggleEventHost,
   deleteEntry,
 } from "@/app/actions/review";
+import {
+  approveServerRequest,
+  rejectServerRequest,
+  approveEventRequest,
+  rejectEventRequest,
+} from "@/app/actions/requests";
 
 export const dynamic = "force-dynamic";
 
@@ -24,28 +31,42 @@ export default async function ReviewPage() {
   if (!user) redirect("/login?next=/review");
   if (!canReview(user)) redirect("/");
 
-  const [pending, contributors] = await Promise.all([
-    prisma.entry.findMany({
-      where: { status: "pending" },
-      include: {
-        author: { select: { username: true } },
-        event: { select: { id: true, name: true } },
-        evidence: true,
-      },
-      orderBy: { createdAt: "asc" },
-    }),
-    prisma.user.findMany({
-      where: { role: { in: ["contributor", "archivist"] } },
-      orderBy: [{ trusted: "desc" }, { username: "asc" }],
-      select: {
-        id: true,
-        username: true,
-        role: true,
-        trusted: true,
-        _count: { select: { entries: true } },
-      },
-    }),
-  ]);
+  const [pending, serverRequests, eventRequests, contributors, allServers] =
+    await Promise.all([
+      prisma.entry.findMany({
+        where: { status: "pending" },
+        include: {
+          author: { select: { username: true } },
+          event: { select: { id: true, name: true } },
+          evidence: true,
+        },
+        orderBy: { createdAt: "asc" },
+      }),
+      prisma.serverRequest.findMany({
+        where: { status: "pending" },
+        include: { requester: { select: { username: true } } },
+        orderBy: { createdAt: "asc" },
+      }),
+      prisma.eventRequest.findMany({
+        where: { status: "pending" },
+        include: { requester: { select: { username: true } } },
+        orderBy: { createdAt: "asc" },
+      }),
+      prisma.user.findMany({
+        where: { role: { in: ["contributor", "archivist"] } },
+        orderBy: [{ trusted: "desc" }, { username: "asc" }],
+        select: {
+          id: true,
+          username: true,
+          role: true,
+          trusted: true,
+          eventHost: true,
+          _count: { select: { entries: true } },
+        },
+      }),
+      prisma.server.findMany({ select: { id: true, name: true } }),
+    ]);
+  const serverNames = new Map(allServers.map((s) => [s.id, s.name]));
 
   return (
     <>
@@ -136,6 +157,111 @@ export default async function ReviewPage() {
       )}
 
       <h2 className="section-title">
+        <span className="cube-bullet" aria-hidden /> Server requests (
+        {serverRequests.length})
+      </h2>
+      {serverRequests.length === 0 ? (
+        <div className="empty-state">No server suggestions waiting.</div>
+      ) : (
+        serverRequests.map((r) => (
+          <article key={r.id} className="queue-item">
+            <div className="layer-block-head">
+              <strong>{r.name}</strong>
+              <span className="muted">
+                · by {r.requester.username} · {formatDate(r.createdAt)}
+              </span>
+            </div>
+            {r.description && (
+              <p className="muted" style={{ fontSize: "0.9rem" }}>
+                {r.description}
+              </p>
+            )}
+            <p style={{ fontSize: "0.85rem" }}>
+              Discord:{" "}
+              <a href={r.discordUrl} target="_blank" rel="noopener noreferrer">
+                {r.discordUrl}
+              </a>
+            </p>
+            <div className="btn-row">
+              <ActionButton
+                action={approveServerRequest.bind(null, r.id)}
+                className="btn btn-sm"
+              >
+                <Icon name="check" /> Approve &amp; create
+              </ActionButton>
+              <ActionButton
+                action={rejectServerRequest.bind(null, r.id, "")}
+                className="btn btn-sm btn-secondary"
+                confirm="Reject this server suggestion?"
+              >
+                Reject
+              </ActionButton>
+            </div>
+          </article>
+        ))
+      )}
+
+      <h2 className="section-title">
+        <span className="cube-bullet" aria-hidden /> Event requests (
+        {eventRequests.length})
+      </h2>
+      {eventRequests.length === 0 ? (
+        <div className="empty-state">No event suggestions waiting.</div>
+      ) : (
+        eventRequests.map((r) => {
+          const serverLabel = r.serverId
+            ? (serverNames.get(r.serverId) ?? "(removed server)")
+            : `${r.proposedServerName} (new server)`;
+          return (
+            <article key={r.id} className="queue-item">
+              <div className="layer-block-head">
+                <EventStatusBadge status={r.eventStatus} />
+                <strong>{r.name}</strong>
+                <span className="muted">
+                  · {serverLabel} · by {r.requester.username} ·{" "}
+                  {formatDate(r.createdAt)}
+                </span>
+              </div>
+              <p className="muted" style={{ fontSize: "0.85rem" }}>
+                {r.theme ? `${r.theme} · ` : ""}
+                {formatDate(r.startDate)}
+                {r.endDate ? ` – ${formatDate(r.endDate)}` : ""}
+              </p>
+              {r.description && (
+                <pre
+                  className="queue-preview"
+                  style={{ whiteSpace: "pre-wrap" }}
+                >
+                  {r.description}
+                </pre>
+              )}
+              <p style={{ fontSize: "0.85rem" }}>
+                Discord:{" "}
+                <a href={r.discordUrl} target="_blank" rel="noopener noreferrer">
+                  {r.discordUrl}
+                </a>
+              </p>
+              <div className="btn-row">
+                <ActionButton
+                  action={approveEventRequest.bind(null, r.id)}
+                  className="btn btn-sm"
+                >
+                  <Icon name="check" /> Approve &amp; create
+                </ActionButton>
+                <ActionButton
+                  action={rejectEventRequest.bind(null, r.id, "")}
+                  className="btn btn-sm btn-secondary"
+                  confirm="Reject this event suggestion?"
+                >
+                  Reject
+                </ActionButton>
+              </div>
+            </article>
+          );
+        })
+      )}
+
+      <h2 className="section-title">
         <span className="cube-bullet" aria-hidden /> Contributors
       </h2>
       <div className="card" style={{ padding: 0, overflow: "hidden" }}>
@@ -146,6 +272,7 @@ export default async function ReviewPage() {
               <th>Role</th>
               <th>Entries</th>
               <th>Trusted</th>
+              <th>Event host</th>
               <th></th>
             </tr>
           </thead>
@@ -166,14 +293,31 @@ export default async function ReviewPage() {
                     "no"
                   )}
                 </td>
+                <td>
+                  {c.eventHost ? (
+                    <span className="trusted-tag">
+                      <Icon name="sparkle" /> host
+                    </span>
+                  ) : (
+                    "no"
+                  )}
+                </td>
                 <td style={{ textAlign: "right" }}>
                   {c.id !== user.id && c.role !== "archivist" && (
-                    <ActionButton
-                      action={toggleTrusted.bind(null, c.id)}
-                      className="btn btn-sm btn-secondary"
-                    >
-                      {c.trusted ? "Revoke trust" : "Grant trust"}
-                    </ActionButton>
+                    <span className="inline-actions">
+                      <ActionButton
+                        action={toggleTrusted.bind(null, c.id)}
+                        className="btn btn-sm btn-secondary"
+                      >
+                        {c.trusted ? "Revoke trust" : "Grant trust"}
+                      </ActionButton>
+                      <ActionButton
+                        action={toggleEventHost.bind(null, c.id)}
+                        className="btn btn-sm btn-secondary"
+                      >
+                        {c.eventHost ? "Revoke host" : "Make host"}
+                      </ActionButton>
+                    </span>
                   )}
                 </td>
               </tr>

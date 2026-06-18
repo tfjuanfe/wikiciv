@@ -190,6 +190,22 @@ export async function toggleTrusted(userId: string): Promise<ActionResult> {
   return { ok: true };
 }
 
+// Grant/revoke the Event Host capability (submit servers/events for review).
+export async function toggleEventHost(userId: string): Promise<ActionResult> {
+  const gate = await gateArchivist();
+  if (!gate.ok) return gate;
+
+  const target = await prisma.user.findUnique({ where: { id: userId } });
+  if (!target) return { ok: false, error: "User not found." };
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { eventHost: !target.eventHost },
+  });
+  revalidatePath("/review");
+  return { ok: true };
+}
+
 // Hard-delete an entry (archivist moderation tool, e.g. spam/abuse).
 // Cascades to its evidence and revisions; the audit log entry survives.
 export async function deleteEntry(entryId: string): Promise<ActionResult> {

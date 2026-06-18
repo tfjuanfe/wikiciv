@@ -33,6 +33,7 @@ export default async function EditServerPage({
           id: server.id,
           name: server.name,
           description: server.description,
+          discordUrl: server.discordUrl,
         }}
       />
     </>

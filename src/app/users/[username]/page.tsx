@@ -36,6 +36,7 @@ export default async function ProfilePage({
       username: true,
       role: true,
       trusted: true,
+      eventHost: true,
       bio: true,
       createdAt: true,
     },
@@ -84,6 +85,9 @@ export default async function ProfilePage({
             <span className="badge badge-type">
               {ROLE_LABEL[profile.role] ?? "Contributor"}
             </span>
+            {profile.eventHost && (
+              <span className="badge badge-layer layer-record">Event Host</span>
+            )}
             <span className="muted">
               {total} published contribution{total === 1 ? "" : "s"}
             </span>

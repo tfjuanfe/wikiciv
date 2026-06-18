@@ -71,6 +71,7 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
         username: true,
         role: true,
         trusted: true,
+        eventHost: true,
         email: true,
         emailVerified: true,
       },
@@ -82,6 +83,7 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
       username: user.username,
       role: user.role as Role,
       trusted: user.trusted,
+      eventHost: user.eventHost,
       email: user.email,
       emailVerified: user.emailVerified,
     };

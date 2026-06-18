@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createEvent, updateEvent, type EventInput } from "@/app/actions/admin";
+import { requestEvent } from "@/app/actions/requests";
 
 interface ServerOption {
   id: string;
@@ -25,17 +26,22 @@ export interface EventFormInitial {
 
 export default function EventForm({
   mode,
+  submitMode = "create",
   servers,
   initial,
 }: {
   mode: "create" | "edit";
+  // "create" = write directly (archivist); "request" = submit for review (host).
+  submitMode?: "create" | "request";
   servers: ServerOption[];
   initial: EventFormInitial;
 }) {
   const router = useRouter();
   const isEdit = mode === "edit";
+  const isRequest = submitMode === "request";
 
   const [serverId, setServerId] = useState(initial.serverId);
+  const [proposedServerName, setProposedServerName] = useState("");
   const [name, setName] = useState(initial.name);
   const [theme, setTheme] = useState(initial.theme);
   const [startDate, setStartDate] = useState(initial.startDate);
@@ -44,12 +50,36 @@ export default function EventForm({
   const [description, setDescription] = useState(initial.description);
   const [discordUrl, setDiscordUrl] = useState(initial.discordUrl);
   const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
   const [busy, setBusy] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setBusy(true);
+
+    if (isRequest) {
+      const res = await requestEvent({
+        serverId,
+        proposedServerName,
+        name,
+        theme,
+        startDate,
+        endDate,
+        status,
+        description,
+        discordUrl,
+      });
+      if (!res.ok) {
+        setError(res.error);
+        setBusy(false);
+        return;
+      }
+      setDone(true);
+      setBusy(false);
+      return;
+    }
+
     const payload: EventInput = {
       serverId,
       name,
@@ -72,6 +102,15 @@ export default function EventForm({
     router.refresh();
   }
 
+  if (done) {
+    return (
+      <div className="alert alert-success">
+        Thanks! Your event suggestion was submitted. An archivist will review it
+        and publish it shortly.
+      </div>
+    );
+  }
+
   return (
     <form className="form-wrap" onSubmit={onSubmit}>
       {error && <div className="alert alert-error">{error}</div>}
@@ -90,6 +129,9 @@ export default function EventForm({
             value={serverId}
             onChange={(e) => setServerId(e.target.value)}
           >
+            {isRequest && (
+              <option value="">— Propose a new server —</option>
+            )}
             {servers.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.name}
@@ -98,6 +140,22 @@ export default function EventForm({
           </select>
         )}
       </div>
+
+      {isRequest && !serverId && (
+        <div className="field">
+          <label htmlFor="newServer">New server name</label>
+          <input
+            id="newServer"
+            type="text"
+            value={proposedServerName}
+            onChange={(e) => setProposedServerName(e.target.value)}
+            placeholder="e.g. Stoneholm SMP"
+          />
+          <p className="hint" style={{ marginTop: 6 }}>
+            We&apos;ll create this server when an archivist approves the event.
+          </p>
+        </div>
+      )}
 
       <div className="field">
         <label htmlFor="name">Event name</label>
@@ -133,8 +191,7 @@ export default function EventForm({
         </div>
         <div className="field">
           <label htmlFor="end">
-            End date{" "}
-            <span className="hint">(required if concluded)</span>
+            End date <span className="hint">(required if concluded)</span>
           </label>
           <input
             id="end"
@@ -182,7 +239,10 @@ export default function EventForm({
 
       <div className="field">
         <label htmlFor="discord">
-          Discord link <span className="hint">(optional)</span>
+          Discord link{" "}
+          <span className="hint">
+            {isRequest ? "(required)" : "(optional)"}
+          </span>
         </label>
         <input
           id="discord"
@@ -206,7 +266,13 @@ export default function EventForm({
 
       <div className="btn-row">
         <button className="btn" type="submit" disabled={busy}>
-          {busy ? "Saving…" : isEdit ? "Save changes" : "Create event"}
+          {busy
+            ? "Saving…"
+            : isRequest
+              ? "Submit for review"
+              : isEdit
+                ? "Save changes"
+                : "Create event"}
         </button>
         <button
           type="button"

@@ -14,9 +14,12 @@ export interface SessionUser {
   username: string;
   role: Role;
   trusted: boolean;
+  eventHost: boolean;
   email: string | null;
   emailVerified: boolean;
 }
+
+export type RequestStatus = "pending" | "approved" | "rejected";
 
 export type Infobox = Record<string, string>;
 

@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { canReview } from "@/lib/permissions";
 import { logAudit } from "@/lib/audit";
+import { discordError, parseDate } from "@/lib/validation";
 import type { SessionUser } from "@/lib/types";
 
 export type AdminResult =
@@ -27,6 +28,7 @@ async function gateArchivist(): Promise<
 export interface ServerInput {
   name: string;
   description: string;
+  discordUrl: string;
 }
 
 export async function createServer(input: ServerInput): Promise<AdminResult> {
@@ -38,11 +40,14 @@ export async function createServer(input: ServerInput): Promise<AdminResult> {
     return { ok: false, error: "Server name is too long." };
   if ((input.description ?? "").length > 5000)
     return { ok: false, error: "Description is too long (5000 characters max)." };
+  const dErr = discordError(input.discordUrl, false);
+  if (dErr) return { ok: false, error: dErr };
 
   const server = await prisma.server.create({
     data: {
       name: input.name.trim(),
       description: input.description.trim(),
+      discordUrl: input.discordUrl.trim(),
     },
   });
   revalidatePath("/");
@@ -61,10 +66,16 @@ export async function updateServer(
     return { ok: false, error: "Server name is too long." };
   if ((input.description ?? "").length > 5000)
     return { ok: false, error: "Description is too long (5000 characters max)." };
+  const dErr = discordError(input.discordUrl, false);
+  if (dErr) return { ok: false, error: dErr };
 
   await prisma.server.update({
     where: { id },
-    data: { name: input.name.trim(), description: input.description.trim() },
+    data: {
+      name: input.name.trim(),
+      description: input.description.trim(),
+      discordUrl: input.discordUrl.trim(),
+    },
   });
   revalidatePath("/");
   revalidatePath(`/servers/${id}`);
@@ -80,12 +91,6 @@ export interface EventInput {
   status: "upcoming" | "ongoing" | "concluded";
   description: string;
   discordUrl: string;
-}
-
-function parseDate(value: string): Date | null {
-  if (!value) return null;
-  const d = new Date(value + "T00:00:00");
-  return Number.isNaN(d.getTime()) ? null : d;
 }
 
 function validateEvent(input: EventInput): string | null {

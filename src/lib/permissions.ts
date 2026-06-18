@@ -33,6 +33,12 @@ export function canReview(user: SessionUser | null): boolean {
   return user?.role === "archivist";
 }
 
+// Whether a user may submit servers/events for review. Archivists can always do
+// this (they also create directly); event hosts submit requests.
+export function canHostEvents(user: SessionUser | null): boolean {
+  return !!user && (user.eventHost || user.role === "archivist");
+}
+
 export function canContribute(user: SessionUser | null): boolean {
   return user?.role === "contributor" || user?.role === "archivist";
 }

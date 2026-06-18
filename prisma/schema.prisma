@@ -29,6 +29,9 @@ model User {
   passwordHash String
   role         String   @default("contributor") // reader | contributor | archivist
   trusted      Boolean  @default(false)
+  // Event hosts may submit servers/events for archivist review. Composable with
+  // any role, so a contributor can also be an event host.
+  eventHost    Boolean  @default(false)
   bio          String   @default("")
   createdAt    DateTime @default(now())
 
@@ -38,6 +41,8 @@ model User {
   comments           Comment[]
   verificationTokens EmailVerificationToken[]
   eventRatings       EventRating[]
+  serverRequests     ServerRequest[]
+  eventRequests      EventRequest[]
 }
 
 // Single-use email-verification tokens. Only a SHA-256 hash of the token is
@@ -61,6 +66,7 @@ model Server {
   id          String  @id @default(cuid())
   name        String
   description String  @default("")
+  discordUrl  String  @default("")
   events      Event[]
 }
 
@@ -197,16 +203,58 @@ model RateLimit {
 
 model AuditLog {
   id         String   @id @default(cuid())
-  action     String // approved | requested_changes | disputed | undisputed | rolled_back | deleted_entry | deleted_event | deleted_server
+  action     String // approved | requested_changes | disputed | undisputed | rolled_back | deleted_entry | deleted_event | deleted_server | approved_server | approved_event | rejected_server | rejected_event
   actorId    String // who performed the action (archivist)
   actorName  String
-  targetType String // entry | event | server
+  targetType String // entry | event | server | server_request | event_request
   targetId   String?
   targetName String
-  authorName String? // original submitter (for entries)
+  authorName String? // original submitter (for entries / requests)
   reason     String? // e.g. the change-request message
   createdAt  DateTime @default(now())
 
   @@index([action])
   @@index([createdAt])
+}
+
+// A submission from an Event Host proposing a new server, pending archivist
+// review. Approving it creates the real Server.
+model ServerRequest {
+  id              String   @id @default(cuid())
+  name            String
+  description     String   @default("")
+  discordUrl      String
+  status          String   @default("pending") // pending | approved | rejected
+  reviewNote      String?
+  requesterId     String
+  requester       User     @relation(fields: [requesterId], references: [id], onDelete: Cascade)
+  createdServerId String? // set once approved
+  createdAt       DateTime @default(now())
+
+  @@index([status])
+  @@index([requesterId])
+}
+
+// A submission proposing a new event (upcoming or concluded). It either attaches
+// to an existing server (serverId) or proposes a new one (proposedServerName).
+model EventRequest {
+  id                 String    @id @default(cuid())
+  serverId           String?
+  proposedServerName String?
+  name               String
+  theme              String    @default("")
+  startDate          DateTime
+  endDate            DateTime?
+  eventStatus        String    @default("upcoming") // upcoming | ongoing | concluded
+  description        String    @default("")
+  discordUrl         String
+  status             String    @default("pending") // pending | approved | rejected
+  reviewNote         String?
+  requesterId        String
+  requester          User      @relation(fields: [requesterId], references: [id], onDelete: Cascade)
+  createdEventId     String? // set once approved
+  createdAt          DateTime  @default(now())
+
+  @@index([status])
+  @@index([requesterId])
 }

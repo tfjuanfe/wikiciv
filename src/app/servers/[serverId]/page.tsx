@@ -3,7 +3,7 @@ import Icon from "@/components/Icon";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
-import { canReview } from "@/lib/permissions";
+import { canHostEvents, canReview } from "@/lib/permissions";
 import { formatDate } from "@/lib/format";
 import { EventStatusBadge } from "@/components/Badges";
 import DeleteButton from "@/components/DeleteButton";
@@ -59,13 +59,26 @@ export default async function ServerPage({
       </div>
       <p className="lede">{server.description}</p>
 
+      {server.discordUrl && (
+        <p style={{ margin: "8px 0 14px" }}>
+          <a
+            href={server.discordUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-sm discord-btn"
+          >
+            <Icon name="discord" /> Join on Discord
+          </a>
+        </p>
+      )}
+
       <h2 className="section-title" style={{ justifyContent: "space-between" }}>
         <span>
           <span className="cube-bullet" aria-hidden /> Events
         </span>
-        {isArchivist && (
+        {canHostEvents(user) && (
           <Link href={`/events/new?serverId=${server.id}`} className="btn btn-sm">
-            + New event
+            + {isArchivist ? "New event" : "Suggest event"}
           </Link>
         )}
       </h2>
