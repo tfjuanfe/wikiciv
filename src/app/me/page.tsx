@@ -7,6 +7,7 @@ import { formatDate, formatDateTime } from "@/lib/format";
 import type { EntryType, Layer } from "@/lib/types";
 import { TypeBadge, LayerBadge, StatusBadge, DisputedTag } from "@/components/Badges";
 import EmailVerification from "@/components/EmailVerification";
+import AccountSettings from "@/components/AccountSettings";
 
 export const dynamic = "force-dynamic";
 
@@ -165,6 +166,8 @@ export default async function MyContributionsPage() {
           />
         </>
       )}
+
+      <AccountSettings />
     </>
   );
 }
