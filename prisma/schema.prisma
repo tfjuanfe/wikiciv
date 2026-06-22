@@ -33,6 +33,15 @@ model User {
   // any role, so a contributor can also be an event host.
   eventHost    Boolean  @default(false)
   bio          String   @default("")
+  // Discord identity (F1) — links a Discord account for login + bot features.
+  discordId       String? @unique
+  discordUsername String?
+  discordAvatar   String?
+  // Uploaded profile picture (F2); falls back to a Discord avatar or a monogram.
+  avatarUrl       String?
+  // Moderation status (F4): active | suspended | banned.
+  status         String    @default("active")
+  suspendedUntil DateTime?
   createdAt    DateTime @default(now())
 
   entries            Entry[]                  @relation("EntryAuthor")
@@ -43,6 +52,11 @@ model User {
   eventRatings       EventRating[]
   serverRequests     ServerRequest[]
   eventRequests      EventRequest[]
+  ownedEvents        Event[]                  @relation("EventOwner")
+  serverInterests    ServerInterest[]
+  votes              Vote[]
+  reportsMade        Report[]
+  tickets            Ticket[]
 }
 
 // Single-use email-verification tokens. Only a SHA-256 hash of the token is
@@ -68,6 +82,7 @@ model Server {
   description String  @default("")
   discordUrl  String  @default("")
   events      Event[]
+  interests   ServerInterest[]
 }
 
 model Event {
@@ -80,8 +95,21 @@ model Event {
   status      String    @default("ongoing") // upcoming | ongoing | concluded
   description String    @default("")
   discordUrl  String    @default("")
+  // Ownership + host controls (F3). ownerId is set when a host's event request
+  // is approved; SetNull keeps the event if the owner's account is removed.
+  ownerId           String?
+  commentsEnabled   Boolean @default(true)
+  discussionEnabled Boolean @default(true)
+  ratingMode        String  @default("open") // open | verified
+  ratingGuildId     String?
+  ratingRoleId      String?
+  // Host page personalization (F3/F7).
+  bannerUrl    String?
+  accentColor  String?
+  customBlocks String  @default("[]")
 
   server  Server        @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  owner   User?         @relation("EventOwner", fields: [ownerId], references: [id], onDelete: SetNull)
   entries Entry[]
   ratings EventRating[]
 
@@ -257,4 +285,70 @@ model EventRequest {
 
   @@index([status])
   @@index([requesterId])
+}
+
+// A user's standing interest in a server/host (F3). When that server publishes a
+// new event, opted-in users get a Discord channel ping (delivered by the bot).
+model ServerInterest {
+  id        String   @id @default(cuid())
+  userId    String
+  serverId  String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, serverId])
+  @@index([serverId])
+}
+
+// Up/down vote on an account (lore version), a subject page, or a comment (F4).
+// targetId is the entryId, subjectKey, or commentId depending on targetType.
+model Vote {
+  id         String   @id @default(cuid())
+  userId     String
+  targetType String // account | subject | comment
+  targetId   String
+  value      Int // +1 | -1
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, targetType, targetId])
+  @@index([targetType, targetId])
+}
+
+// A user report against content or another user, for the moderation queue (F4).
+model Report {
+  id         String   @id @default(cuid())
+  reporterId String
+  targetType String // entry | comment | user | event
+  targetId   String
+  reason     String
+  details    String   @default("")
+  status     String   @default("open") // open | resolved | dismissed
+  createdAt  DateTime @default(now())
+
+  reporter User @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([targetType, targetId])
+}
+
+// A support/request ticket — initially used for requesting the event-host role (F4).
+model Ticket {
+  id         String   @id @default(cuid())
+  userId     String
+  type       String // event_host_request | other
+  subject    String
+  body       String   @default("")
+  status     String   @default("open") // open | approved | rejected | closed
+  reviewNote String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([userId])
 }
