@@ -15,7 +15,7 @@ export async function generateMetadata({
 }: {
   params: { username: string };
 }): Promise<Metadata> {
-  return { title: `${params.username} | WikiCiv` };
+  return { title: `${params.username} | CivCentral` };
 }
 
 const ROLE_LABEL: Record<string, string> = {

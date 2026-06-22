@@ -72,17 +72,18 @@ export default async function HomePage() {
     <>
       <section className="hero">
         <div className="hero-copy">
-          <p className="eyebrow">The civilization archive</p>
-          <h1>Welcome to WikiCiv!</h1>
+          <p className="eyebrow">Minecraft civilization events</p>
+          <h1>Every civ event, in one place.</h1>
           <p className="hero-lede">
-            Inspired by Wikipedia, on WikiCiv <strong>YOUR</strong> stories,
-            lore, and ideas become immortalized in an ever-growing civ
-            storytelling community. Read articles, or write your own. The
-            library is all yours!
+            CivCentral is where players find the Minecraft civilization events
+            worth their time — with <strong>honest ratings</strong> and clear
+            info you can trust, free of the hype and drama. Hosts get real
+            control over how their event is shown. And when an event ends, its
+            story stays: the wars, nations, and characters that made it matter.
           </p>
           <div className="hero-cta">
-            <Link href="/search" className="btn btn-lg">
-              Explore the archive
+            <Link href="/upcoming" className="btn btn-lg">
+              Browse events
             </Link>
             <Link href="/info" className="btn btn-lg btn-ghost">
               How it works
@@ -90,16 +91,16 @@ export default async function HomePage() {
           </div>
           <dl className="hero-stats">
             <div>
-              <dt>{entryCount}</dt>
-              <dd>entries</dd>
-            </div>
-            <div>
               <dt>{eventCount}</dt>
               <dd>events</dd>
             </div>
             <div>
               <dt>{servers.length}</dt>
               <dd>hosts</dd>
+            </div>
+            <div>
+              <dt>{entryCount}</dt>
+              <dd>entries</dd>
             </div>
           </dl>
         </div>

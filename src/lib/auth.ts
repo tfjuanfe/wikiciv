@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "./db";
 import type { Role, SessionUser } from "./types";
 
-const COOKIE_NAME = "wikiciv_session";
+const COOKIE_NAME = "civcentral_session";
 const MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 
 // Resolve the signing secret at request time. In production we refuse to fall

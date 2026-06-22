@@ -28,7 +28,7 @@ export function getBaseUrl(): string {
   return "http://localhost:3000";
 }
 
-const FROM = process.env.EMAIL_FROM?.trim() || "WikiCiv <noreply@wikiciv.xyz>";
+const FROM = process.env.EMAIL_FROM?.trim() || "CivCentral <noreply@civcentral.com>";
 
 // Send the verification email. Returns ok=false (rather than throwing) so
 // callers can surface a friendly message. If RESEND_API_KEY is unset we log the
@@ -49,7 +49,7 @@ export async function sendVerificationEmail(
     const { error } = await resend.emails.send({
       from: FROM,
       to,
-      subject: "Verify your WikiCiv email",
+      subject: "Verify your CivCentral email",
       text: verificationText(link),
       html: verificationHtml(link),
     });
@@ -66,7 +66,7 @@ export async function sendVerificationEmail(
 
 function verificationText(link: string): string {
   return [
-    "Welcome to WikiCiv!",
+    "Welcome to CivCentral!",
     "",
     "Confirm your email to start contributing records and accounts:",
     link,
@@ -78,7 +78,7 @@ function verificationText(link: string): string {
 function verificationHtml(link: string): string {
   return `
   <div style="font-family:system-ui,sans-serif;max-width:480px;margin:0 auto;color:#1a1a1a">
-    <h2 style="margin:0 0 12px">Verify your WikiCiv email</h2>
+    <h2 style="margin:0 0 12px">Verify your CivCentral email</h2>
     <p style="margin:0 0 16px;line-height:1.5">
       Confirm your email to start contributing records and accounts to the archive.
     </p>

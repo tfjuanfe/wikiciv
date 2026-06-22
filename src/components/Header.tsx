@@ -15,10 +15,10 @@ export default async function Header({ user }: { user: SessionUser | null }) {
     <header className="site-header">
       {/* Row 1: brand · search · account */}
       <div className="header-top">
-        <Link href="/" className="brand" aria-label="WikiCiv home">
+        <Link href="/" className="brand" aria-label="CivCentral home">
           <Image
             src="/logo.png"
-            alt="WikiCiv"
+            alt="CivCentral"
             width={760}
             height={252}
             priority
@@ -26,7 +26,7 @@ export default async function Header({ user }: { user: SessionUser | null }) {
           />
           <Image
             src="/logo-dark.png"
-            alt="WikiCiv"
+            alt="CivCentral"
             width={760}
             height={252}
             priority

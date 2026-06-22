@@ -1,12 +1,20 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "FAQ | WikiCiv" };
+export const metadata: Metadata = { title: "FAQ | CivCentral" };
 
 const FAQS: { q: string; a: string }[] = [
   {
-    q: "What is WikiCiv?",
-    a: "A community wiki for documenting Minecraft civilization events: the nations, characters, wars, places, and artifacts that players create during multiplayer roleplay.",
+    q: "What is CivCentral?",
+    a: "CivCentral is the home for Minecraft civilization events: find the ones worth your time with honest ratings and info you can trust, and — once an event ends — document the nations, characters, wars, places, and artifacts that made it.",
+  },
+  {
+    q: "How do I find events?",
+    a: "Browse upcoming events from the home page and the Upcoming page, and explore the hosts running them. Each event has its own page with the details and player ratings.",
+  },
+  {
+    q: "How do event ratings work?",
+    a: "Logged-in members rate events on a 1-to-5 scale. Ratings are shown on each event and collected on the Event ratings page, so you can see what players actually thought instead of relying on hype.",
   },
   {
     q: "What is the difference between a Record and an Account?",
@@ -14,11 +22,11 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Who can contribute?",
-    a: "Anyone can read WikiCiv without an account. To add or edit entries, create an account. New contributors' submissions are reviewed by an archivist before they go public.",
+    a: "Anyone can browse CivCentral without an account. To rate events or add and edit entries, create an account. New contributors' submissions are reviewed by an archivist before they go public.",
   },
   {
     q: "What is an archivist?",
-    a: "Archivists are staff who review submissions, keep entries organized, and handle conflicts and cleanup. They can publish, request changes, mark records as disputed, roll back edits, and remove content.",
+    a: "Archivists are staff who review submissions, keep entries organized, keep ratings and info honest, and handle conflicts and moderation. They can publish, request changes, mark records as disputed, roll back edits, and remove content.",
   },
   {
     q: "What does 'disputed' mean on a Record?",
@@ -50,8 +58,8 @@ export default function FaqPage() {
       </nav>
       <h1 className="page-title">FAQ</h1>
       <p className="lede">
-        Common questions about how WikiCiv works. Want more background? Read the{" "}
-        <Link href="/info">About page</Link>.
+        Common questions about how CivCentral works. Want more background? Read
+        the <Link href="/info">About page</Link>.
       </p>
 
       <div className="list-stack">

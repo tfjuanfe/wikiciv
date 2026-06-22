@@ -17,13 +17,13 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "WikiCiv | Minecraft civilization lore archive",
+  title: "CivCentral | Minecraft civilization events",
   description:
-    "A community archive of Minecraft civilization roleplay events: the nations, wars, characters, and places that players create.",
+    "The home for Minecraft civilization events: find the ones worth your time, see honest ratings, and trust the info. When an event ends, its story stays — the wars, nations, and characters that made it.",
 };
 
 // Set the theme before first paint to avoid a flash of the wrong mode.
-const themeScript = `(function(){try{document.documentElement.classList.add('js');var t=localStorage.getItem('wikiciv-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
+const themeScript = `(function(){try{document.documentElement.classList.add('js');var t=localStorage.getItem('civcentral-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
 
 export default async function RootLayout({
   children,
@@ -58,9 +58,9 @@ export default async function RootLayout({
               className="footer-mark"
             />
             <p>
-              <strong>WikiCiv</strong> is a community-run archive for Minecraft
-              civilization events: the nations, wars, and characters players
-              bring to life.
+              <strong>CivCentral</strong> is the home for Minecraft civilization
+              events: find what&apos;s worth your time, see honest ratings, and keep
+              the stories that follow.
             </p>
           </div>
         </footer>

@@ -6,7 +6,7 @@ import { formatDate } from "@/lib/format";
 import { EventStatusBadge } from "@/components/Badges";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Upcoming events | WikiCiv" };
+export const metadata: Metadata = { title: "Upcoming events | CivCentral" };
 
 export default async function UpcomingPage() {
   const events = await prisma.event.findMany({

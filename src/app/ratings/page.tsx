@@ -9,7 +9,7 @@ import { EventStatusBadge } from "@/components/Badges";
 import RatingControl from "@/components/RatingControl";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Event ratings | WikiCiv" };
+export const metadata: Metadata = { title: "Event ratings | CivCentral" };
 
 export default async function RatingsPage() {
   const user = await getCurrentUser();

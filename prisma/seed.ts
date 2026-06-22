@@ -296,7 +296,7 @@ Evidence: battle-site screenshots showing Concord banners over the ruins, and th
 
 This account holds the war was **inconclusive**. Yes, Ardenhold was abandoned — but so was the Concord's own stronghold days later, and no faction held the field by season's end. To call it a "victory" for anyone, this claim argues, overstates what the logs actually show.
 
-> ⚠ Marked **disputed**. WikiCiv does not rule on which Record is correct — it shows both, attributed to who submitted them.`,
+> ⚠ Marked **disputed**. CivCentral does not rule on which Record is correct — it shows both, attributed to who submitted them.`,
     evidence: [
       {
         url: "https://picsum.photos/seed/ashen-war-empty/640/400",

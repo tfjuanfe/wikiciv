@@ -5,7 +5,7 @@ import { prisma } from "@/lib/db";
 import EntryCard from "@/components/EntryCard";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Popular | WikiCiv" };
+export const metadata: Metadata = { title: "Popular | CivCentral" };
 
 // subjectKey is `${eventId}::${type}::${nameLowercased}`; eventId and type never
 // contain "::", so the first two segments are safe and the rest is the name.

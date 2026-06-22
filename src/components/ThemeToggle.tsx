@@ -22,7 +22,7 @@ export default function ThemeToggle() {
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
     try {
-      localStorage.setItem("wikiciv-theme", next);
+      localStorage.setItem("civcentral-theme", next);
     } catch {
       /* ignore storage errors */
     }

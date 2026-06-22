@@ -42,7 +42,7 @@ export async function GET(
   out.push(
     `> ${TYPE_LABELS[type]} · ${anchor.event.name} (${anchor.event.server.name})`,
   );
-  out.push(`> Exported from WikiCiv on ${isoDate(new Date())}`, "");
+  out.push(`> Exported from CivCentral on ${isoDate(new Date())}`, "");
 
   if (records.length > 0) {
     out.push("## Record", "");

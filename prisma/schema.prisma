@@ -1,4 +1,4 @@
-// WikiCiv data model.
+// CivCentral data model.
 //
 // Production runs on PostgreSQL (Neon, via Vercel). Set DATABASE_URL to the
 // pooled connection string and DIRECT_URL to the direct (non-pooled) one.

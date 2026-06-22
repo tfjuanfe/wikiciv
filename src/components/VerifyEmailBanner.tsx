@@ -10,14 +10,14 @@ export default function VerifyEmailBanner({ hasEmail }: { hasEmail: boolean }) {
   const [hidden, setHidden] = useState(true);
 
   useEffect(() => {
-    setHidden(sessionStorage.getItem("wikiciv-hide-verify-banner") === "1");
+    setHidden(sessionStorage.getItem("civcentral-hide-verify-banner") === "1");
   }, []);
 
   if (hidden) return null;
 
   function dismiss() {
     try {
-      sessionStorage.setItem("wikiciv-hide-verify-banner", "1");
+      sessionStorage.setItem("civcentral-hide-verify-banner", "1");
     } catch {
       /* ignore storage errors */
     }

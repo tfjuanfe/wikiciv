@@ -1,9 +1,9 @@
-# WikiCiv
+# CivCentral
 
-An open, collaborative lore archive for Minecraft **civilization events** — multiplayer RP events where players build civilizations and generate emergent history.
+The home for Minecraft **civilization events** — multiplayer RP events where players build civilizations and generate emergent history. Find the events worth your time with honest ratings and trustworthy info, and — once an event ends — document the nations, wars, and characters that made it.
 
 > **Guiding principle: "Every telling has a home."**
-> WikiCiv never overwrites or deletes one person's version of history in favor of another's. When accounts conflict, they coexist, attributed to whoever submitted them. The system documents and attributes lore — it never rules on which version is "true."
+> CivCentral never overwrites or deletes one person's version of history in favor of another's. When accounts conflict, they coexist, attributed to whoever submitted them. The system documents and attributes lore — it never rules on which version is "true."
 
 ## The two-layer model
 

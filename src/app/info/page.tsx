@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "About | WikiCiv" };
+export const metadata: Metadata = { title: "About | CivCentral" };
 
 export default function InfoPage() {
   return (
@@ -9,11 +9,12 @@ export default function InfoPage() {
       <nav className="breadcrumbs">
         <Link href="/">Home</Link> / About
       </nav>
-      <h1 className="page-title">About WikiCiv</h1>
+      <h1 className="page-title">About CivCentral</h1>
       <p className="lede">
-        WikiCiv is a community wiki for the history of Minecraft civilization
-        events: multiplayer roleplay worlds where players found nations, fight
-        wars, and build a shared history together.
+        CivCentral is the home for Minecraft civilization events — multiplayer
+        roleplay worlds where players found nations, fight wars, and build a
+        shared history. It&apos;s where players find the events worth their time,
+        and where the stories from those events are kept once they end.
       </p>
 
       <h2 className="section-title">
@@ -21,10 +22,48 @@ export default function InfoPage() {
       </h2>
       <div className="prose">
         <p>
+          CivCentral helps you find Minecraft civilization events and decide
+          which ones are worth joining — with honest ratings and clear,
+          trustworthy info instead of hype and hearsay. It&apos;s built to be
+          easy to use and to stay free of toxicity and misinformation, so the
+          info you read is info you can actually rely on.
+        </p>
+      </div>
+
+      <h2 className="section-title">
+        <span className="cube-bullet" aria-hidden /> For hosts
+      </h2>
+      <div className="prose">
+        <p>
+          Hosts get real control and visibility over how their event is
+          presented — its details, its description, and how it&apos;s rated. You
+          decide how your event shows up to players, instead of leaving it to
+          rumor and scattered Discord posts.
+        </p>
+      </div>
+
+      <h2 className="section-title">
+        <span className="cube-bullet" aria-hidden /> Honest ratings, no drama
+      </h2>
+      <div className="prose">
+        <p>
+          Ratings come from real players, and the platform is moderated to stay
+          free of toxicity and misinformation. The goal is simple: a place
+          people actually trust when they&apos;re deciding where to play next.
+        </p>
+      </div>
+
+      <h2 className="section-title">
+        <span className="cube-bullet" aria-hidden /> When an event ends
+      </h2>
+      <div className="prose">
+        <p>
           Civilization events create a lot of history that normally disappears
-          into chat logs, Discord threads, and old screenshots. WikiCiv is a
-          place to write that history down and keep it organized, with entries
-          for civilizations, characters, wars, places, and artifacts.
+          into chat logs, Discord threads, and old screenshots. When an event
+          ends, its story shouldn&apos;t disappear with it. CivCentral lets hosts
+          and players document the civilizations, characters, wars, places, and
+          artifacts that made an event worth remembering — kept organized and
+          searchable for good.
         </p>
       </div>
 
@@ -32,7 +71,7 @@ export default function InfoPage() {
         <span className="cube-bullet" aria-hidden /> Two layers per subject
       </h2>
       <div className="prose">
-        <p>Every subject is documented in two layers:</p>
+        <p>When a story gets written down, it&apos;s documented in two layers:</p>
         <ul>
           <li>
             <strong>Record</strong>: the documented facts, such as dates,
@@ -57,9 +96,10 @@ export default function InfoPage() {
       </h2>
       <div className="prose">
         <p>
-          WikiCiv was founded by <strong>Danteware</strong> and is kept up by a
-          small group of archivists who review submissions and keep the archive
-          tidy. Anyone can read it, and anyone with an account can contribute.
+          CivCentral was founded by <strong>Danteware</strong> and is kept up by
+          a small group of archivists who review submissions, keep ratings and
+          info honest, and handle moderation. Anyone can read it, and anyone with
+          an account can contribute.
         </p>
       </div>
 
@@ -68,25 +108,25 @@ export default function InfoPage() {
       </h2>
       <div className="prose">
         <ul>
+          <li>Help players find the civilization events worth their time.</li>
           <li>
-            Give civilization events a lasting, searchable history instead of
-            letting it fade over time.
+            Give hosts real control and visibility over how their events are
+            presented.
           </li>
           <li>
-            Separate documented facts from in-character storytelling so both
-            have a clear place.
+            Keep ratings honest and the platform free of toxicity and
+            misinformation.
           </li>
           <li>
-            Let players record their own faction&apos;s perspective and have it
-            credited to them.
+            Make sure an event&apos;s story doesn&apos;t disappear once it ends.
           </li>
           <li>Stay open and community-run: free to read, open to contributors.</li>
         </ul>
       </div>
 
       <p className="lede" style={{ marginTop: 24 }}>
-        Want to help? <Link href="/register">Create an account</Link> and start
-        adding to the archive, or read the <Link href="/faq">FAQ</Link>.
+        Want in? <Link href="/register">Create an account</Link> to start rating
+        and documenting events, or read the <Link href="/faq">FAQ</Link>.
       </p>
     </>
   );
