@@ -1941,3 +1941,112 @@ a.concept-card:hover {
 [data-theme="dark"] a.concept-card:hover {
   box-shadow: 0 16px 38px rgba(0, 0, 0, 0.5);
 }
+
+/* ============================================================
+   Mobile-friendly baseline (Stage 0)
+   Builds on the existing responsive rules above. Goals: never
+   scroll the page sideways, keep the header usable on small
+   phones, make primary actions full-width and comfortably
+   tappable, and stop iOS from zooming on input focus.
+   ============================================================ */
+
+/* Long words, URLs, and code in rendered markdown must wrap rather
+   than push the layout wider than the screen. */
+.prose {
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  /* Wide markdown tables scroll inside their own box instead of
+     widening the whole page (GitHub-style). */
+  .prose table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-main {
+    padding: 20px 14px 52px;
+  }
+  .page-title {
+    font-size: 1.6rem;
+  }
+
+  /* Compact, non-overflowing top bar. */
+  .header-top {
+    padding: 10px 14px;
+    gap: 10px;
+  }
+  .header-account {
+    gap: 10px;
+    font-size: 0.88rem;
+  }
+
+  /* Turn the page tabs into one swipeable row instead of a tall
+     wrapped block. */
+  .header-tabs {
+    padding: 0 8px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .header-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .header-tabs a {
+    white-space: nowrap;
+  }
+
+  /* Stack the hero actions full-width so they're easy to hit. */
+  .hero-cta {
+    gap: 10px;
+  }
+  .hero-cta .btn {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+  .hero-stats {
+    gap: 22px;
+  }
+
+  /* 16px form text stops iOS Safari from zooming in on focus. */
+  input,
+  select,
+  textarea,
+  .header-search input {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .brand-logo {
+    height: 32px;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 8vw, 2.4rem);
+  }
+  .hero-stats {
+    gap: 16px;
+  }
+}
+
+/* Comfortable touch targets on touch devices, without changing the
+   tighter pointer/desktop sizing. */
+@media (pointer: coarse) {
+  .header-tabs a,
+  .header-account a,
+  .link-button {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .btn {
+    min-height: 44px;
+  }
+  .btn-sm {
+    min-height: 38px;
+  }
+}
