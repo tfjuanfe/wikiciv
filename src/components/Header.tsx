@@ -92,13 +92,13 @@ export default async function Header({ user }: { user: SessionUser | null }) {
         <Link href="/ratings">Ratings</Link>
         <Link href="/popular">Popular</Link>
         {user && <Link href="/me">My contributions</Link>}
-        {user?.eventHost && user.role !== "archivist" && user.role !== "owner" && (
+        {user?.eventHost && user.role !== "archivist" && (
           <>
             <Link href="/events/new">Suggest event</Link>
             <Link href="/servers/new">Suggest server</Link>
           </>
         )}
-        {(user?.role === "archivist" || user?.role === "owner") && (
+        {user?.role === "archivist" && (
           <Link href="/review" className="nav-review">
             Review
           </Link>
