@@ -1,0 +1,1548 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Five Marks for CivCentral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap">
+
+<style>
+  :root {
+    --ground: #EAEDE8;
+    --panel: #FFFFFF;
+    --panel-2: #F4F6F2;
+    --ink: #131A16;
+    --ink-2: #414B45;
+    --muted: #6B7670;
+    --rule: #D5DAD3;
+    --rule-2: #E3E7E0;
+    --mark: #0B7A5A;
+    --plate-light: #FBFCFA;
+    --plate-dark: #0C110E;
+    --plate-dark-2: #161D19;
+    --shadow: 0 1px 2px rgba(19, 26, 22, .05), 0 12px 28px -18px rgba(19, 26, 22, .35);
+
+    --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --f-read: "Newsreader", Georgia, "Times New Roman", serif;
+    --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+    --wrap: 1060px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0D110F;
+      --panel: #151B18;
+      --panel-2: #1A211D;
+      --ink: #E9EDE8;
+      --ink-2: #B7C0B9;
+      --muted: #8B958E;
+      --rule: #262E29;
+      --rule-2: #202823;
+      --mark: #4ADE80;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 14px 32px -20px rgba(0, 0, 0, .9);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0D110F;
+    --panel: #151B18;
+    --panel-2: #1A211D;
+    --ink: #E9EDE8;
+    --ink-2: #B7C0B9;
+    --muted: #8B958E;
+    --rule: #262E29;
+    --rule-2: #202823;
+    --mark: #4ADE80;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 14px 32px -20px rgba(0, 0, 0, .9);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-display);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 28px; }
+  svg { display: block; }
+
+  /* ---------------------------------------------------------- masthead */
+  .masthead { padding: 72px 0 40px; }
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 20px;
+  }
+  .masthead h1 {
+    font-size: clamp(34px, 5.4vw, 56px);
+    line-height: 1.02;
+    letter-spacing: -.028em;
+    font-weight: 700;
+    margin: 0 0 20px;
+    max-width: 15ch;
+    text-wrap: balance;
+  }
+  .deck {
+    font-family: var(--f-read);
+    font-size: 19px;
+    line-height: 1.62;
+    color: var(--ink-2);
+    max-width: 62ch;
+    margin: 0 0 36px;
+  }
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .facts > div { background: var(--panel); padding: 16px 18px; }
+  .facts dt {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 6px;
+  }
+  .facts dd { margin: 0; font-size: 14.5px; font-weight: 500; line-height: 1.4; }
+
+  .swatches { display: flex; flex-wrap: wrap; gap: 10px; margin: 28px 0 0; padding: 0; list-style: none; }
+  .swatches li {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--f-mono); font-size: 11px; color: var(--muted);
+    border: 1px solid var(--rule); border-radius: 3px; padding: 5px 9px 5px 6px;
+    background: var(--panel);
+  }
+  .chip { width: 15px; height: 15px; border-radius: 2px; box-shadow: inset 0 0 0 1px rgba(128,138,132,.45); }
+
+  /* ---------------------------------------------------------- concepts */
+  .board { padding: 44px 0 8px; display: flex; flex-direction: column; gap: 26px; }
+  .concept {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .chead {
+    display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+    padding: 22px 26px 20px;
+    border-bottom: 1px solid var(--rule-2);
+  }
+  .num {
+    font-family: var(--f-mono); font-size: 12px; font-weight: 500;
+    color: var(--mark); letter-spacing: .06em;
+    padding-top: 4px;
+  }
+  .chead h2 {
+    font-size: 27px; font-weight: 700; letter-spacing: -.02em; margin: 0;
+  }
+  .chead .tag {
+    font-family: var(--f-read); font-style: italic; font-size: 18px;
+    color: var(--muted); margin: 0;
+  }
+
+  .plates { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule-2); }
+  .plate {
+    margin: 0; padding: 40px 30px 16px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px;
+    min-height: 190px;
+  }
+  .plate.on-light { background: var(--plate-light); }
+  .plate.on-dark { background: var(--plate-dark); }
+  .plate .lock svg { height: 54px; width: auto; max-width: 100%; }
+  .plate figcaption {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  }
+  .plate.on-light figcaption { color: #9AA49D; }
+  .plate.on-dark figcaption { color: #5E6B63; }
+
+  /* wordmark-led concept sets its own scale */
+  .plate .lock.type svg { height: 44px; }
+
+  .proof {
+    display: flex; align-items: flex-end; gap: 30px; flex-wrap: wrap;
+    padding: 22px 26px;
+    border-top: 1px solid var(--rule-2);
+    background: var(--panel-2);
+  }
+  .pgroup { display: flex; align-items: flex-end; gap: 12px; }
+  .pgroup + .pgroup { border-left: 1px solid var(--rule); padding-left: 30px; }
+  .pcell { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .pcell span {
+    font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .08em; color: var(--muted);
+  }
+  .tile { background: var(--plate-light); border: 1px solid var(--rule); border-radius: 4px; padding: 7px; display: flex; }
+  .tile.bare { background: none; border: none; padding: 0; }
+  .tile.round { border-radius: 50%; overflow: hidden; padding: 0; border: 1px solid var(--rule); }
+  .tile.round svg { border-radius: 50%; }
+  .s96 svg { height: 72px; width: auto; }
+  .s48 svg { height: 44px; width: auto; }
+  .s32 svg { height: 30px; width: auto; }
+  .s16 svg { height: 16px; width: auto; }
+  .s64 svg { height: 62px; width: auto; }
+
+  /* These two tiles are fixed light and fixed dark whatever the page theme is,
+     so their marks take literal colours, not the theme ink. */
+  .mono-l svg g { color: #131A16; }
+  .mono-d { background: var(--plate-dark); border-color: #26302A; }
+  .mono-d svg g { color: #EDF1EC; }
+
+  .notes {
+    display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 34px;
+    padding: 24px 26px 28px;
+    border-top: 1px solid var(--rule-2);
+  }
+  .notes p {
+    font-family: var(--f-read); font-size: 16.5px; line-height: 1.68; color: var(--ink-2);
+    margin: 0 0 12px; max-width: 64ch;
+  }
+  .notes p:last-child { margin-bottom: 0; }
+  .spec { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+  .spec div { display: grid; grid-template-columns: 78px 1fr; gap: 12px; align-items: start; }
+  .spec dt {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--muted); padding-top: 3px;
+  }
+  .spec dd { margin: 0; font-size: 14px; line-height: 1.5; color: var(--ink); }
+
+  /* ---------------------------------------------------------- closing */
+  .closing { padding: 40px 0 90px; }
+  .closing h2 {
+    font-size: 24px; font-weight: 700; letter-spacing: -.02em; margin: 0 0 18px;
+  }
+  .rec {
+    background: var(--panel); border: 1px solid var(--rule); border-radius: 5px;
+    padding: 26px 28px; margin-bottom: 26px;
+  }
+  .rec p { font-family: var(--f-read); font-size: 17px; line-height: 1.68; color: var(--ink-2); margin: 0 0 14px; max-width: 68ch; }
+  .rec p:last-child { margin-bottom: 0; }
+  .rec strong { color: var(--ink); font-family: var(--f-display); font-weight: 600; font-size: 15.5px; }
+  .files { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--rule-2); }
+  th {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); border-bottom: 1px solid var(--rule);
+  }
+  td.path { font-family: var(--f-mono); font-size: 12.5px; color: var(--ink); }
+  td.note { color: var(--muted); }
+  .foot {
+    font-family: var(--f-mono); font-size: 11px; color: var(--muted);
+    margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--rule);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 820px) {
+    .plates { grid-template-columns: 1fr; }
+    .notes { grid-template-columns: 1fr; gap: 22px; }
+    .pgroup + .pgroup { border-left: none; padding-left: 0; }
+    .masthead { padding-top: 48px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">CivCentral &middot; identity concepts &middot; round two</p>
+    <h1>Five marks, five different arguments</h1>
+    <p class="deck">
+      Each of these makes a different case for what CivCentral is &mdash; a centre, a landmark,
+      a name, a pair of coexisting records, a banner. They share a palette and nothing else:
+      different silhouettes, different construction, different behaviour at 16&nbsp;pixels.
+      None of them is flat, and none of them borrows a pixel of Minecraft.
+    </p>
+    <dl class="facts">
+      <div><dt>Deliverable</dt><dd>Icon, lockup, one-colour cut</dd></div>
+      <div><dt>Format</dt><dd>Vector SVG, regenerable</dd></div>
+      <div><dt>Floor</dt><dd>Legible at 16&nbsp;px</dd></div>
+      <div><dt>Rights</dt><dd>100% original artwork</dd></div>
+    </dl>
+    <ul class="swatches">
+      <li><span class="chip" style="background:#4ADE80"></span>#4ADE80</li>
+      <li><span class="chip" style="background:#10B981"></span>#10B981</li>
+      <li><span class="chip" style="background:#047857"></span>#047857</li>
+      <li><span class="chip" style="background:#065F46"></span>#065F46</li>
+      <li><span class="chip" style="background:#FBBF24"></span>#FBBF24</li>
+      <li><span class="chip" style="background:#B45309"></span>#B45309</li>
+      <li><span class="chip" style="background:#0F172A"></span>#0F172A</li>
+    </ul>
+  </header>
+
+  <main class="board">
+
+    <!-- ============================================================ 01 -->
+    <section class="concept">
+      <div class="chead">
+        <span class="num">01</span>
+        <h2>Core</h2>
+        <p class="tag">The centre, held.</p>
+      </div>
+      <div class="plates">
+        <figure class="plate on-light">
+          <div class="lock"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496.82 120" width="496.82" height="120" role="img" aria-label="CivCentral - Core lockup">
+  <title>CivCentral - Core lockup</title>
+  <defs>
+    <linearGradient id="01-core-lockup-0--c-face" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.55" stop-color="#10B981"/><stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="01-core-lockup-0--c-edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#047857"/><stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+  </defs>
+  
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" transform="translate(0 9)" fill="url(#01-core-lockup-0--c-edge)"/>
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" fill="url(#01-core-lockup-0--c-face)"/>
+  <path d="M30.3 23.3 A42 42 0 0 1 72 12.8" fill="none" stroke="#A7F3D0" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <polygon points="45,44.5 60,53 60,70 45,61.5" fill="#B45309"/>
+  <polygon points="75,44.5 60,53 60,70 75,61.5" fill="#F59E0B"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="#FDE68A"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="none" stroke="#FBBF24" stroke-width="1.5" stroke-linejoin="round" opacity="0.9"/>
+  <g transform="translate(146 39) scale(0.42)">
+    <clipPath id="01-core-lockup-0--01-core-lockup-ct"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    <clipPath id="01-core-lockup-0--01-core-lockup-cc"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    
+    <g clip-path="url(#01-core-lockup-0--01-core-lockup-cc)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  </g>
+</svg></div>
+          <figcaption>light ground</figcaption>
+        </figure>
+        <figure class="plate on-dark">
+          <div class="lock"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496.82 120" width="496.82" height="120" role="img" aria-label="CivCentral - Core lockup">
+  <title>CivCentral - Core lockup</title>
+  <defs>
+    <linearGradient id="01-core-lockup-dark-1--c-face" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.55" stop-color="#10B981"/><stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="01-core-lockup-dark-1--c-edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#047857"/><stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+  </defs>
+  
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" transform="translate(0 9)" fill="url(#01-core-lockup-dark-1--c-edge)"/>
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" fill="url(#01-core-lockup-dark-1--c-face)"/>
+  <path d="M30.3 23.3 A42 42 0 0 1 72 12.8" fill="none" stroke="#A7F3D0" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <polygon points="45,44.5 60,53 60,70 45,61.5" fill="#B45309"/>
+  <polygon points="75,44.5 60,53 60,70 75,61.5" fill="#F59E0B"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="#FDE68A"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="none" stroke="#FBBF24" stroke-width="1.5" stroke-linejoin="round" opacity="0.9"/>
+  <g transform="translate(146 39) scale(0.42)">
+    <clipPath id="01-core-lockup-dark-1--01-core-lockup-dark-ct"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    <clipPath id="01-core-lockup-dark-1--01-core-lockup-dark-cc"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    
+    <g clip-path="url(#01-core-lockup-dark-1--01-core-lockup-dark-cc)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 0)" stroke="#4ADE80" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 0)" stroke="#4ADE80" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 0)" stroke="#4ADE80" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  </g>
+</svg></div>
+          <figcaption>dark ground</figcaption>
+        </figure>
+      </div>
+      <div class="proof">
+        <div class="pgroup">
+          <div class="pcell"><div class="tile s96"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Core icon">
+  <title>CivCentral - Core icon</title>
+  <defs>
+    <linearGradient id="01-core-icon-2--c-face" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.55" stop-color="#10B981"/><stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="01-core-icon-2--c-edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#047857"/><stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" transform="translate(0 9)" fill="url(#01-core-icon-2--c-edge)"/>
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" fill="url(#01-core-icon-2--c-face)"/>
+  <path d="M30.3 23.3 A42 42 0 0 1 72 12.8" fill="none" stroke="#A7F3D0" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <polygon points="45,44.5 60,53 60,70 45,61.5" fill="#B45309"/>
+  <polygon points="75,44.5 60,53 60,70 75,61.5" fill="#F59E0B"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="#FDE68A"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="none" stroke="#FBBF24" stroke-width="1.5" stroke-linejoin="round" opacity="0.9"/>
+</svg></div><span>96</span></div>
+          <div class="pcell"><div class="tile s48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Core icon">
+  <title>CivCentral - Core icon</title>
+  <defs>
+    <linearGradient id="01-core-icon-3--c-face" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.55" stop-color="#10B981"/><stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="01-core-icon-3--c-edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#047857"/><stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" transform="translate(0 9)" fill="url(#01-core-icon-3--c-edge)"/>
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" fill="url(#01-core-icon-3--c-face)"/>
+  <path d="M30.3 23.3 A42 42 0 0 1 72 12.8" fill="none" stroke="#A7F3D0" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <polygon points="45,44.5 60,53 60,70 45,61.5" fill="#B45309"/>
+  <polygon points="75,44.5 60,53 60,70 75,61.5" fill="#F59E0B"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="#FDE68A"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="none" stroke="#FBBF24" stroke-width="1.5" stroke-linejoin="round" opacity="0.9"/>
+</svg></div><span>48</span></div>
+          <div class="pcell"><div class="tile s32"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Core icon">
+  <title>CivCentral - Core icon</title>
+  <defs>
+    <linearGradient id="01-core-icon-4--c-face" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.55" stop-color="#10B981"/><stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="01-core-icon-4--c-edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#047857"/><stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" transform="translate(0 9)" fill="url(#01-core-icon-4--c-edge)"/>
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" fill="url(#01-core-icon-4--c-face)"/>
+  <path d="M30.3 23.3 A42 42 0 0 1 72 12.8" fill="none" stroke="#A7F3D0" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <polygon points="45,44.5 60,53 60,70 45,61.5" fill="#B45309"/>
+  <polygon points="75,44.5 60,53 60,70 75,61.5" fill="#F59E0B"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="#FDE68A"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="none" stroke="#FBBF24" stroke-width="1.5" stroke-linejoin="round" opacity="0.9"/>
+</svg></div><span>32</span></div>
+          <div class="pcell"><div class="tile s16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Core icon">
+  <title>CivCentral - Core icon</title>
+  <defs>
+    <linearGradient id="01-core-icon-5--c-face" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.55" stop-color="#10B981"/><stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="01-core-icon-5--c-edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#047857"/><stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" transform="translate(0 9)" fill="url(#01-core-icon-5--c-edge)"/>
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" fill="url(#01-core-icon-5--c-face)"/>
+  <path d="M30.3 23.3 A42 42 0 0 1 72 12.8" fill="none" stroke="#A7F3D0" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <polygon points="45,44.5 60,53 60,70 45,61.5" fill="#B45309"/>
+  <polygon points="75,44.5 60,53 60,70 75,61.5" fill="#F59E0B"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="#FDE68A"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="none" stroke="#FBBF24" stroke-width="1.5" stroke-linejoin="round" opacity="0.9"/>
+</svg></div><span>16</span></div>
+        </div>
+        <div class="pgroup">
+          <div class="pcell"><div class="tile round s64"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Core icon">
+  <title>CivCentral - Core icon</title>
+  <defs>
+    <linearGradient id="01-core-icon-6--c-face" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.55" stop-color="#10B981"/><stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="01-core-icon-6--c-edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#047857"/><stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" transform="translate(0 9)" fill="url(#01-core-icon-6--c-edge)"/>
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" fill="url(#01-core-icon-6--c-face)"/>
+  <path d="M30.3 23.3 A42 42 0 0 1 72 12.8" fill="none" stroke="#A7F3D0" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <polygon points="45,44.5 60,53 60,70 45,61.5" fill="#B45309"/>
+  <polygon points="75,44.5 60,53 60,70 75,61.5" fill="#F59E0B"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="#FDE68A"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="none" stroke="#FBBF24" stroke-width="1.5" stroke-linejoin="round" opacity="0.9"/>
+</svg></div><span>DISCORD</span></div>
+          <div class="pcell"><div class="tile s48 mono-l"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Core monochrome">
+  <title>CivCentral - Core monochrome</title>
+  <g color="#0F172A">
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" fill="currentColor"/>
+  <polygon points="60,36 75,44.5 75,61.5 60,70 45,61.5 45,44.5" fill="currentColor"/>
+  </g>
+</svg></div><span>1-COLOUR</span></div>
+          <div class="pcell"><div class="tile s48 mono-d"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Core monochrome">
+  <title>CivCentral - Core monochrome</title>
+  <g color="#0F172A">
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" fill="currentColor"/>
+  <polygon points="60,36 75,44.5 75,61.5 60,70 45,61.5 45,44.5" fill="currentColor"/>
+  </g>
+</svg></div><span>REVERSED</span></div>
+        </div>
+      </div>
+      <div class="notes">
+        <div>
+          <p>
+            The letter is the whole mark. A heavy ring opens to the right to make the C, and
+            the block sitting inside it is the thing the name promises &mdash; one place where
+            everything gathers. Read it as <em>Civ</em> closing around <em>Central</em>.
+          </p>
+          <p>
+            The ring is extruded rather than drawn, so it sits on the page like a struck coin;
+            the block is a true isometric solid with three lit faces, which is where the
+            Minecraft nod lives &mdash; a cube, not a texture.
+          </p>
+        </div>
+        <dl class="spec">
+          <div><dt>Reads as</dt><dd>Green C with a gold centre, down to 16&nbsp;px</dd></div>
+          <div><dt>Strongest</dt><dd>Primary mark and favicon</dd></div>
+          <div><dt>Trade-off</dt><dd>The safest of the five &mdash; quiet where the others are loud</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============================================================ 02 -->
+    <section class="concept">
+      <div class="chead">
+        <span class="num">02</span>
+        <h2>Beacon</h2>
+        <p class="tag">The thing you can see from anywhere.</p>
+      </div>
+      <div class="plates">
+        <figure class="plate on-light">
+          <div class="lock"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496.82 120" width="496.82" height="120" role="img" aria-label="CivCentral - Beacon lockup">
+  <title>CivCentral - Beacon lockup</title>
+  <defs>
+    <linearGradient id="02-beacon-lockup-9--b-sky" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#0B2E26"/><stop offset="1" stop-color="#04150F"/>
+    </linearGradient>
+    <radialGradient id="02-beacon-lockup-9--b-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#10B981" stop-opacity="0.55"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="02-beacon-lockup-9--b-beam" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#A7F3D0" stop-opacity="0.85"/>
+      <stop offset="0.55" stop-color="#4ADE80" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#4ADE80" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="02-beacon-lockup-9--b-core" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="0.6" stop-color="#A7F3D0" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#A7F3D0" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="02-beacon-lockup-9--b-tile"><rect x="2" y="2" width="116" height="116" rx="28"/></clipPath>
+  </defs>
+  
+  <rect x="2" y="2" width="116" height="116" rx="28" fill="url(#02-beacon-lockup-9--b-sky)"/>
+  <g clip-path="url(#02-beacon-lockup-9--b-tile)">
+    <ellipse cx="60" cy="84" rx="52" ry="38" fill="url(#02-beacon-lockup-9--b-glow)"/>
+    <polygon points="50,79 70,79 80,2 40,2" fill="url(#02-beacon-lockup-9--b-beam)"/>
+    <polygon points="55.5,79 64.5,79 68,2 52,2" fill="url(#02-beacon-lockup-9--b-core)"/>
+    <polygon points="41,78 60,88.5 60,106.5 41,96" fill="#B45309"/>
+    <polygon points="79,78 60,88.5 60,106.5 79,96" fill="#F59E0B"/>
+    <polygon points="60,67.5 79,78 60,88.5 41,78" fill="#FDE68A"/>
+    <polygon points="41,78 60,88.5 79,78 60,67.5" fill="#FFFFFF" opacity="0.22"/>
+  </g>
+  <rect x="3.25" y="3.25" width="113.5" height="113.5" rx="26.75" fill="none" stroke="#FFFFFF" stroke-opacity="0.16" stroke-width="2.5"/>
+  <g transform="translate(146 39) scale(0.42)">
+    <clipPath id="02-beacon-lockup-9--02-beacon-lockup-ct"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    <clipPath id="02-beacon-lockup-9--02-beacon-lockup-cc"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    
+    <g clip-path="url(#02-beacon-lockup-9--02-beacon-lockup-cc)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  </g>
+</svg></div>
+          <figcaption>light ground</figcaption>
+        </figure>
+        <figure class="plate on-dark">
+          <div class="lock"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496.82 120" width="496.82" height="120" role="img" aria-label="CivCentral - Beacon lockup">
+  <title>CivCentral - Beacon lockup</title>
+  <defs>
+    <linearGradient id="02-beacon-lockup-dark-10--b-sky" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#0B2E26"/><stop offset="1" stop-color="#04150F"/>
+    </linearGradient>
+    <radialGradient id="02-beacon-lockup-dark-10--b-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#10B981" stop-opacity="0.55"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="02-beacon-lockup-dark-10--b-beam" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#A7F3D0" stop-opacity="0.85"/>
+      <stop offset="0.55" stop-color="#4ADE80" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#4ADE80" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="02-beacon-lockup-dark-10--b-core" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="0.6" stop-color="#A7F3D0" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#A7F3D0" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="02-beacon-lockup-dark-10--b-tile"><rect x="2" y="2" width="116" height="116" rx="28"/></clipPath>
+  </defs>
+  
+  <rect x="2" y="2" width="116" height="116" rx="28" fill="url(#02-beacon-lockup-dark-10--b-sky)"/>
+  <g clip-path="url(#02-beacon-lockup-dark-10--b-tile)">
+    <ellipse cx="60" cy="84" rx="52" ry="38" fill="url(#02-beacon-lockup-dark-10--b-glow)"/>
+    <polygon points="50,79 70,79 80,2 40,2" fill="url(#02-beacon-lockup-dark-10--b-beam)"/>
+    <polygon points="55.5,79 64.5,79 68,2 52,2" fill="url(#02-beacon-lockup-dark-10--b-core)"/>
+    <polygon points="41,78 60,88.5 60,106.5 41,96" fill="#B45309"/>
+    <polygon points="79,78 60,88.5 60,106.5 79,96" fill="#F59E0B"/>
+    <polygon points="60,67.5 79,78 60,88.5 41,78" fill="#FDE68A"/>
+    <polygon points="41,78 60,88.5 79,78 60,67.5" fill="#FFFFFF" opacity="0.22"/>
+  </g>
+  <rect x="3.25" y="3.25" width="113.5" height="113.5" rx="26.75" fill="none" stroke="#FFFFFF" stroke-opacity="0.16" stroke-width="2.5"/>
+  <g transform="translate(146 39) scale(0.42)">
+    <clipPath id="02-beacon-lockup-dark-10--02-beacon-lockup-dark-ct"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    <clipPath id="02-beacon-lockup-dark-10--02-beacon-lockup-dark-cc"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    
+    <g clip-path="url(#02-beacon-lockup-dark-10--02-beacon-lockup-dark-cc)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 0)" stroke="#4ADE80" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 0)" stroke="#4ADE80" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 0)" stroke="#4ADE80" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  </g>
+</svg></div>
+          <figcaption>dark ground</figcaption>
+        </figure>
+      </div>
+      <div class="proof">
+        <div class="pgroup">
+          <div class="pcell"><div class="tile s96"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Beacon icon">
+  <title>CivCentral - Beacon icon</title>
+  <defs>
+    <linearGradient id="02-beacon-icon-11--b-sky" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#0B2E26"/><stop offset="1" stop-color="#04150F"/>
+    </linearGradient>
+    <radialGradient id="02-beacon-icon-11--b-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#10B981" stop-opacity="0.55"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="02-beacon-icon-11--b-beam" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#A7F3D0" stop-opacity="0.85"/>
+      <stop offset="0.55" stop-color="#4ADE80" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#4ADE80" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="02-beacon-icon-11--b-core" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="0.6" stop-color="#A7F3D0" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#A7F3D0" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="02-beacon-icon-11--b-tile"><rect x="2" y="2" width="116" height="116" rx="28"/></clipPath>
+  </defs>
+
+  <rect x="2" y="2" width="116" height="116" rx="28" fill="url(#02-beacon-icon-11--b-sky)"/>
+  <g clip-path="url(#02-beacon-icon-11--b-tile)">
+    <ellipse cx="60" cy="84" rx="52" ry="38" fill="url(#02-beacon-icon-11--b-glow)"/>
+    <polygon points="50,79 70,79 80,2 40,2" fill="url(#02-beacon-icon-11--b-beam)"/>
+    <polygon points="55.5,79 64.5,79 68,2 52,2" fill="url(#02-beacon-icon-11--b-core)"/>
+    <polygon points="41,78 60,88.5 60,106.5 41,96" fill="#B45309"/>
+    <polygon points="79,78 60,88.5 60,106.5 79,96" fill="#F59E0B"/>
+    <polygon points="60,67.5 79,78 60,88.5 41,78" fill="#FDE68A"/>
+    <polygon points="41,78 60,88.5 79,78 60,67.5" fill="#FFFFFF" opacity="0.22"/>
+  </g>
+  <rect x="3.25" y="3.25" width="113.5" height="113.5" rx="26.75" fill="none" stroke="#FFFFFF" stroke-opacity="0.16" stroke-width="2.5"/>
+</svg></div><span>96</span></div>
+          <div class="pcell"><div class="tile s48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Beacon icon">
+  <title>CivCentral - Beacon icon</title>
+  <defs>
+    <linearGradient id="02-beacon-icon-12--b-sky" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#0B2E26"/><stop offset="1" stop-color="#04150F"/>
+    </linearGradient>
+    <radialGradient id="02-beacon-icon-12--b-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#10B981" stop-opacity="0.55"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="02-beacon-icon-12--b-beam" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#A7F3D0" stop-opacity="0.85"/>
+      <stop offset="0.55" stop-color="#4ADE80" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#4ADE80" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="02-beacon-icon-12--b-core" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="0.6" stop-color="#A7F3D0" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#A7F3D0" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="02-beacon-icon-12--b-tile"><rect x="2" y="2" width="116" height="116" rx="28"/></clipPath>
+  </defs>
+
+  <rect x="2" y="2" width="116" height="116" rx="28" fill="url(#02-beacon-icon-12--b-sky)"/>
+  <g clip-path="url(#02-beacon-icon-12--b-tile)">
+    <ellipse cx="60" cy="84" rx="52" ry="38" fill="url(#02-beacon-icon-12--b-glow)"/>
+    <polygon points="50,79 70,79 80,2 40,2" fill="url(#02-beacon-icon-12--b-beam)"/>
+    <polygon points="55.5,79 64.5,79 68,2 52,2" fill="url(#02-beacon-icon-12--b-core)"/>
+    <polygon points="41,78 60,88.5 60,106.5 41,96" fill="#B45309"/>
+    <polygon points="79,78 60,88.5 60,106.5 79,96" fill="#F59E0B"/>
+    <polygon points="60,67.5 79,78 60,88.5 41,78" fill="#FDE68A"/>
+    <polygon points="41,78 60,88.5 79,78 60,67.5" fill="#FFFFFF" opacity="0.22"/>
+  </g>
+  <rect x="3.25" y="3.25" width="113.5" height="113.5" rx="26.75" fill="none" stroke="#FFFFFF" stroke-opacity="0.16" stroke-width="2.5"/>
+</svg></div><span>48</span></div>
+          <div class="pcell"><div class="tile s32"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Beacon icon">
+  <title>CivCentral - Beacon icon</title>
+  <defs>
+    <linearGradient id="02-beacon-icon-13--b-sky" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#0B2E26"/><stop offset="1" stop-color="#04150F"/>
+    </linearGradient>
+    <radialGradient id="02-beacon-icon-13--b-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#10B981" stop-opacity="0.55"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="02-beacon-icon-13--b-beam" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#A7F3D0" stop-opacity="0.85"/>
+      <stop offset="0.55" stop-color="#4ADE80" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#4ADE80" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="02-beacon-icon-13--b-core" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="0.6" stop-color="#A7F3D0" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#A7F3D0" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="02-beacon-icon-13--b-tile"><rect x="2" y="2" width="116" height="116" rx="28"/></clipPath>
+  </defs>
+
+  <rect x="2" y="2" width="116" height="116" rx="28" fill="url(#02-beacon-icon-13--b-sky)"/>
+  <g clip-path="url(#02-beacon-icon-13--b-tile)">
+    <ellipse cx="60" cy="84" rx="52" ry="38" fill="url(#02-beacon-icon-13--b-glow)"/>
+    <polygon points="50,79 70,79 80,2 40,2" fill="url(#02-beacon-icon-13--b-beam)"/>
+    <polygon points="55.5,79 64.5,79 68,2 52,2" fill="url(#02-beacon-icon-13--b-core)"/>
+    <polygon points="41,78 60,88.5 60,106.5 41,96" fill="#B45309"/>
+    <polygon points="79,78 60,88.5 60,106.5 79,96" fill="#F59E0B"/>
+    <polygon points="60,67.5 79,78 60,88.5 41,78" fill="#FDE68A"/>
+    <polygon points="41,78 60,88.5 79,78 60,67.5" fill="#FFFFFF" opacity="0.22"/>
+  </g>
+  <rect x="3.25" y="3.25" width="113.5" height="113.5" rx="26.75" fill="none" stroke="#FFFFFF" stroke-opacity="0.16" stroke-width="2.5"/>
+</svg></div><span>32</span></div>
+          <div class="pcell"><div class="tile s16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Beacon icon">
+  <title>CivCentral - Beacon icon</title>
+  <defs>
+    <linearGradient id="02-beacon-icon-14--b-sky" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#0B2E26"/><stop offset="1" stop-color="#04150F"/>
+    </linearGradient>
+    <radialGradient id="02-beacon-icon-14--b-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#10B981" stop-opacity="0.55"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="02-beacon-icon-14--b-beam" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#A7F3D0" stop-opacity="0.85"/>
+      <stop offset="0.55" stop-color="#4ADE80" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#4ADE80" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="02-beacon-icon-14--b-core" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="0.6" stop-color="#A7F3D0" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#A7F3D0" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="02-beacon-icon-14--b-tile"><rect x="2" y="2" width="116" height="116" rx="28"/></clipPath>
+  </defs>
+
+  <rect x="2" y="2" width="116" height="116" rx="28" fill="url(#02-beacon-icon-14--b-sky)"/>
+  <g clip-path="url(#02-beacon-icon-14--b-tile)">
+    <ellipse cx="60" cy="84" rx="52" ry="38" fill="url(#02-beacon-icon-14--b-glow)"/>
+    <polygon points="50,79 70,79 80,2 40,2" fill="url(#02-beacon-icon-14--b-beam)"/>
+    <polygon points="55.5,79 64.5,79 68,2 52,2" fill="url(#02-beacon-icon-14--b-core)"/>
+    <polygon points="41,78 60,88.5 60,106.5 41,96" fill="#B45309"/>
+    <polygon points="79,78 60,88.5 60,106.5 79,96" fill="#F59E0B"/>
+    <polygon points="60,67.5 79,78 60,88.5 41,78" fill="#FDE68A"/>
+    <polygon points="41,78 60,88.5 79,78 60,67.5" fill="#FFFFFF" opacity="0.22"/>
+  </g>
+  <rect x="3.25" y="3.25" width="113.5" height="113.5" rx="26.75" fill="none" stroke="#FFFFFF" stroke-opacity="0.16" stroke-width="2.5"/>
+</svg></div><span>16</span></div>
+        </div>
+        <div class="pgroup">
+          <div class="pcell"><div class="tile round s64"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Beacon icon">
+  <title>CivCentral - Beacon icon</title>
+  <defs>
+    <linearGradient id="02-beacon-icon-15--b-sky" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#0B2E26"/><stop offset="1" stop-color="#04150F"/>
+    </linearGradient>
+    <radialGradient id="02-beacon-icon-15--b-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#10B981" stop-opacity="0.55"/><stop offset="1" stop-color="#10B981" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="02-beacon-icon-15--b-beam" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#A7F3D0" stop-opacity="0.85"/>
+      <stop offset="0.55" stop-color="#4ADE80" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#4ADE80" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="02-beacon-icon-15--b-core" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="0.6" stop-color="#A7F3D0" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#A7F3D0" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="02-beacon-icon-15--b-tile"><rect x="2" y="2" width="116" height="116" rx="28"/></clipPath>
+  </defs>
+
+  <rect x="2" y="2" width="116" height="116" rx="28" fill="url(#02-beacon-icon-15--b-sky)"/>
+  <g clip-path="url(#02-beacon-icon-15--b-tile)">
+    <ellipse cx="60" cy="84" rx="52" ry="38" fill="url(#02-beacon-icon-15--b-glow)"/>
+    <polygon points="50,79 70,79 80,2 40,2" fill="url(#02-beacon-icon-15--b-beam)"/>
+    <polygon points="55.5,79 64.5,79 68,2 52,2" fill="url(#02-beacon-icon-15--b-core)"/>
+    <polygon points="41,78 60,88.5 60,106.5 41,96" fill="#B45309"/>
+    <polygon points="79,78 60,88.5 60,106.5 79,96" fill="#F59E0B"/>
+    <polygon points="60,67.5 79,78 60,88.5 41,78" fill="#FDE68A"/>
+    <polygon points="41,78 60,88.5 79,78 60,67.5" fill="#FFFFFF" opacity="0.22"/>
+  </g>
+  <rect x="3.25" y="3.25" width="113.5" height="113.5" rx="26.75" fill="none" stroke="#FFFFFF" stroke-opacity="0.16" stroke-width="2.5"/>
+</svg></div><span>DISCORD</span></div>
+          <div class="pcell"><div class="tile s48 mono-l"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Beacon monochrome">
+  <title>CivCentral - Beacon monochrome</title>
+  <g color="#0F172A">
+  <g stroke="currentColor" stroke-linecap="round" fill="none">
+    <path d="M60 62 V22" stroke-width="10"/>
+    <path d="M47 64 L36 30" stroke-width="8.5"/>
+    <path d="M73 64 L84 30" stroke-width="8.5"/>
+  </g>
+  <polygon points="60,67.5 79,78 79,96 60,106.5 41,96 41,78" fill="currentColor"/>
+  </g>
+</svg></div><span>1-COLOUR</span></div>
+          <div class="pcell"><div class="tile s48 mono-d"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Beacon monochrome">
+  <title>CivCentral - Beacon monochrome</title>
+  <g color="#0F172A">
+  <g stroke="currentColor" stroke-linecap="round" fill="none">
+    <path d="M60 62 V22" stroke-width="10"/>
+    <path d="M47 64 L36 30" stroke-width="8.5"/>
+    <path d="M73 64 L84 30" stroke-width="8.5"/>
+  </g>
+  <polygon points="60,67.5 79,78 79,96 60,106.5 41,96 41,78" fill="currentColor"/>
+  </g>
+</svg></div><span>REVERSED</span></div>
+        </div>
+      </div>
+      <div class="notes">
+        <div>
+          <p>
+            Every civ server has one place you can see from across the map. This is that
+            argument for the word <em>central</em>: a gold block throwing a column of light,
+            drawn as a night tile rather than a symbol on white.
+          </p>
+          <p>
+            Its depth comes from light &mdash; a glow behind the block, a beam that fades as it
+            climbs, a lit top face &mdash; instead of bevels or shadow. It is the only one of the
+            five that is happier on a dark ground, which is where this audience lives.
+          </p>
+        </div>
+        <dl class="spec">
+          <div><dt>Reads as</dt><dd>A lit shaft over a block; a tile, not a glyph</dd></div>
+          <div><dt>Strongest</dt><dd>App icon and Discord avatar</dd></div>
+          <div><dt>Trade-off</dt><dd>Light can't survive one colour, so the mono cut restates the beam as rays</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============================================================ 03 -->
+    <section class="concept">
+      <div class="chead">
+        <span class="num">03</span>
+        <h2>Blockwork</h2>
+        <p class="tag">No symbol. Just the name, cut from stone.</p>
+      </div>
+      <div class="plates">
+        <figure class="plate on-light">
+          <div class="lock type"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 816.16 136" width="816.16" height="136" role="img" aria-label="CivCentral - Blockwork wordmark">
+  <title>CivCentral - Blockwork wordmark</title>
+  <defs>
+    <linearGradient id="03-blockwork-lockup-18--bw-ga" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="#4ADE80"/><stop offset="1" stop-color="#059669"/></linearGradient>
+    <linearGradient id="03-blockwork-lockup-18--bw-gb" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="#1E293B"/><stop offset="1" stop-color="#0F172A"/></linearGradient>
+  </defs>
+  <g transform="translate(14 14) scale(0.96)">
+    <clipPath id="03-blockwork-lockup-18--bw-ct"><rect x="-4" y="0" width="829" height="111"/></clipPath>
+    <clipPath id="03-blockwork-lockup-18--bw-cc"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    <g clip-path="url(#03-blockwork-lockup-18--bw-ct)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 11)" stroke="#065F46" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 11)" stroke="#065F46" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 11)" stroke="#065F46" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 11)" stroke="#065F46" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 11)" stroke="#065F46" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 11)" stroke="#065F46" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 11)" stroke="#065F46" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 11)" stroke="#065F46" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 11)" stroke="#065F46" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 11)" stroke="#065F46" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+    <g clip-path="url(#03-blockwork-lockup-18--bw-cc)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 0)" stroke="url(#03-blockwork-lockup-18--bw-ga)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 0)" stroke="url(#03-blockwork-lockup-18--bw-ga)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 0)" stroke="url(#03-blockwork-lockup-18--bw-ga)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 0)" stroke="url(#03-blockwork-lockup-18--bw-gb)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 0)" stroke="url(#03-blockwork-lockup-18--bw-gb)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 0)" stroke="url(#03-blockwork-lockup-18--bw-gb)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 0)" stroke="url(#03-blockwork-lockup-18--bw-gb)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 0)" stroke="url(#03-blockwork-lockup-18--bw-gb)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 0)" stroke="url(#03-blockwork-lockup-18--bw-gb)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 0)" stroke="url(#03-blockwork-lockup-18--bw-gb)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  </g>
+</svg></div>
+          <figcaption>light ground</figcaption>
+        </figure>
+        <figure class="plate on-dark">
+          <div class="lock type"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 816.16 136" width="816.16" height="136" role="img" aria-label="CivCentral - Blockwork wordmark on dark">
+  <title>CivCentral - Blockwork wordmark on dark</title>
+  <defs>
+    <linearGradient id="03-blockwork-lockup-dark-19--bw-ga" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="#86EFAC"/><stop offset="1" stop-color="#10B981"/></linearGradient>
+    <linearGradient id="03-blockwork-lockup-dark-19--bw-gb" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C7D2CB"/></linearGradient>
+  </defs>
+  <g transform="translate(14 14) scale(0.96)">
+    <clipPath id="03-blockwork-lockup-dark-19--bw-ct"><rect x="-4" y="0" width="829" height="111"/></clipPath>
+    <clipPath id="03-blockwork-lockup-dark-19--bw-cc"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    <g clip-path="url(#03-blockwork-lockup-dark-19--bw-ct)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 11)" stroke="#047857" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 11)" stroke="#047857" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 11)" stroke="#047857" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 11)" stroke="#047857" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 11)" stroke="#047857" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 11)" stroke="#047857" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 11)" stroke="#047857" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 11)" stroke="#047857" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 11)" stroke="#047857" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 11)" stroke="#047857" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+    <g clip-path="url(#03-blockwork-lockup-dark-19--bw-cc)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 0)" stroke="url(#03-blockwork-lockup-dark-19--bw-ga)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 0)" stroke="url(#03-blockwork-lockup-dark-19--bw-ga)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 0)" stroke="url(#03-blockwork-lockup-dark-19--bw-ga)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 0)" stroke="url(#03-blockwork-lockup-dark-19--bw-gb)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 0)" stroke="url(#03-blockwork-lockup-dark-19--bw-gb)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 0)" stroke="url(#03-blockwork-lockup-dark-19--bw-gb)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 0)" stroke="url(#03-blockwork-lockup-dark-19--bw-gb)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 0)" stroke="url(#03-blockwork-lockup-dark-19--bw-gb)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 0)" stroke="url(#03-blockwork-lockup-dark-19--bw-gb)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 0)" stroke="url(#03-blockwork-lockup-dark-19--bw-gb)" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  </g>
+</svg></div>
+          <figcaption>dark ground</figcaption>
+        </figure>
+      </div>
+      <div class="proof">
+        <div class="pgroup">
+          <div class="pcell"><div class="tile s96"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Blockwork icon">
+  <title>CivCentral - Blockwork icon</title>
+  <defs>
+    <linearGradient id="03-blockwork-icon-20--bwi" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#16211B"/><stop offset="1" stop-color="#080F0C"/></linearGradient>
+    <linearGradient id="03-blockwork-icon-20--bwc" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="#6EE7A8"/><stop offset="1" stop-color="#10B981"/></linearGradient>
+  </defs>
+  <rect x="2" y="2" width="116" height="116" rx="26" fill="url(#03-blockwork-icon-20--bwi)"/>
+  <rect x="3.25" y="3.25" width="113.5" height="113.5" rx="26.75" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="2.5"/>
+  <g transform="translate(36.6 30.5) scale(0.72)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#065F46" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  <g transform="translate(36.6 17.5) scale(0.72)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="url(#03-blockwork-icon-20--bwc)" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+</svg></div><span>96</span></div>
+          <div class="pcell"><div class="tile s48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Blockwork icon">
+  <title>CivCentral - Blockwork icon</title>
+  <defs>
+    <linearGradient id="03-blockwork-icon-21--bwi" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#16211B"/><stop offset="1" stop-color="#080F0C"/></linearGradient>
+    <linearGradient id="03-blockwork-icon-21--bwc" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="#6EE7A8"/><stop offset="1" stop-color="#10B981"/></linearGradient>
+  </defs>
+  <rect x="2" y="2" width="116" height="116" rx="26" fill="url(#03-blockwork-icon-21--bwi)"/>
+  <rect x="3.25" y="3.25" width="113.5" height="113.5" rx="26.75" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="2.5"/>
+  <g transform="translate(36.6 30.5) scale(0.72)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#065F46" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  <g transform="translate(36.6 17.5) scale(0.72)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="url(#03-blockwork-icon-21--bwc)" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+</svg></div><span>48</span></div>
+          <div class="pcell"><div class="tile s32"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Blockwork icon">
+  <title>CivCentral - Blockwork icon</title>
+  <defs>
+    <linearGradient id="03-blockwork-icon-22--bwi" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#16211B"/><stop offset="1" stop-color="#080F0C"/></linearGradient>
+    <linearGradient id="03-blockwork-icon-22--bwc" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="#6EE7A8"/><stop offset="1" stop-color="#10B981"/></linearGradient>
+  </defs>
+  <rect x="2" y="2" width="116" height="116" rx="26" fill="url(#03-blockwork-icon-22--bwi)"/>
+  <rect x="3.25" y="3.25" width="113.5" height="113.5" rx="26.75" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="2.5"/>
+  <g transform="translate(36.6 30.5) scale(0.72)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#065F46" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  <g transform="translate(36.6 17.5) scale(0.72)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="url(#03-blockwork-icon-22--bwc)" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+</svg></div><span>32</span></div>
+          <div class="pcell"><div class="tile s16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Blockwork icon">
+  <title>CivCentral - Blockwork icon</title>
+  <defs>
+    <linearGradient id="03-blockwork-icon-23--bwi" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#16211B"/><stop offset="1" stop-color="#080F0C"/></linearGradient>
+    <linearGradient id="03-blockwork-icon-23--bwc" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="#6EE7A8"/><stop offset="1" stop-color="#10B981"/></linearGradient>
+  </defs>
+  <rect x="2" y="2" width="116" height="116" rx="26" fill="url(#03-blockwork-icon-23--bwi)"/>
+  <rect x="3.25" y="3.25" width="113.5" height="113.5" rx="26.75" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="2.5"/>
+  <g transform="translate(36.6 30.5) scale(0.72)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#065F46" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  <g transform="translate(36.6 17.5) scale(0.72)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="url(#03-blockwork-icon-23--bwc)" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+</svg></div><span>16</span></div>
+        </div>
+        <div class="pgroup">
+          <div class="pcell"><div class="tile round s64"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Blockwork icon">
+  <title>CivCentral - Blockwork icon</title>
+  <defs>
+    <linearGradient id="03-blockwork-icon-24--bwi" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#16211B"/><stop offset="1" stop-color="#080F0C"/></linearGradient>
+    <linearGradient id="03-blockwork-icon-24--bwc" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="#6EE7A8"/><stop offset="1" stop-color="#10B981"/></linearGradient>
+  </defs>
+  <rect x="2" y="2" width="116" height="116" rx="26" fill="url(#03-blockwork-icon-24--bwi)"/>
+  <rect x="3.25" y="3.25" width="113.5" height="113.5" rx="26.75" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="2.5"/>
+  <g transform="translate(36.6 30.5) scale(0.72)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#065F46" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  <g transform="translate(36.6 17.5) scale(0.72)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="url(#03-blockwork-icon-24--bwc)" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+</svg></div><span>DISCORD</span></div>
+          <div class="pcell"><div class="tile s32 mono-l"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 816.16 136" width="816.16" height="136" role="img" aria-label="CivCentral - Blockwork monochrome">
+  <title>CivCentral - Blockwork monochrome</title>
+  <g color="#0F172A"><g transform="translate(14 18) scale(0.96)">
+    <clipPath id="03-blockwork-mono-25--bwm-ct"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    <clipPath id="03-blockwork-mono-25--bwm-cc"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    
+    <g clip-path="url(#03-blockwork-mono-25--bwm-cc)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  </g>
+  </g>
+</svg></div><span>1-COLOUR</span></div>
+          <div class="pcell"><div class="tile s32 mono-d"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 816.16 136" width="816.16" height="136" role="img" aria-label="CivCentral - Blockwork monochrome">
+  <title>CivCentral - Blockwork monochrome</title>
+  <g color="#0F172A"><g transform="translate(14 18) scale(0.96)">
+    <clipPath id="03-blockwork-mono-26--bwm-ct"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    <clipPath id="03-blockwork-mono-26--bwm-cc"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    
+    <g clip-path="url(#03-blockwork-mono-26--bwm-cc)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 0)" stroke="currentColor" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  </g>
+  </g>
+</svg></div><span>REVERSED</span></div>
+        </div>
+      </div>
+      <div class="notes">
+        <div>
+          <p>
+            A typographic route: ten letters drawn on a single grid, every corner cut at the
+            same 16-unit chamfer, then extruded so the word reads as placed blocks with one
+            green cut face. Nothing to explain and nothing to license &mdash; the alphabet is drawn
+            from scratch, so it nods at voxels without touching Mojang's type.
+          </p>
+          <p>
+            <em>Civ</em> takes the green and <em>Central</em> takes the ink, which lets the
+            wordmark split into a short form wherever space is tight.
+          </p>
+        </div>
+        <dl class="spec">
+          <div><dt>Reads as</dt><dd>The name, at any size, with no icon to learn</dd></div>
+          <div><dt>Strongest</dt><dd>Site header, merch, anywhere horizontal</dd></div>
+          <div><dt>Trade-off</dt><dd>Needs the C tile to fill a square slot</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============================================================ 04 -->
+    <section class="concept">
+      <div class="chead">
+        <span class="num">04</span>
+        <h2>Interlock</h2>
+        <p class="tag">Two tellings, neither one deleted.</p>
+      </div>
+      <div class="plates">
+        <figure class="plate on-light">
+          <div class="lock"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 516.82 120" width="516.82" height="120" role="img" aria-label="CivCentral - Interlock lockup">
+  <title>CivCentral - Interlock lockup</title>
+  <defs>
+    <linearGradient id="04-interlock-lockup-27--i-a" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/><stop offset="1" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="04-interlock-lockup-27--i-b" x1="0.2" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FBBF24"/><stop offset="0.45" stop-color="#F59E0B"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <clipPath id="04-interlock-lockup-27--i-low"><rect x="0" y="58" width="140" height="62"/></clipPath>
+    <clipPath id="04-interlock-lockup-27--i-top"><rect x="0" y="0" width="140" height="58"/></clipPath>
+    <mask id="04-interlock-lockup-27--i-m1"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-lockup-27--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+    <mask id="04-interlock-lockup-27--i-m2"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-lockup-27--i-low)"><path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+  </defs>
+  
+  <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="url(#04-interlock-lockup-27--i-a)"/>
+  <g clip-path="url(#04-interlock-lockup-27--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#065F46" opacity="0.4" transform="translate(-3 3)"/></g>
+  <path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="url(#04-interlock-lockup-27--i-b)"/>
+  <g clip-path="url(#04-interlock-lockup-27--i-low)">
+    <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#B45309" opacity="0.35" transform="translate(3 -3)"/>
+    <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="url(#04-interlock-lockup-27--i-a)"/>
+  </g>
+  <g transform="translate(166 39) scale(0.42)">
+    <clipPath id="04-interlock-lockup-27--04-interlock-lockup-ct"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    <clipPath id="04-interlock-lockup-27--04-interlock-lockup-cc"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    
+    <g clip-path="url(#04-interlock-lockup-27--04-interlock-lockup-cc)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  </g>
+</svg></div>
+          <figcaption>light ground</figcaption>
+        </figure>
+        <figure class="plate on-dark">
+          <div class="lock"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 516.82 120" width="516.82" height="120" role="img" aria-label="CivCentral - Interlock lockup">
+  <title>CivCentral - Interlock lockup</title>
+  <defs>
+    <linearGradient id="04-interlock-lockup-dark-28--i-a" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/><stop offset="1" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="04-interlock-lockup-dark-28--i-b" x1="0.2" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FBBF24"/><stop offset="0.45" stop-color="#F59E0B"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <clipPath id="04-interlock-lockup-dark-28--i-low"><rect x="0" y="58" width="140" height="62"/></clipPath>
+    <clipPath id="04-interlock-lockup-dark-28--i-top"><rect x="0" y="0" width="140" height="58"/></clipPath>
+    <mask id="04-interlock-lockup-dark-28--i-m1"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-lockup-dark-28--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+    <mask id="04-interlock-lockup-dark-28--i-m2"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-lockup-dark-28--i-low)"><path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+  </defs>
+  
+  <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="url(#04-interlock-lockup-dark-28--i-a)"/>
+  <g clip-path="url(#04-interlock-lockup-dark-28--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#065F46" opacity="0.4" transform="translate(-3 3)"/></g>
+  <path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="url(#04-interlock-lockup-dark-28--i-b)"/>
+  <g clip-path="url(#04-interlock-lockup-dark-28--i-low)">
+    <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#B45309" opacity="0.35" transform="translate(3 -3)"/>
+    <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="url(#04-interlock-lockup-dark-28--i-a)"/>
+  </g>
+  <g transform="translate(166 39) scale(0.42)">
+    <clipPath id="04-interlock-lockup-dark-28--04-interlock-lockup-dark-ct"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    <clipPath id="04-interlock-lockup-dark-28--04-interlock-lockup-dark-cc"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    
+    <g clip-path="url(#04-interlock-lockup-dark-28--04-interlock-lockup-dark-cc)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 0)" stroke="#4ADE80" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 0)" stroke="#4ADE80" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 0)" stroke="#4ADE80" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  </g>
+</svg></div>
+          <figcaption>dark ground</figcaption>
+        </figure>
+      </div>
+      <div class="proof">
+        <div class="pgroup">
+          <div class="pcell"><div class="tile s96"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 120" width="140" height="120" role="img" aria-label="CivCentral - Interlock icon">
+  <title>CivCentral - Interlock icon</title>
+  <defs>
+    <linearGradient id="04-interlock-icon-29--i-a" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/><stop offset="1" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="04-interlock-icon-29--i-b" x1="0.2" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FBBF24"/><stop offset="0.45" stop-color="#F59E0B"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <clipPath id="04-interlock-icon-29--i-low"><rect x="0" y="58" width="140" height="62"/></clipPath>
+    <clipPath id="04-interlock-icon-29--i-top"><rect x="0" y="0" width="140" height="58"/></clipPath>
+    <mask id="04-interlock-icon-29--i-m1"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-icon-29--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+    <mask id="04-interlock-icon-29--i-m2"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-icon-29--i-low)"><path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+  </defs>
+
+  <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="url(#04-interlock-icon-29--i-a)"/>
+  <g clip-path="url(#04-interlock-icon-29--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#065F46" opacity="0.4" transform="translate(-3 3)"/></g>
+  <path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="url(#04-interlock-icon-29--i-b)"/>
+  <g clip-path="url(#04-interlock-icon-29--i-low)">
+    <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#B45309" opacity="0.35" transform="translate(3 -3)"/>
+    <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="url(#04-interlock-icon-29--i-a)"/>
+  </g>
+</svg></div><span>96</span></div>
+          <div class="pcell"><div class="tile s48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 120" width="140" height="120" role="img" aria-label="CivCentral - Interlock icon">
+  <title>CivCentral - Interlock icon</title>
+  <defs>
+    <linearGradient id="04-interlock-icon-30--i-a" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/><stop offset="1" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="04-interlock-icon-30--i-b" x1="0.2" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FBBF24"/><stop offset="0.45" stop-color="#F59E0B"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <clipPath id="04-interlock-icon-30--i-low"><rect x="0" y="58" width="140" height="62"/></clipPath>
+    <clipPath id="04-interlock-icon-30--i-top"><rect x="0" y="0" width="140" height="58"/></clipPath>
+    <mask id="04-interlock-icon-30--i-m1"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-icon-30--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+    <mask id="04-interlock-icon-30--i-m2"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-icon-30--i-low)"><path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+  </defs>
+
+  <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="url(#04-interlock-icon-30--i-a)"/>
+  <g clip-path="url(#04-interlock-icon-30--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#065F46" opacity="0.4" transform="translate(-3 3)"/></g>
+  <path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="url(#04-interlock-icon-30--i-b)"/>
+  <g clip-path="url(#04-interlock-icon-30--i-low)">
+    <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#B45309" opacity="0.35" transform="translate(3 -3)"/>
+    <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="url(#04-interlock-icon-30--i-a)"/>
+  </g>
+</svg></div><span>48</span></div>
+          <div class="pcell"><div class="tile s32"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 120" width="140" height="120" role="img" aria-label="CivCentral - Interlock icon">
+  <title>CivCentral - Interlock icon</title>
+  <defs>
+    <linearGradient id="04-interlock-icon-31--i-a" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/><stop offset="1" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="04-interlock-icon-31--i-b" x1="0.2" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FBBF24"/><stop offset="0.45" stop-color="#F59E0B"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <clipPath id="04-interlock-icon-31--i-low"><rect x="0" y="58" width="140" height="62"/></clipPath>
+    <clipPath id="04-interlock-icon-31--i-top"><rect x="0" y="0" width="140" height="58"/></clipPath>
+    <mask id="04-interlock-icon-31--i-m1"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-icon-31--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+    <mask id="04-interlock-icon-31--i-m2"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-icon-31--i-low)"><path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+  </defs>
+
+  <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="url(#04-interlock-icon-31--i-a)"/>
+  <g clip-path="url(#04-interlock-icon-31--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#065F46" opacity="0.4" transform="translate(-3 3)"/></g>
+  <path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="url(#04-interlock-icon-31--i-b)"/>
+  <g clip-path="url(#04-interlock-icon-31--i-low)">
+    <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#B45309" opacity="0.35" transform="translate(3 -3)"/>
+    <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="url(#04-interlock-icon-31--i-a)"/>
+  </g>
+</svg></div><span>32</span></div>
+          <div class="pcell"><div class="tile s16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 120" width="140" height="120" role="img" aria-label="CivCentral - Interlock icon">
+  <title>CivCentral - Interlock icon</title>
+  <defs>
+    <linearGradient id="04-interlock-icon-32--i-a" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/><stop offset="1" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="04-interlock-icon-32--i-b" x1="0.2" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FBBF24"/><stop offset="0.45" stop-color="#F59E0B"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <clipPath id="04-interlock-icon-32--i-low"><rect x="0" y="58" width="140" height="62"/></clipPath>
+    <clipPath id="04-interlock-icon-32--i-top"><rect x="0" y="0" width="140" height="58"/></clipPath>
+    <mask id="04-interlock-icon-32--i-m1"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-icon-32--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+    <mask id="04-interlock-icon-32--i-m2"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-icon-32--i-low)"><path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+  </defs>
+
+  <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="url(#04-interlock-icon-32--i-a)"/>
+  <g clip-path="url(#04-interlock-icon-32--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#065F46" opacity="0.4" transform="translate(-3 3)"/></g>
+  <path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="url(#04-interlock-icon-32--i-b)"/>
+  <g clip-path="url(#04-interlock-icon-32--i-low)">
+    <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#B45309" opacity="0.35" transform="translate(3 -3)"/>
+    <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="url(#04-interlock-icon-32--i-a)"/>
+  </g>
+</svg></div><span>16</span></div>
+        </div>
+        <div class="pgroup">
+          <div class="pcell"><div class="tile round s64"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 120" width="140" height="120" role="img" aria-label="CivCentral - Interlock icon">
+  <title>CivCentral - Interlock icon</title>
+  <defs>
+    <linearGradient id="04-interlock-icon-33--i-a" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/><stop offset="1" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="04-interlock-icon-33--i-b" x1="0.2" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FBBF24"/><stop offset="0.45" stop-color="#F59E0B"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <clipPath id="04-interlock-icon-33--i-low"><rect x="0" y="58" width="140" height="62"/></clipPath>
+    <clipPath id="04-interlock-icon-33--i-top"><rect x="0" y="0" width="140" height="58"/></clipPath>
+    <mask id="04-interlock-icon-33--i-m1"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-icon-33--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+    <mask id="04-interlock-icon-33--i-m2"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-icon-33--i-low)"><path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+  </defs>
+
+  <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="url(#04-interlock-icon-33--i-a)"/>
+  <g clip-path="url(#04-interlock-icon-33--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#065F46" opacity="0.4" transform="translate(-3 3)"/></g>
+  <path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="url(#04-interlock-icon-33--i-b)"/>
+  <g clip-path="url(#04-interlock-icon-33--i-low)">
+    <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#B45309" opacity="0.35" transform="translate(3 -3)"/>
+    <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="url(#04-interlock-icon-33--i-a)"/>
+  </g>
+</svg></div><span>DISCORD</span></div>
+          <div class="pcell"><div class="tile s48 mono-l"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 120" width="140" height="120" role="img" aria-label="CivCentral - Interlock monochrome">
+  <title>CivCentral - Interlock monochrome</title>
+  <defs>
+    <linearGradient id="04-interlock-mono-34--i-a" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/><stop offset="1" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="04-interlock-mono-34--i-b" x1="0.2" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FBBF24"/><stop offset="0.45" stop-color="#F59E0B"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <clipPath id="04-interlock-mono-34--i-low"><rect x="0" y="58" width="140" height="62"/></clipPath>
+    <clipPath id="04-interlock-mono-34--i-top"><rect x="0" y="0" width="140" height="58"/></clipPath>
+    <mask id="04-interlock-mono-34--i-m1"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-mono-34--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+    <mask id="04-interlock-mono-34--i-m2"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-mono-34--i-low)"><path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+  </defs>
+  <g color="#0F172A">
+  <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="currentColor" mask="url(#04-interlock-mono-34--i-m1)"/>
+  <path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="currentColor" mask="url(#04-interlock-mono-34--i-m2)"/>
+  </g>
+</svg></div><span>1-COLOUR</span></div>
+          <div class="pcell"><div class="tile s48 mono-d"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 120" width="140" height="120" role="img" aria-label="CivCentral - Interlock monochrome">
+  <title>CivCentral - Interlock monochrome</title>
+  <defs>
+    <linearGradient id="04-interlock-mono-35--i-a" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/><stop offset="1" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="04-interlock-mono-35--i-b" x1="0.2" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FBBF24"/><stop offset="0.45" stop-color="#F59E0B"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <clipPath id="04-interlock-mono-35--i-low"><rect x="0" y="58" width="140" height="62"/></clipPath>
+    <clipPath id="04-interlock-mono-35--i-top"><rect x="0" y="0" width="140" height="58"/></clipPath>
+    <mask id="04-interlock-mono-35--i-m1"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-mono-35--i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+    <mask id="04-interlock-mono-35--i-m2"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#04-interlock-mono-35--i-low)"><path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+  </defs>
+  <g color="#0F172A">
+  <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="currentColor" mask="url(#04-interlock-mono-35--i-m1)"/>
+  <path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="currentColor" mask="url(#04-interlock-mono-35--i-m2)"/>
+  </g>
+</svg></div><span>REVERSED</span></div>
+        </div>
+      </div>
+      <div class="notes">
+        <div>
+          <p>
+            The initials, threaded. Two Cs cross twice &mdash; the gold passes in front at the top,
+            the green passes in front at the bottom &mdash; so neither ring is ever the one on top.
+            That weave is the site's founding rule drawn as geometry: conflicting accounts
+            coexist, attributed, and nothing gets overwritten.
+          </p>
+          <p>
+            Emerald and gold also carry the two layers the wiki already runs on, Record and
+            Account. Depth here is honest occlusion rather than shading &mdash; one strand simply
+            goes behind the other.
+          </p>
+        </div>
+        <dl class="spec">
+          <div><dt>Reads as</dt><dd>A CC monogram; a chain link at a glance</dd></div>
+          <div><dt>Strongest</dt><dd>Stamps, watermarks, attribution badges</dd></div>
+          <div><dt>Trade-off</dt><dd>The widest mark &mdash; it wants horizontal room</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============================================================ 05 -->
+    <section class="concept">
+      <div class="chead">
+        <span class="num">05</span>
+        <h2>Standard</h2>
+        <p class="tag">Every telling has a home.</p>
+      </div>
+      <div class="plates">
+        <figure class="plate on-light">
+          <div class="lock"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496.82 120" width="496.82" height="120" role="img" aria-label="CivCentral - Standard lockup">
+  <title>CivCentral - Standard lockup</title>
+  <defs>
+    <linearGradient id="05-standard-lockup-36--s-cloth" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#047857"/><stop offset="0.12" stop-color="#10B981"/>
+      <stop offset="0.28" stop-color="#047857"/><stop offset="0.42" stop-color="#10B981"/>
+      <stop offset="0.5" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/>
+      <stop offset="0.74" stop-color="#047857"/><stop offset="0.88" stop-color="#10B981"/>
+      <stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+    <linearGradient id="05-standard-lockup-36--s-rod" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDE68A"/><stop offset="0.5" stop-color="#FBBF24"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="05-standard-lockup-36--s-shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#00110C" stop-opacity="0.45"/><stop offset="1" stop-color="#00110C" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="05-standard-lockup-36--s-clip"><path d="M28 25 H92 V100 L60 82 L28 100 Z"/></clipPath>
+    <mask id="05-standard-lockup-36--s-mask"><rect width="120" height="120" fill="#fff"/><g transform="translate(44.4 33.5) scale(0.48)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#000" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g></mask>
+  </defs>
+  
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" transform="translate(3 4)" fill="#0F172A" opacity="0.16"/>
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" fill="url(#05-standard-lockup-36--s-cloth)" mask="url(#05-standard-lockup-36--s-mask)"/>
+  <g clip-path="url(#05-standard-lockup-36--s-clip)"><rect x="28" y="25" width="64" height="15" fill="url(#05-standard-lockup-36--s-shade)"/></g>
+  <rect x="14" y="16" width="92" height="9" rx="4.5" fill="url(#05-standard-lockup-36--s-rod)"/>
+  <circle cx="14" cy="20.5" r="6.5" fill="url(#05-standard-lockup-36--s-rod)"/>
+  <circle cx="106" cy="20.5" r="6.5" fill="url(#05-standard-lockup-36--s-rod)"/>
+  <circle cx="11.6" cy="18.2" r="1.9" fill="#FDE68A" opacity="0.9"/>
+  <g transform="translate(146 39) scale(0.42)">
+    <clipPath id="05-standard-lockup-36--05-standard-lockup-ct"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    <clipPath id="05-standard-lockup-36--05-standard-lockup-cc"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    
+    <g clip-path="url(#05-standard-lockup-36--05-standard-lockup-cc)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  </g>
+</svg></div>
+          <figcaption>light ground</figcaption>
+        </figure>
+        <figure class="plate on-dark">
+          <div class="lock"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496.82 120" width="496.82" height="120" role="img" aria-label="CivCentral - Standard lockup">
+  <title>CivCentral - Standard lockup</title>
+  <defs>
+    <linearGradient id="05-standard-lockup-dark-37--s-cloth" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#047857"/><stop offset="0.12" stop-color="#10B981"/>
+      <stop offset="0.28" stop-color="#047857"/><stop offset="0.42" stop-color="#10B981"/>
+      <stop offset="0.5" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/>
+      <stop offset="0.74" stop-color="#047857"/><stop offset="0.88" stop-color="#10B981"/>
+      <stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+    <linearGradient id="05-standard-lockup-dark-37--s-rod" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDE68A"/><stop offset="0.5" stop-color="#FBBF24"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="05-standard-lockup-dark-37--s-shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#00110C" stop-opacity="0.45"/><stop offset="1" stop-color="#00110C" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="05-standard-lockup-dark-37--s-clip"><path d="M28 25 H92 V100 L60 82 L28 100 Z"/></clipPath>
+    <mask id="05-standard-lockup-dark-37--s-mask"><rect width="120" height="120" fill="#fff"/><g transform="translate(44.4 33.5) scale(0.48)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#000" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g></mask>
+  </defs>
+  
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" transform="translate(3 4)" fill="#0F172A" opacity="0.16"/>
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" fill="url(#05-standard-lockup-dark-37--s-cloth)" mask="url(#05-standard-lockup-dark-37--s-mask)"/>
+  <g clip-path="url(#05-standard-lockup-dark-37--s-clip)"><rect x="28" y="25" width="64" height="15" fill="url(#05-standard-lockup-dark-37--s-shade)"/></g>
+  <rect x="14" y="16" width="92" height="9" rx="4.5" fill="url(#05-standard-lockup-dark-37--s-rod)"/>
+  <circle cx="14" cy="20.5" r="6.5" fill="url(#05-standard-lockup-dark-37--s-rod)"/>
+  <circle cx="106" cy="20.5" r="6.5" fill="url(#05-standard-lockup-dark-37--s-rod)"/>
+  <circle cx="11.6" cy="18.2" r="1.9" fill="#FDE68A" opacity="0.9"/>
+  <g transform="translate(146 39) scale(0.42)">
+    <clipPath id="05-standard-lockup-dark-37--05-standard-lockup-dark-ct"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    <clipPath id="05-standard-lockup-dark-37--05-standard-lockup-dark-cc"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    
+    <g clip-path="url(#05-standard-lockup-dark-37--05-standard-lockup-dark-cc)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 0)" stroke="#4ADE80" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 0)" stroke="#4ADE80" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 0)" stroke="#4ADE80" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 0)" stroke="#F5F7F4" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  </g>
+</svg></div>
+          <figcaption>dark ground</figcaption>
+        </figure>
+      </div>
+      <div class="proof">
+        <div class="pgroup">
+          <div class="pcell"><div class="tile s96"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Standard icon">
+  <title>CivCentral - Standard icon</title>
+  <defs>
+    <linearGradient id="05-standard-icon-38--s-cloth" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#047857"/><stop offset="0.12" stop-color="#10B981"/>
+      <stop offset="0.28" stop-color="#047857"/><stop offset="0.42" stop-color="#10B981"/>
+      <stop offset="0.5" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/>
+      <stop offset="0.74" stop-color="#047857"/><stop offset="0.88" stop-color="#10B981"/>
+      <stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+    <linearGradient id="05-standard-icon-38--s-rod" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDE68A"/><stop offset="0.5" stop-color="#FBBF24"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="05-standard-icon-38--s-shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#00110C" stop-opacity="0.45"/><stop offset="1" stop-color="#00110C" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="05-standard-icon-38--s-clip"><path d="M28 25 H92 V100 L60 82 L28 100 Z"/></clipPath>
+    <mask id="05-standard-icon-38--s-mask"><rect width="120" height="120" fill="#fff"/><g transform="translate(44.4 33.5) scale(0.48)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#000" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g></mask>
+  </defs>
+
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" transform="translate(3 4)" fill="#0F172A" opacity="0.16"/>
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" fill="url(#05-standard-icon-38--s-cloth)" mask="url(#05-standard-icon-38--s-mask)"/>
+  <g clip-path="url(#05-standard-icon-38--s-clip)"><rect x="28" y="25" width="64" height="15" fill="url(#05-standard-icon-38--s-shade)"/></g>
+  <rect x="14" y="16" width="92" height="9" rx="4.5" fill="url(#05-standard-icon-38--s-rod)"/>
+  <circle cx="14" cy="20.5" r="6.5" fill="url(#05-standard-icon-38--s-rod)"/>
+  <circle cx="106" cy="20.5" r="6.5" fill="url(#05-standard-icon-38--s-rod)"/>
+  <circle cx="11.6" cy="18.2" r="1.9" fill="#FDE68A" opacity="0.9"/>
+</svg></div><span>96</span></div>
+          <div class="pcell"><div class="tile s48"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Standard icon">
+  <title>CivCentral - Standard icon</title>
+  <defs>
+    <linearGradient id="05-standard-icon-39--s-cloth" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#047857"/><stop offset="0.12" stop-color="#10B981"/>
+      <stop offset="0.28" stop-color="#047857"/><stop offset="0.42" stop-color="#10B981"/>
+      <stop offset="0.5" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/>
+      <stop offset="0.74" stop-color="#047857"/><stop offset="0.88" stop-color="#10B981"/>
+      <stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+    <linearGradient id="05-standard-icon-39--s-rod" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDE68A"/><stop offset="0.5" stop-color="#FBBF24"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="05-standard-icon-39--s-shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#00110C" stop-opacity="0.45"/><stop offset="1" stop-color="#00110C" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="05-standard-icon-39--s-clip"><path d="M28 25 H92 V100 L60 82 L28 100 Z"/></clipPath>
+    <mask id="05-standard-icon-39--s-mask"><rect width="120" height="120" fill="#fff"/><g transform="translate(44.4 33.5) scale(0.48)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#000" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g></mask>
+  </defs>
+
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" transform="translate(3 4)" fill="#0F172A" opacity="0.16"/>
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" fill="url(#05-standard-icon-39--s-cloth)" mask="url(#05-standard-icon-39--s-mask)"/>
+  <g clip-path="url(#05-standard-icon-39--s-clip)"><rect x="28" y="25" width="64" height="15" fill="url(#05-standard-icon-39--s-shade)"/></g>
+  <rect x="14" y="16" width="92" height="9" rx="4.5" fill="url(#05-standard-icon-39--s-rod)"/>
+  <circle cx="14" cy="20.5" r="6.5" fill="url(#05-standard-icon-39--s-rod)"/>
+  <circle cx="106" cy="20.5" r="6.5" fill="url(#05-standard-icon-39--s-rod)"/>
+  <circle cx="11.6" cy="18.2" r="1.9" fill="#FDE68A" opacity="0.9"/>
+</svg></div><span>48</span></div>
+          <div class="pcell"><div class="tile s32"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Standard icon">
+  <title>CivCentral - Standard icon</title>
+  <defs>
+    <linearGradient id="05-standard-icon-40--s-cloth" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#047857"/><stop offset="0.12" stop-color="#10B981"/>
+      <stop offset="0.28" stop-color="#047857"/><stop offset="0.42" stop-color="#10B981"/>
+      <stop offset="0.5" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/>
+      <stop offset="0.74" stop-color="#047857"/><stop offset="0.88" stop-color="#10B981"/>
+      <stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+    <linearGradient id="05-standard-icon-40--s-rod" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDE68A"/><stop offset="0.5" stop-color="#FBBF24"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="05-standard-icon-40--s-shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#00110C" stop-opacity="0.45"/><stop offset="1" stop-color="#00110C" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="05-standard-icon-40--s-clip"><path d="M28 25 H92 V100 L60 82 L28 100 Z"/></clipPath>
+    <mask id="05-standard-icon-40--s-mask"><rect width="120" height="120" fill="#fff"/><g transform="translate(44.4 33.5) scale(0.48)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#000" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g></mask>
+  </defs>
+
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" transform="translate(3 4)" fill="#0F172A" opacity="0.16"/>
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" fill="url(#05-standard-icon-40--s-cloth)" mask="url(#05-standard-icon-40--s-mask)"/>
+  <g clip-path="url(#05-standard-icon-40--s-clip)"><rect x="28" y="25" width="64" height="15" fill="url(#05-standard-icon-40--s-shade)"/></g>
+  <rect x="14" y="16" width="92" height="9" rx="4.5" fill="url(#05-standard-icon-40--s-rod)"/>
+  <circle cx="14" cy="20.5" r="6.5" fill="url(#05-standard-icon-40--s-rod)"/>
+  <circle cx="106" cy="20.5" r="6.5" fill="url(#05-standard-icon-40--s-rod)"/>
+  <circle cx="11.6" cy="18.2" r="1.9" fill="#FDE68A" opacity="0.9"/>
+</svg></div><span>32</span></div>
+          <div class="pcell"><div class="tile s16"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Standard icon">
+  <title>CivCentral - Standard icon</title>
+  <defs>
+    <linearGradient id="05-standard-icon-41--s-cloth" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#047857"/><stop offset="0.12" stop-color="#10B981"/>
+      <stop offset="0.28" stop-color="#047857"/><stop offset="0.42" stop-color="#10B981"/>
+      <stop offset="0.5" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/>
+      <stop offset="0.74" stop-color="#047857"/><stop offset="0.88" stop-color="#10B981"/>
+      <stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+    <linearGradient id="05-standard-icon-41--s-rod" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDE68A"/><stop offset="0.5" stop-color="#FBBF24"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="05-standard-icon-41--s-shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#00110C" stop-opacity="0.45"/><stop offset="1" stop-color="#00110C" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="05-standard-icon-41--s-clip"><path d="M28 25 H92 V100 L60 82 L28 100 Z"/></clipPath>
+    <mask id="05-standard-icon-41--s-mask"><rect width="120" height="120" fill="#fff"/><g transform="translate(44.4 33.5) scale(0.48)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#000" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g></mask>
+  </defs>
+
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" transform="translate(3 4)" fill="#0F172A" opacity="0.16"/>
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" fill="url(#05-standard-icon-41--s-cloth)" mask="url(#05-standard-icon-41--s-mask)"/>
+  <g clip-path="url(#05-standard-icon-41--s-clip)"><rect x="28" y="25" width="64" height="15" fill="url(#05-standard-icon-41--s-shade)"/></g>
+  <rect x="14" y="16" width="92" height="9" rx="4.5" fill="url(#05-standard-icon-41--s-rod)"/>
+  <circle cx="14" cy="20.5" r="6.5" fill="url(#05-standard-icon-41--s-rod)"/>
+  <circle cx="106" cy="20.5" r="6.5" fill="url(#05-standard-icon-41--s-rod)"/>
+  <circle cx="11.6" cy="18.2" r="1.9" fill="#FDE68A" opacity="0.9"/>
+</svg></div><span>16</span></div>
+        </div>
+        <div class="pgroup">
+          <div class="pcell"><div class="tile round s64"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Standard icon">
+  <title>CivCentral - Standard icon</title>
+  <defs>
+    <linearGradient id="05-standard-icon-42--s-cloth" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#047857"/><stop offset="0.12" stop-color="#10B981"/>
+      <stop offset="0.28" stop-color="#047857"/><stop offset="0.42" stop-color="#10B981"/>
+      <stop offset="0.5" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/>
+      <stop offset="0.74" stop-color="#047857"/><stop offset="0.88" stop-color="#10B981"/>
+      <stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+    <linearGradient id="05-standard-icon-42--s-rod" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDE68A"/><stop offset="0.5" stop-color="#FBBF24"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="05-standard-icon-42--s-shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#00110C" stop-opacity="0.45"/><stop offset="1" stop-color="#00110C" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="05-standard-icon-42--s-clip"><path d="M28 25 H92 V100 L60 82 L28 100 Z"/></clipPath>
+    <mask id="05-standard-icon-42--s-mask"><rect width="120" height="120" fill="#fff"/><g transform="translate(44.4 33.5) scale(0.48)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#000" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g></mask>
+  </defs>
+
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" transform="translate(3 4)" fill="#0F172A" opacity="0.16"/>
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" fill="url(#05-standard-icon-42--s-cloth)" mask="url(#05-standard-icon-42--s-mask)"/>
+  <g clip-path="url(#05-standard-icon-42--s-clip)"><rect x="28" y="25" width="64" height="15" fill="url(#05-standard-icon-42--s-shade)"/></g>
+  <rect x="14" y="16" width="92" height="9" rx="4.5" fill="url(#05-standard-icon-42--s-rod)"/>
+  <circle cx="14" cy="20.5" r="6.5" fill="url(#05-standard-icon-42--s-rod)"/>
+  <circle cx="106" cy="20.5" r="6.5" fill="url(#05-standard-icon-42--s-rod)"/>
+  <circle cx="11.6" cy="18.2" r="1.9" fill="#FDE68A" opacity="0.9"/>
+</svg></div><span>DISCORD</span></div>
+          <div class="pcell"><div class="tile s48 mono-l"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Standard monochrome">
+  <title>CivCentral - Standard monochrome</title>
+  <defs>
+    <linearGradient id="05-standard-mono-43--s-cloth" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#047857"/><stop offset="0.12" stop-color="#10B981"/>
+      <stop offset="0.28" stop-color="#047857"/><stop offset="0.42" stop-color="#10B981"/>
+      <stop offset="0.5" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/>
+      <stop offset="0.74" stop-color="#047857"/><stop offset="0.88" stop-color="#10B981"/>
+      <stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+    <linearGradient id="05-standard-mono-43--s-rod" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDE68A"/><stop offset="0.5" stop-color="#FBBF24"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="05-standard-mono-43--s-shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#00110C" stop-opacity="0.45"/><stop offset="1" stop-color="#00110C" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="05-standard-mono-43--s-clip"><path d="M28 25 H92 V100 L60 82 L28 100 Z"/></clipPath>
+    <mask id="05-standard-mono-43--s-mask"><rect width="120" height="120" fill="#fff"/><g transform="translate(44.4 33.5) scale(0.48)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#000" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g></mask>
+  </defs>
+  <g color="#0F172A">
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" fill="currentColor" mask="url(#05-standard-mono-43--s-mask)"/>
+  <rect x="14" y="16" width="92" height="9" rx="4.5" fill="currentColor"/>
+  <circle cx="14" cy="20.5" r="6.5" fill="currentColor"/>
+  <circle cx="106" cy="20.5" r="6.5" fill="currentColor"/>
+  </g>
+</svg></div><span>1-COLOUR</span></div>
+          <div class="pcell"><div class="tile s48 mono-d"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Standard monochrome">
+  <title>CivCentral - Standard monochrome</title>
+  <defs>
+    <linearGradient id="05-standard-mono-44--s-cloth" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#047857"/><stop offset="0.12" stop-color="#10B981"/>
+      <stop offset="0.28" stop-color="#047857"/><stop offset="0.42" stop-color="#10B981"/>
+      <stop offset="0.5" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/>
+      <stop offset="0.74" stop-color="#047857"/><stop offset="0.88" stop-color="#10B981"/>
+      <stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+    <linearGradient id="05-standard-mono-44--s-rod" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDE68A"/><stop offset="0.5" stop-color="#FBBF24"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="05-standard-mono-44--s-shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#00110C" stop-opacity="0.45"/><stop offset="1" stop-color="#00110C" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="05-standard-mono-44--s-clip"><path d="M28 25 H92 V100 L60 82 L28 100 Z"/></clipPath>
+    <mask id="05-standard-mono-44--s-mask"><rect width="120" height="120" fill="#fff"/><g transform="translate(44.4 33.5) scale(0.48)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#000" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g></mask>
+  </defs>
+  <g color="#0F172A">
+  <path d="M28 25 H92 V100 L60 82 L28 100 Z" fill="currentColor" mask="url(#05-standard-mono-44--s-mask)"/>
+  <rect x="14" y="16" width="92" height="9" rx="4.5" fill="currentColor"/>
+  <circle cx="14" cy="20.5" r="6.5" fill="currentColor"/>
+  <circle cx="106" cy="20.5" r="6.5" fill="currentColor"/>
+  </g>
+</svg></div><span>REVERSED</span></div>
+        </div>
+      </div>
+      <div class="notes">
+        <div>
+          <p>
+            The most heraldic of the five, and the most game-native: banners are a thing
+            players actually make, and a hall of hung standards is what an archive of
+            civilisations looks like. The C is cut out of the cloth rather than printed on it.
+          </p>
+          <p>
+            The drape is nine gradient stops across the width, so it reads as fabric catching
+            light instead of a flat pennant shape. Gold rod, swallowtail hem, one clean
+            silhouette.
+          </p>
+        </div>
+        <dl class="spec">
+          <div><dt>Reads as</dt><dd>A hanging banner bearing a C</dd></div>
+          <div><dt>Strongest</dt><dd>Event pages, faction pages, print</dd></div>
+          <div><dt>Trade-off</dt><dd>The most detailed &mdash; below 24&nbsp;px the folds flatten out</dd></div>
+        </dl>
+      </div>
+    </section>
+
+  </main>
+
+  <section class="closing">
+    <h2>If it were my call</h2>
+    <div class="rec">
+      <p>
+        <strong>Core as the primary, Blockwork as its wordmark.</strong>
+        Core is the one that survives every size and every context without special handling,
+        and it says <em>Civ</em> and <em>Central</em> in a single shape. Pair it with the
+        Blockwork letters and you have a full lockup where the icon and the type are visibly
+        cut from the same material.
+      </p>
+      <p>
+        <strong>Beacon for Discord.</strong>
+        A round avatar sits on a dark chat list, and Beacon is the only mark here designed
+        to glow in that context rather than tolerate it.
+      </p>
+      <p>
+        <strong>Interlock and Standard are the riskier picks</strong> &mdash; Interlock because a
+        monogram asks people to learn it, Standard because detail costs you at small sizes.
+        Both are worth a second round if you want the identity to argue for the archive
+        rather than the hub.
+      </p>
+    </div>
+
+    <h2>What was delivered</h2>
+    <div class="files">
+      <table>
+        <thead>
+          <tr><th>File</th><th>Contains</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="path">NN-name-icon.svg</td><td class="note">Full-colour app mark, square (Interlock is 140&times;120)</td></tr>
+          <tr><td class="path">NN-name-lockup.svg</td><td class="note">Icon plus wordmark, for light grounds</td></tr>
+          <tr><td class="path">NN-name-lockup-dark.svg</td><td class="note">Same lockup, recoloured for dark grounds</td></tr>
+          <tr><td class="path">NN-name-mono.svg</td><td class="note">One-colour cut; override <code>color</code> to recolour</td></tr>
+          <tr><td class="path">scripts/make-brand-concepts.cjs</td><td class="note">Regenerates all twenty files &mdash; geometry, kerning and palette live here</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="foot">
+      20 SVGs in wikiciv/docs/logo-concepts/v2/ &middot; run <code>node scripts/make-brand-concepts.cjs</code> to rebuild<br>
+      All artwork original. No Mojang trademarks, fonts or textures are used; the blocky and
+      isometric cues are drawn from scratch. The wordmark alphabet is custom vector, not a licensed typeface.
+    </p>
+  </section>
+
+</div>
+
+</html>

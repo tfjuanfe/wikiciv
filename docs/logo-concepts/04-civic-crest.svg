@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral civic crest">
+  <defs>
+    <linearGradient id="cr" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34D399"/>
+      <stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <path d="M60 12 L102 26 L102 60 Q102 92 60 110 Q18 92 18 60 L18 26 Z" fill="url(#cr)" stroke="#FBBF24" stroke-width="4" stroke-linejoin="round"/>
+  <!-- castle -->
+  <g fill="#ffffff">
+    <rect x="44" y="58" width="32" height="28"/>
+    <rect x="44" y="52" width="8" height="8"/>
+    <rect x="56" y="52" width="8" height="8"/>
+    <rect x="68" y="52" width="8" height="8"/>
+  </g>
+  <rect x="55" y="74" width="10" height="12" rx="5" fill="#047857"/>
+  <rect x="48" y="63" width="6" height="6" fill="#047857"/>
+  <rect x="66" y="63" width="6" height="6" fill="#047857"/>
+  <line x1="60" y1="52" x2="60" y2="40" stroke="#B45309" stroke-width="2.5"/>
+  <polygon points="60,40 60,48 72,44" fill="#FBBF24"/>
+</svg>

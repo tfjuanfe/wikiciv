@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral compass hub">
+  <circle cx="60" cy="60" r="50" fill="none" stroke="#10B981" stroke-width="6"/>
+  <g stroke="#10B981" stroke-width="6" stroke-linecap="round">
+    <line x1="76" y1="60" x2="102" y2="60"/>
+    <line x1="71.3" y1="71.3" x2="89.7" y2="89.7"/>
+    <line x1="60" y1="76" x2="60" y2="102"/>
+    <line x1="48.7" y1="71.3" x2="30.3" y2="89.7"/>
+    <line x1="44" y1="60" x2="18" y2="60"/>
+    <line x1="48.7" y1="48.7" x2="30.3" y2="30.3"/>
+    <line x1="60" y1="44" x2="60" y2="18"/>
+    <line x1="71.3" y1="48.7" x2="89.7" y2="30.3"/>
+  </g>
+  <circle cx="60" cy="60" r="11" fill="#FBBF24" stroke="#059669" stroke-width="4"/>
+</svg>

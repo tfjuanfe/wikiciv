@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral - Beacon monochrome">
+  <title>CivCentral - Beacon monochrome</title>
+  <g color="#0F172A">
+  <g stroke="currentColor" stroke-linecap="round" fill="none">
+    <path d="M60 62 V22" stroke-width="10"/>
+    <path d="M47 64 L36 30" stroke-width="8.5"/>
+    <path d="M73 64 L84 30" stroke-width="8.5"/>
+  </g>
+  <polygon points="60,67.5 79,78 79,96 60,106.5 41,96 41,78" fill="currentColor"/>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral voxel tile">
+  <defs>
+    <linearGradient id="vt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#34D399"/>
+      <stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="104" height="104" rx="24" fill="url(#vt)"/>
+  <g fill="#ffffff">
+    <rect x="28" y="23" width="13" height="13" rx="2"/>
+    <rect x="45" y="23" width="13" height="13" rx="2"/>
+    <rect x="62" y="23" width="13" height="13" rx="2"/>
+    <rect x="79" y="23" width="13" height="13" rx="2"/>
+    <rect x="28" y="40" width="13" height="13" rx="2"/>
+    <rect x="28" y="57" width="13" height="13" rx="2"/>
+    <rect x="45" y="57" width="13" height="13" rx="2"/>
+    <rect x="28" y="74" width="13" height="13" rx="2"/>
+    <rect x="28" y="91" width="13" height="13" rx="2"/>
+    <rect x="45" y="91" width="13" height="13" rx="2"/>
+    <rect x="62" y="91" width="13" height="13" rx="2"/>
+    <rect x="79" y="91" width="13" height="13" rx="2"/>
+  </g>
+</svg>

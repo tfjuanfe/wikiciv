@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>CivCentral — logo concepts</title>
+<style>
+  :root { font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  body { margin: 0; background: #eef2f5; color: #0f172a; }
+  header { padding: 32px 28px 8px; }
+  header h1 { margin: 0 0 4px; font-size: 24px; letter-spacing: -0.5px; }
+  header p { margin: 0; color: #64748b; font-size: 14px; }
+  .concept { padding: 22px 28px; border-top: 1px solid #dbe2e8; }
+  .concept h2 { margin: 0 0 2px; font-size: 17px; }
+  .concept .desc { margin: 0 0 14px; color: #475569; font-size: 13.5px; max-width: 70ch; }
+  .concept .desc b { color: #0f172a; }
+  .tiles { display: flex; gap: 16px; flex-wrap: wrap; }
+  .tile { flex: 1 1 320px; min-width: 280px; border-radius: 14px; padding: 22px 24px;
+          display: flex; align-items: center; gap: 18px; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+  .tile.light { background: #ffffff; color: #0f172a; border: 1px solid #e2e8f0; }
+  .tile.dark  { background: #0f172a; color: #f8fafc; }
+  .tile svg { flex: none; }
+  .wm { font-weight: 800; font-size: 30px; letter-spacing: -1px; line-height: 1; }
+  .wm .c1 { color: #10b981; }
+  .wm .c2 { color: currentColor; }
+  .tag { display: block; margin-top: 5px; font-size: 11px; font-weight: 600;
+         letter-spacing: 1.5px; text-transform: uppercase; opacity: .55; }
+  .ico-only { display:flex; gap:10px; margin-top:10px; }
+  .ico-only .chip { width:40px; height:40px; }
+  footer { padding: 20px 28px 48px; color:#64748b; font-size:13px; }
+  code { background:#e2e8f0; padding:1px 5px; border-radius:4px; font-size:12px; }
+</style>
+</head>
+<body>
+
+<!-- ===== sprite (hidden) ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="vt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#34D399"/><stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="cr" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34D399"/><stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+
+  <symbol id="ico-1" viewBox="0 0 120 120">
+    <rect x="8" y="8" width="104" height="104" rx="24" fill="url(#vt)"/>
+    <g fill="#fff">
+      <rect x="28" y="23" width="13" height="13" rx="2"/><rect x="45" y="23" width="13" height="13" rx="2"/>
+      <rect x="62" y="23" width="13" height="13" rx="2"/><rect x="79" y="23" width="13" height="13" rx="2"/>
+      <rect x="28" y="40" width="13" height="13" rx="2"/>
+      <rect x="28" y="57" width="13" height="13" rx="2"/><rect x="45" y="57" width="13" height="13" rx="2"/>
+      <rect x="28" y="74" width="13" height="13" rx="2"/>
+      <rect x="28" y="91" width="13" height="13" rx="2"/><rect x="45" y="91" width="13" height="13" rx="2"/>
+      <rect x="62" y="91" width="13" height="13" rx="2"/><rect x="79" y="91" width="13" height="13" rx="2"/>
+    </g>
+  </symbol>
+
+  <symbol id="ico-2" viewBox="0 0 120 120">
+    <circle cx="60" cy="60" r="50" fill="none" stroke="#10B981" stroke-width="6"/>
+    <g stroke="#10B981" stroke-width="6" stroke-linecap="round">
+      <line x1="76" y1="60" x2="102" y2="60"/><line x1="71.3" y1="71.3" x2="89.7" y2="89.7"/>
+      <line x1="60" y1="76" x2="60" y2="102"/><line x1="48.7" y1="71.3" x2="30.3" y2="89.7"/>
+      <line x1="44" y1="60" x2="18" y2="60"/><line x1="48.7" y1="48.7" x2="30.3" y2="30.3"/>
+      <line x1="60" y1="44" x2="60" y2="18"/><line x1="71.3" y1="48.7" x2="89.7" y2="30.3"/>
+    </g>
+    <circle cx="60" cy="60" r="11" fill="#FBBF24" stroke="#059669" stroke-width="4"/>
+  </symbol>
+
+  <symbol id="ico-3" viewBox="0 0 120 120">
+    <polygon points="16,82 60,104 60,120 16,98" fill="#047857"/>
+    <polygon points="104,82 60,104 60,120 104,98" fill="#10B981"/>
+    <polygon points="60,60 104,82 60,104 16,82" fill="#34D399"/>
+    <polygon points="30,53 60,68 60,82 30,67" fill="#047857"/>
+    <polygon points="90,53 60,68 60,82 90,67" fill="#10B981"/>
+    <polygon points="60,38 90,53 60,68 30,53" fill="#34D399"/>
+    <polygon points="42,29 60,38 60,50 42,41" fill="#047857"/>
+    <polygon points="78,29 60,38 60,50 78,41" fill="#10B981"/>
+    <polygon points="60,20 78,29 60,38 42,29" fill="#34D399"/>
+    <line x1="60" y1="20" x2="60" y2="6" stroke="#B45309" stroke-width="3"/>
+    <polygon points="60,6 60,16 75,11" fill="#FBBF24"/>
+  </symbol>
+
+  <symbol id="ico-4" viewBox="0 0 120 120">
+    <path d="M60 12 L102 26 L102 60 Q102 92 60 110 Q18 92 18 60 L18 26 Z" fill="url(#cr)" stroke="#FBBF24" stroke-width="4" stroke-linejoin="round"/>
+    <g fill="#fff">
+      <rect x="44" y="58" width="32" height="28"/>
+      <rect x="44" y="52" width="8" height="8"/><rect x="56" y="52" width="8" height="8"/><rect x="68" y="52" width="8" height="8"/>
+    </g>
+    <rect x="55" y="74" width="10" height="12" rx="5" fill="#047857"/>
+    <rect x="48" y="63" width="6" height="6" fill="#047857"/><rect x="66" y="63" width="6" height="6" fill="#047857"/>
+    <line x1="60" y1="52" x2="60" y2="40" stroke="#B45309" stroke-width="2.5"/>
+    <polygon points="60,40 60,48 72,44" fill="#FBBF24"/>
+  </symbol>
+
+  <symbol id="ico-5" viewBox="0 0 120 120">
+    <polygon points="60,10 103,35 60,60 17,35" fill="#34D399"/>
+    <polygon points="103,35 103,85 60,110 60,60" fill="#10B981"/>
+    <polygon points="17,35 60,60 60,110 17,85" fill="#047857"/>
+    <path d="M60 10 L103 35 L103 85 L60 110 L17 85 L17 35 Z" fill="none" stroke="#FBBF24" stroke-width="3" stroke-linejoin="round"/>
+  </symbol>
+</svg>
+
+<header>
+  <h1>CivCentral — 5 logo concepts</h1>
+  <p>Each shown as an app icon + horizontal lockup, on light and dark. SVGs live next to this file.</p>
+</header>
+
+<!-- 1 -->
+<section class="concept">
+  <h2>1 · Voxel Tile <span style="color:#94a3b8">— pixel “C” app mark</span></h2>
+  <p class="desc"><b>Most Minecraft-native.</b> A pixel-art “C” on a rounded emerald tile. Reads instantly as a game/community app icon, scales down to a favicon cleanly, and is the easiest to animate. Risk: leans playful, less “archive”.</p>
+  <div class="tiles">
+    <div class="tile light"><svg width="64" height="64"><use href="#ico-1"/></svg><div class="wm"><span class="c1">Civ</span><span class="c2">Central</span><span class="tag">civilization archive</span></div></div>
+    <div class="tile dark"><svg width="64" height="64"><use href="#ico-1"/></svg><div class="wm"><span class="c1">Civ</span><span class="c2">Central</span><span class="tag">civilization archive</span></div></div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="concept">
+  <h2>2 · Compass Hub <span style="color:#94a3b8">— “all roads meet here”</span></h2>
+  <p class="desc"><b>Best “central / hub” story.</b> Spokes converging on a golden core — a meeting point of civilizations. Single-weight, works as a tiny monochrome glyph, very legible. Risk: generic compass feel unless paired with the wordmark.</p>
+  <div class="tiles">
+    <div class="tile light"><svg width="64" height="64"><use href="#ico-2"/></svg><div class="wm"><span class="c1">Civ</span><span class="c2">Central</span><span class="tag">the events hub</span></div></div>
+    <div class="tile dark"><svg width="64" height="64"><use href="#ico-2"/></svg><div class="wm"><span class="c1">Civ</span><span class="c2">Central</span><span class="tag">the events hub</span></div></div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="concept">
+  <h2>3 · Iso Ziggurat <span style="color:#94a3b8">— a built civilization</span></h2>
+  <p class="desc"><b>Most “civilization-building”.</b> A stepped isometric tower with a banner on top — evokes Minecraft builds and rising empires. Strong, distinctive silhouette. Risk: the most detailed mark; loses fidelity at favicon size.</p>
+  <div class="tiles">
+    <div class="tile light"><svg width="64" height="64"><use href="#ico-3"/></svg><div class="wm"><span class="c1">Civ</span><span class="c2">Central</span><span class="tag">build · chronicle · share</span></div></div>
+    <div class="tile dark"><svg width="64" height="64"><use href="#ico-3"/></svg><div class="wm"><span class="c1">Civ</span><span class="c2">Central</span><span class="tag">build · chronicle · share</span></div></div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="concept">
+  <h2>4 · Civic Crest <span style="color:#94a3b8">— heraldic archive</span></h2>
+  <p class="desc"><b>Most “lore / heritage”.</b> A shield + castle crest — gravitas that suits an authoritative archive and looks great on a Discord server icon. Risk: crests are common in gaming; relies on the gold/emerald palette to feel ownable.</p>
+  <div class="tiles">
+    <div class="tile light"><svg width="64" height="64"><use href="#ico-4"/></svg><div class="wm"><span class="c1">Civ</span><span class="c2">Central</span><span class="tag">every telling has a home</span></div></div>
+    <div class="tile dark"><svg width="64" height="64"><use href="#ico-4"/></svg><div class="wm"><span class="c1">Civ</span><span class="c2">Central</span><span class="tag">every telling has a home</span></div></div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="concept">
+  <h2>5 · Hex Cube <span style="color:#94a3b8">— modern block emblem</span></h2>
+  <p class="desc"><b>Most scalable / brandable.</b> An isometric block reading as a hexagon badge — “a block” (Minecraft) and “a hub facet” at once. Minimal, flat, perfect at every size, ages well. Risk: cleanest but least overtly themed. <b>My pick for a primary mark.</b></p>
+  <div class="tiles">
+    <div class="tile light"><svg width="64" height="64"><use href="#ico-5"/></svg><div class="wm"><span class="c1">Civ</span><span class="c2">Central</span><span class="tag">civilization archive</span></div></div>
+    <div class="tile dark"><svg width="64" height="64"><use href="#ico-5"/></svg><div class="wm"><span class="c1">Civ</span><span class="c2">Central</span><span class="tag">civilization archive</span></div></div>
+  </div>
+</section>
+
+<footer>
+  Palette: emerald <code>#10B981</code> · light <code>#34D399</code> · deep <code>#047857</code> · gold <code>#FBBF24</code> · ink <code>#0F172A</code>.
+  Pick one and I can wire it into <code>scripts/make-logo.cjs</code> to export <code>logo.png</code>, <code>logo-dark.png</code>, and the favicons.
+</footer>
+
+</body>
+</html>

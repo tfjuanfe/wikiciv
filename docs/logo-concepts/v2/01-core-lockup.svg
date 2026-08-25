@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496.82 120" width="496.82" height="120" role="img" aria-label="CivCentral - Core lockup">
+  <title>CivCentral - Core lockup</title>
+  <defs>
+    <linearGradient id="c-face" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.55" stop-color="#10B981"/><stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="c-edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#047857"/><stop offset="1" stop-color="#065F46"/>
+    </linearGradient>
+  </defs>
+  
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" transform="translate(0 9)" fill="url(#c-edge)"/>
+  <path d="M97.75 71.41 A42 42 0 1 1 97.75 34.59 L80.67 42.92 A23 23 0 1 0 80.67 63.08 Z" fill="url(#c-face)"/>
+  <path d="M30.3 23.3 A42 42 0 0 1 72 12.8" fill="none" stroke="#A7F3D0" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <polygon points="45,44.5 60,53 60,70 45,61.5" fill="#B45309"/>
+  <polygon points="75,44.5 60,53 60,70 75,61.5" fill="#F59E0B"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="#FDE68A"/>
+  <polygon points="60,36 75,44.5 60,53 45,44.5" fill="none" stroke="#FBBF24" stroke-width="1.5" stroke-linejoin="round" opacity="0.9"/>
+  <g transform="translate(146 39) scale(0.42)">
+    <clipPath id="01-core-lockup-ct"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    <clipPath id="01-core-lockup-cc"><rect x="-4" y="0" width="829" height="100"/></clipPath>
+    
+    <g clip-path="url(#01-core-lockup-cc)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(0 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100" transform="translate(92 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M5.2 -19.1 L38 89 L70.8 -19.1" transform="translate(130 0)" stroke="#10B981" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" transform="translate(214 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M63 11 L11 11 L11 89 L63 89 M11 50 L54 50" transform="translate(303 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 100 M11 0 L67 100 M67 0 L67 100" transform="translate(391 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4 11 L72 11 M38 11 L38 100" transform="translate(481 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 100 L11 11 L40 11 L56 27 L56 39 L40 55 L11 55 M36 55 L69.4 117.6" transform="translate(565 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M4.73 119 L44 0 L83.27 119 M25 76 L63 76" transform="translate(649 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/><path d="M11 0 L11 89 L59 89" transform="translate(751 0)" stroke="#0F172A" stroke-width="22" fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  </g>
+</svg>

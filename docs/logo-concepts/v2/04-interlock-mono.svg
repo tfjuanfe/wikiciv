@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 120" width="140" height="120" role="img" aria-label="CivCentral - Interlock monochrome">
+  <title>CivCentral - Interlock monochrome</title>
+  <defs>
+    <linearGradient id="i-a" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/><stop offset="0.6" stop-color="#10B981"/><stop offset="1" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="i-b" x1="0.2" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FBBF24"/><stop offset="0.45" stop-color="#F59E0B"/><stop offset="1" stop-color="#B45309"/>
+    </linearGradient>
+    <clipPath id="i-low"><rect x="0" y="58" width="140" height="62"/></clipPath>
+    <clipPath id="i-top"><rect x="0" y="0" width="140" height="58"/></clipPath>
+    <mask id="i-m1"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#i-top)"><path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+    <mask id="i-m2"><rect width="140" height="120" fill="#fff"/><g clip-path="url(#i-low)"><path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="#000" stroke="#000" stroke-width="9"/></g></mask>
+  </defs>
+  <g color="#0F172A">
+  <path d="M79.55 75.84 A38 38 0 1 1 79.55 40.16 L64.54 48.14 A21 21 0 1 0 64.54 67.86 Z" fill="currentColor" mask="url(#i-m1)"/>
+  <path d="M127.55 75.84 A38 38 0 1 1 127.55 40.16 L112.54 48.14 A21 21 0 1 0 112.54 67.86 Z" fill="currentColor" mask="url(#i-m2)"/>
+  </g>
+</svg>

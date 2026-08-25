@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral isometric ziggurat">
+  <!-- tier 1 (base) -->
+  <polygon points="16,82 60,104 60,120 16,98" fill="#047857"/>
+  <polygon points="104,82 60,104 60,120 104,98" fill="#10B981"/>
+  <polygon points="60,60 104,82 60,104 16,82" fill="#34D399"/>
+  <!-- tier 2 -->
+  <polygon points="30,53 60,68 60,82 30,67" fill="#047857"/>
+  <polygon points="90,53 60,68 60,82 90,67" fill="#10B981"/>
+  <polygon points="60,38 90,53 60,68 30,53" fill="#34D399"/>
+  <!-- tier 3 (top) -->
+  <polygon points="42,29 60,38 60,50 42,41" fill="#047857"/>
+  <polygon points="78,29 60,38 60,50 78,41" fill="#10B981"/>
+  <polygon points="60,20 78,29 60,38 42,29" fill="#34D399"/>
+  <!-- flag -->
+  <line x1="60" y1="20" x2="60" y2="6" stroke="#B45309" stroke-width="3"/>
+  <polygon points="60,6 60,16 75,11" fill="#FBBF24"/>
+</svg>

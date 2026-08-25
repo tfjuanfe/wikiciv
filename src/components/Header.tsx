@@ -19,16 +19,16 @@ export default async function Header({ user }: { user: SessionUser | null }) {
           <Image
             src="/logo.png"
             alt="CivCentral"
-            width={760}
-            height={252}
+            width={1236}
+            height={180}
             priority
             className="brand-logo brand-logo-light"
           />
           <Image
             src="/logo-dark.png"
             alt="CivCentral"
-            width={760}
-            height={252}
+            width={1236}
+            height={180}
             priority
             className="brand-logo brand-logo-dark"
           />
@@ -92,13 +92,13 @@ export default async function Header({ user }: { user: SessionUser | null }) {
         <Link href="/ratings">Ratings</Link>
         <Link href="/popular">Popular</Link>
         {user && <Link href="/me">My contributions</Link>}
-        {user?.eventHost && user.role !== "archivist" && (
+        {user?.eventHost && user.role !== "archivist" && user.role !== "owner" && (
           <>
             <Link href="/events/new">Suggest event</Link>
             <Link href="/servers/new">Suggest server</Link>
           </>
         )}
-        {user?.role === "archivist" && (
+        {(user?.role === "archivist" || user?.role === "owner") && (
           <Link href="/review" className="nav-review">
             Review
           </Link>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral hex cube">
+  <polygon points="60,10 103,35 60,60 17,35" fill="#34D399"/>
+  <polygon points="103,35 103,85 60,110 60,60" fill="#10B981"/>
+  <polygon points="17,35 60,60 60,110 17,85" fill="#047857"/>
+  <path d="M60 10 L103 35 L103 85 L60 110 L17 85 L17 35 Z" fill="none" stroke="#FBBF24" stroke-width="3" stroke-linejoin="round"/>
+</svg>

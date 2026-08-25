@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="CivCentral mark">
+  <title>CivCentral mark</title>
+  <defs>
+    <linearGradient id="bwi" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="#16211B"/><stop offset="1" stop-color="#080F0C"/></linearGradient>
+    <linearGradient id="bwc" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="#6EE7A8"/><stop offset="1" stop-color="#10B981"/></linearGradient>
+  </defs>
+  <rect x="2" y="2" width="116" height="116" rx="26" fill="url(#bwi)"/>
+  <rect x="3.25" y="3.25" width="113.5" height="113.5" rx="24.75" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="2.5"/>
+  <g transform="translate(36.6 30.5) scale(0.72)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="#065F46" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+  <g transform="translate(36.6 17.5) scale(0.72)"><path d="M65 11 L27 11 L11 27 L11 73 L27 89 L65 89" stroke="url(#bwc)" stroke-width="22" fill="none" stroke-linejoin="miter" stroke-miterlimit="10"/></g>
+</svg>
